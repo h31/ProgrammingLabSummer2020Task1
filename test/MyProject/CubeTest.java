@@ -43,6 +43,26 @@ class CubeTest {
         side[0][0] = "\u001B[31m" + "▮";
         side[0][1] = "\u001B[31m" + "▮";
         Assertions.assertArrayEquals(Cube.status(), side);
+        Cube.turnClockwise();
+        Cube.turnRight();
+        Assertions.assertNotEquals(Cube.status(), side);
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                side[i][j] = "\u001B[33m" + "▮";
+            }
+        }
+        Assertions.assertArrayEquals(Cube.status(), side);
+        Cube.turnLeft();
+        Cube.turnCounterClockwise();
+        Cube.turnRight();
+        Assertions.assertNotEquals(Cube.status(), side);
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                side[i][j] = "\u001B[32m" + "▮";
+            }
+        }
+        Assertions.assertArrayEquals(Cube.status(), side);
+        Cube.turnLeft();
     }
 
     @Test

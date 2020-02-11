@@ -154,6 +154,20 @@ public class Cube {
         }
     }
 
+    //Поворот кубика по часовой стрелке
+    public static void turnClockwise() {
+        for (int i = 0; i < size + 1; i++) {
+            f(i);
+        }
+    }
+
+    //Поворот кубика по часовой стрелке
+    public static void turnCounterClockwise() {
+        for (int i = 0; i < size + 1; i++) {
+            b(i);
+        }
+    }
+
     //запрос состояния грани
     public static String[][] status() {
         return front;
