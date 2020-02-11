@@ -28,6 +28,7 @@ public class Cube {
             down[i][1] = back[i][1];
             back[i][1] = turn[i];
         }
+        right = rotate(right);
     }
 
     //поворот верхней грани на 90 градусов по часовой стрелке
@@ -39,6 +40,7 @@ public class Cube {
             back[1][(i + 1) % 2] = left[i][1];
             left[i][1] = turn[i];
         }
+        up = rotate(up);
     }
 
     //поворот передней грани на 90 градусов по часовой стрелке
@@ -50,6 +52,7 @@ public class Cube {
             down[0][(i + 1) % 2] = right[1][i];
             right[1][i] = turn[i];
         }
+        front = rotate(front);
     }
 
     // поворот левой грани на 90 градусов по часовой стрелке
@@ -61,6 +64,7 @@ public class Cube {
             down[i][0] = front[i][0];
             front[i][0] = turn[i];
         }
+        left = rotate(left);
     }
 
     // поворот задней грани на 90 градусов по часовой стрелке
@@ -72,6 +76,7 @@ public class Cube {
             down[1][(i + 1) % 2] = left[0][i];
             left[0][i] = turn[i];
         }
+        back = rotate(back);
     }
 
     // поворот нижней грани на 90 градусов по часовой стрелке
@@ -83,6 +88,7 @@ public class Cube {
             back[0][(i + 1) % 2] = right[(i + 1) % 2][1];
             right[(i + 1) % 2][1] = turn[i];
         }
+        down = rotate(down);
     }
 
     //Повороты кубика
@@ -143,5 +149,16 @@ public class Cube {
                 f();
             }
         }
+    }
+
+    //поворот содержимого грани на 90 градусов по часовой стрелке
+    private static String[][] rotate (String[][] face) {
+        String[][] result = new String[face[0].length][face[0].length];
+        for (int i = 0; i < face[0].length; i++) {
+            for (int j = face[0].length - 1; j >= 0; j--) {
+                result[i][face[0].length - 1 - j] = face[j][i];
+            }
+        }
+        return result;
     }
 }
