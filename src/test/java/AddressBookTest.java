@@ -1,30 +1,44 @@
+import javafx.util.Pair;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class AddressBookTest {
 
-    private AddressBook createDictionary() {
-        AddressBook dictionary = new AddressBook();
-        dictionary.add("Krivitskii", new Address("Komendantskii", "22", "269"));
-        dictionary.add("Galieva", new Address("Nevskiy", "35", "3"));
-        dictionary.add("Shomov", new Address("Komendantskii", "35", "5"));
-        dictionary.add("Kuznecova", new Address("Nevskiy", "35", "5"));
-        dictionary.add("Sergeev", new Address("Primorskaya", "19", "2"));
-        dictionary.add("Petryaeva", new Address("Lesnaya", "22", "269"));
-        return dictionary;
-    }
-
     @Test
     public void add() {
+        assertEquals(8,
+                new AddressBook(
+                        new Pair<>("Krivitskii", new Address("Komendantskii", "1", "1")),
+                        new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")),
+                        new Pair<>("Galieva", new Address("Nevskiy", "35", "3")),
+                        new Pair<>("Shomov", new Address("Komendantskii", "35", "5")),
+                        new Pair<>("Kuznecova", new Address("Nevskiy", "35", "3")),
+                        new Pair<>("Sergeev", new Address("Primorskaya", "19", "2")),
+                        new Pair<>("Petryaeva", new Address("Lesnaya", "22", "269"))
+                ).add("Sidorov", new Address("Lesnaya", "52", "24")).size());
+        assertEquals(1, new AddressBook().add("Krivitskii", new Address("Komendantskii", "1", "1")).size());
     }
 
     @Test
     public void remove() {
+        assertEquals(2,
+                new AddressBook(
+                        new Pair<>("Krivitskii", new Address("Komendantskii", "1", "1")),
+                        new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")),
+                        new Pair<>("Galieva", new Address("Nevskiy", "35", "3"))
+                ).remove("Galieva").size());
+        assertNull(new AddressBook().remove("Krivitskii"));
     }
 
     @Test
     public void changeAdds() {
+        assertEquals("Komendantskii", new AddressBook(
+                new Pair<>("Krivitskii", new Address("Komendantskii", "1", "1")),
+                new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")),
+                new Pair<>("Galieva", new Address("Nevskiy", "35", "3"))
+        ).changeAdds("Galieva", new Address("Komendantskii", "35", "3")).getAdds("Galieva").getStreet());
+        assertNull(new AddressBook().changeAdds("Krivitskii", new Address("Nevskiy", "35", "3")));
     }
 
     @Test

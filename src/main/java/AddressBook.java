@@ -9,27 +9,42 @@ class AddressBook {
 
     @SafeVarargs
     AddressBook(Pair<String, Address>... people) {
-        for(int i = 0; i!= people.length; i++) {
-            map.put(people[i].getKey(),people[i].getValue());
+        for (int i = 0; i != people.length; i++) {
+            map.put(people[i].getKey(), people[i].getValue());
         }
     }
 
-    AddressBook() {}
+    private AddressBook(HashMap<String, Address> map) {
+        this.map = map;
+    }
 
-    void add(String surname, Address address) {
+    AddressBook add(String surname, Address address) {
         map.put(surname, address);
+        return this;
     }
 
-    void remove(String surname) {
-        map.remove(surname);
+    AddressBook remove(String surname) {
+        return (map.remove(surname) == null) ? null : this;
     }
 
-    void changeAdds(String surname, Address address) {
-        map.replace(surname, address);
+    AddressBook changeAdds(String surname, Address address) {
+        if (!map.containsKey(surname)) return null;
+        try {
+            map.replace(surname, address);
+        } catch(NullPointerException | IllegalArgumentException | UnsupportedOperationException | ClassCastException ignored) {
+            return null;
+        }
+        return this;
     }
 
     Address getAdds(String surname) {
-        return map.get(surname);
+        Address adds;
+        try {
+             adds = map.get(surname);
+        } catch (ClassCastException | NullPointerException ignored) {
+            return null;
+        }
+        return adds;
     }
 
     ArrayList<String> filterStreet(String street) {
