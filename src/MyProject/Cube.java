@@ -2,125 +2,143 @@ package MyProject;
 
 public class Cube {
 
-    // Цвета для вывода квадратиков
-    private static String RED = "\u001B[31m";
-    private static String GREEN = "\u001B[32m";
-    private static String YELLOW = "\u001B[33m";
-    private static String BLUE = "\u001B[34m";
-    private static String PURPLE = "\u001B[35m";
-    private static String WHITE = "\u001B[37m";
+    private static String[][] front;
+    private static String[][] right;
+    private static String[][] left;
+    private static String[][] back;
+    private static String[][] up;
+    private static String[][] down;
+    private static int size;
 
-    private static String[][] front = {{RED + "▮", RED + "▮"}, {RED + "▮", RED + "▮"}};
-    private static String[][] right = {{BLUE + "▮", BLUE + "▮"}, {BLUE + "▮", BLUE + "▮"}};
-    private static String[][] left = {{GREEN + "▮", GREEN + "▮"}, {GREEN + "▮", GREEN + "▮"}};
-    private static String[][] back = {{PURPLE + "▮", PURPLE + "▮"}, {PURPLE + "▮", PURPLE + "▮"}};
-    private static String[][] up = {{WHITE + "▮", WHITE + "▮"}, {WHITE + "▮", WHITE + "▮"}};
-    private static String[][] down = {{YELLOW + "▮", YELLOW + "▮"}, {YELLOW + "▮", YELLOW + "▮"}};
-
-
-    //Методы поворотов кубика (Язык поворотов кубика стандартный)
-    //поворот правой грани на 90 градусов по часовой стрелке
-    public static void r() {
-        String[] turn = {up[0][1], up[1][1]};
-        for (int i = 0; i < 2; i++) {
-            up[i][1] = front[i][1];
-            front[i][1] = down[i][1];
-            down[i][1] = back[i][1];
-            back[i][1] = turn[i];
+    Cube(int n) {
+        front = new String[n][n];
+        right = new String[n][n];
+        left = new String[n][n];
+        back = new String[n][n];
+        up = new String[n][n];
+        down = new String[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                front[i][j] = "\u001B[31m" + "▮"; //Red
+                right[i][j] = "\u001B[34m" + "▮"; //Blue
+                left[i][j] = "\u001B[32m" + "▮"; //Green
+                back[i][j] = "\u001B[35m" + "▮"; //Purple
+                up[i][j] = "\u001B[37m" + "▮"; //White
+                down[i][j] = "\u001B[33m" + "▮"; //Yellow
+            }
         }
-        right = rotate(right);
+        size = n - 1;
     }
 
-    //поворот верхней грани на 90 градусов по часовой стрелке
-    public static void u() {
-        String[] turn = {front[0][0], front[0][1]};
-        for (int i = 0; i < 2; i++) {
-            front[0][i] = right[(i + 1) % 2][0];
-            right[(i + 1) % 2][0] = back[1][(i + 1) % 2];
-            back[1][(i + 1) % 2] = left[i][1];
-            left[i][1] = turn[i];
+
+    //Методы поворотов кубика (Язык поворотов кубика стандартный), чтобы указать какое "кольцо" надо поворачивать
+    //необходимо в метод передать его номер (от 0 до размера кубика - 1)
+
+    //поворот грани, отсчитывая справа на 90 градусов по часовой стрелке
+    public static void r(int k) {
+        String[] turn = new String[size + 1];
+        for (int i = 0; i < size + 1; i++) {
+            turn[i] = up[i][size - k];
+            up[i][size - k] = front[i][size - k];
+            front[i][size - k] = down[i][size - k];
+            down[i][size - k] = back[i][size - k];
+            back[i][size - k] = turn[i];
         }
-        up = rotate(up);
+        if (k == 0) {
+            right = rotate(right);
+        } else if (k == size) {
+            for (int i = 1; i < 4; i++) {
+                left = rotate(left);
+            }
+        }
     }
 
-    //поворот передней грани на 90 градусов по часовой стрелке
-    public static void f() {
-        String[] turn = {up[1][0], up[1][1]};
-        for (int i = 0; i < 2; i++) {
-            up[1][i] = left[1][i];
-            left[1][i] = down[0][(i + 1) % 2];
-            down[0][(i + 1) % 2] = right[1][i];
-            right[1][i] = turn[i];
+    //поворот грани, отсчитывая сверху на 90 градусов по часовой стрелке
+    public static void u(int k) {
+        String[] turn = new String[size + 1];
+        for (int i = 0; i < size + 1; i++) {
+            turn[i] = front[k][i];
+            front[k][i] = right[(i + 1) % (size + 1)][k];
+            right[(i + 1) % (size + 1)][k] = back[size - k][(i + 1) % (size + 1)];
+            back[size - k][(i + 1) % (size + 1)] = left[i][size - k];
+            left[i][size - k] = turn[i];
         }
-        front = rotate(front);
+        if (k == 0) {
+            up = rotate(up);
+        } else if (k == size) {
+            for (int i = 1; i < 4; i++) {
+                down = rotate(down);
+            }
+        }
     }
 
-    // поворот левой грани на 90 градусов по часовой стрелке
-    public static void l() {
-        String[] turn = {up[0][0], up[1][0]};
-        for (int i = 0; i < 2; i++) {
-            up[i][0] = back[i][0];
-            back[i][0] = down[i][0];
-            down[i][0] = front[i][0];
-            front[i][0] = turn[i];
+    //поворот грани, отсчитывая спереди на 90 градусов по часовой стрелке
+    public static void f(int k) {
+        String[] turn = new String[size + 1];
+        for (int i = 0; i < size + 1; i++) {
+            turn[i] = up[size - k][i];
+            up[size - k][i] = left[size - k][i];
+            left[size - k][i] = down[k][(i + 1) % (size + 1)];
+            down[k][(i + 1) % (size + 1)] = right[size - k][i];
+            right[size - k][i] = turn[i];
         }
-        left = rotate(left);
+        if (k == 0) {
+            front = rotate(front);
+        } else if (k == size) {
+            for (int i = 1; i < 4; i++) {
+                back = rotate(back);
+            }
+        }
     }
 
-    // поворот задней грани на 90 градусов по часовой стрелке
-    public static void b() {
-        String[] turn = {up[0][0], up[0][1]};
-        for (int i = 0; i < 2; i++) {
-            up[0][i] = right[0][i];
-            right[0][i] = down[1][(i + 1) % 2];
-            down[1][(i + 1) % 2] = left[0][i];
-            left[0][i] = turn[i];
+    // поворот грани, отсчитывая слева на 90 градусов по часовой стрелке
+    public static void l(int k) {
+        for (int i = 1; i < 4; i++) {
+            r(size - k);
         }
-        back = rotate(back);
     }
 
-    // поворот нижней грани на 90 градусов по часовой стрелке
-    public static void d() {
-        String[] turn = {front[1][0], front[1][1]};
-        for (int i = 0; i < 2; i++) {
-            front[1][i] = left[i][0];
-            left[i][0] = back[0][(i + 1) % 2];
-            back[0][(i + 1) % 2] = right[(i + 1) % 2][1];
-            right[(i + 1) % 2][1] = turn[i];
+    // поворот грани, отсчитывая сзади на 90 градусов по часовой стрелке
+    public static void b(int k) {
+        for (int i = 1; i < 4; i++) {
+            f(size - k);
         }
-        down = rotate(down);
     }
+
+    // поворот грани, отсчитывая снизу на 90 градусов по часовой стрелке
+    public static void d(int k) {
+        for (int i = 1; i < 4; i++) {
+            u(size - k);
+        }
+    }
+
 
     //Повороты кубика
     //Поворот кубика влево
     public static void turnLeft() {
-        u();
-        for (int i = 1; i < 4; i++) {
-            d();
+        for (int i = 0; i < size + 1; i++) {
+            u(i);
         }
     }
 
     //Поворот кубика вправо
     public static void turnRight() {
-        d();
-        for (int i = 1; i < 4; i++) {
-            u();
+        for (int i = 0; i < size + 1; i++) {
+            d(i);
         }
     }
 
     //Поворот кубика вверх
     public static void turnUp() {
-        r();
-        for (int i = 1; i < 4; i++) {
-            l();
+        for (int i = 0; i < size + 1; i++) {
+            r(i);
         }
     }
 
     //Поворот кубика вниз
     public static void turnDown() {
-        l();
-        for (int i = 1; i < 4; i++) {
-            r();
+        for (int i = 0; i < size + 1; i++) {
+            l(i);
         }
     }
 
@@ -135,18 +153,18 @@ public class Cube {
         for (int i = 1; i < 3 + n; i++) {
             int k = (int) (Math.random() * 3);
             for (int j = 0; j < k; j++) {
-                r();
-                d();
+                r(0);
+                d(0);
             }
             k = (int) (Math.random() * 3);
             for (int j = 0; j < k; j++) {
-                b();
-                l();
+                b(0);
+                l(0);
             }
             k = (int) (Math.random() * 3);
             for (int j = 0; j < k; j++) {
-                u();
-                f();
+                u(0);
+                f(0);
             }
         }
     }
