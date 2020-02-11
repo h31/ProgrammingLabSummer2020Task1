@@ -1,8 +1,6 @@
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class AddressBook {
     private HashMap<String, Address> map = new HashMap<>();
@@ -31,7 +29,7 @@ class AddressBook {
         if (!map.containsKey(surname)) return null;
         try {
             map.replace(surname, address);
-        } catch(NullPointerException | IllegalArgumentException | UnsupportedOperationException | ClassCastException ignored) {
+        } catch (NullPointerException | IllegalArgumentException | UnsupportedOperationException | ClassCastException ignored) {
             return null;
         }
         return this;
@@ -40,7 +38,7 @@ class AddressBook {
     Address getAdds(String surname) {
         Address adds;
         try {
-             adds = map.get(surname);
+            adds = map.get(surname);
         } catch (ClassCastException | NullPointerException ignored) {
             return null;
         }
@@ -90,5 +88,9 @@ class Address {
 
     String getApartment() {
         return this.apartment;
+    }
+
+    boolean equals(Address address) {
+        return this.apartment.equals(address.apartment) & this.house.equals(address.house) & this.street.equals(address.street);
     }
 }

@@ -1,6 +1,8 @@
 import javafx.util.Pair;
 import org.junit.Test;
 
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 public class AddressBookTest {
@@ -43,10 +45,19 @@ public class AddressBookTest {
 
     @Test
     public void getAdds() {
+        assertTrue(new AddressBook(
+                new Pair<>("Shadaev", new Address("Komendantskii", "22", "269"))).getAdds("Shadaev")
+                .equals(new Address("Komendantskii", "22", "269")));
+        assertNull(new AddressBook().getAdds("Krivitskii"));
     }
 
     @Test
     public void filterStreet() {
+        /*assertTrue(new AddressBook(
+                new Pair<>("Krivitskii", new Address("Komendantskii", "1", "1")),
+                new Pair<>("Mukaddam", new Address("Komendantskii", "22", "269")),
+                new Pair<>("Chuprov", new Address("Nevskiy", "35", "3"))
+        ).filterStreet("Komendantskii");*/
     }
 
     @Test
