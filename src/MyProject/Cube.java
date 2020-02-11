@@ -11,6 +11,9 @@ public class Cube {
     private static int size;
 
     Cube(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException();
+        }
         front = new String[n][n];
         right = new String[n][n];
         left = new String[n][n];
@@ -36,6 +39,9 @@ public class Cube {
 
     //поворот грани, отсчитывая справа на 90 градусов по часовой стрелке
     public static void r(int k) {
+        if (k > size || k < 0) {
+            throw new IllegalArgumentException();
+        }
         String[] turn = new String[size + 1];
         for (int i = 0; i < size + 1; i++) {
             turn[i] = up[i][size - k];
@@ -55,6 +61,9 @@ public class Cube {
 
     //поворот грани, отсчитывая сверху на 90 градусов по часовой стрелке
     public static void u(int k) {
+        if (k > size || k < 0) {
+            throw new IllegalArgumentException();
+        }
         String[] turn = new String[size + 1];
         for (int i = 0; i < size + 1; i++) {
             turn[i] = front[k][i];
@@ -74,6 +83,9 @@ public class Cube {
 
     //поворот грани, отсчитывая спереди на 90 градусов по часовой стрелке
     public static void f(int k) {
+        if (k > size || k < 0) {
+            throw new IllegalArgumentException();
+        }
         String[] turn = new String[size + 1];
         for (int i = 0; i < size + 1; i++) {
             turn[i] = up[size - k][i];
