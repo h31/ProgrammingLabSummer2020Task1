@@ -1,11 +1,8 @@
 package MyProject;
 
 public class Cube {
-    /*
-    Для реализации утилиты просто в цикли рандомное число раз поворачиваешь стороны
-     */
 
-    // Цвета для вывода текста
+    // Цвета для вывода квадратиков
     private static String RED = "\u001B[31m";
     private static String GREEN = "\u001B[32m";
     private static String YELLOW = "\u001B[33m";
@@ -22,7 +19,6 @@ public class Cube {
 
 
     //Методы поворотов кубика (Язык поворотов кубика стандартный)
-
     //поворот правой грани на 90 градусов по часовой стрелке
     public static void r() {
         String[] turn = {up[0][1], up[1][1]};
@@ -119,6 +115,33 @@ public class Cube {
         l();
         for (int i = 1; i < 4; i++) {
             r();
+        }
+    }
+
+    //запрос состояния грани
+    public static String[][] status() {
+        return front;
+    }
+
+    //случайная установка состояния кубика
+    public static void shuffle() {
+        int n = (int) (Math.random() * 3);
+        for (int i = 1; i < 3 + n; i++) {
+            int k = (int) (Math.random() * 3);
+            for (int j = 0; j < k; j++) {
+                r();
+                d();
+            }
+            k = (int) (Math.random() * 3);
+            for (int j = 0; j < k; j++) {
+                b();
+                l();
+            }
+            k = (int) (Math.random() * 3);
+            for (int j = 0; j < k; j++) {
+                u();
+                f();
+            }
         }
     }
 }
