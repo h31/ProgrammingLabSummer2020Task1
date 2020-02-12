@@ -22,39 +22,32 @@ class AddressBook {
     }
 
     AddressBook remove(String surname) {
-        return (map.remove(surname) == null) ? null : this;
+        if (!map.containsKey(surname)) throw new NullPointerException();
+        map.remove(surname);
+        return this;
     }
 
     AddressBook changeAdds(String surname, Address address) {
-        if (!map.containsKey(surname)) return null;
-        try {
-            map.replace(surname, address);
-        } catch (NullPointerException | IllegalArgumentException | UnsupportedOperationException | ClassCastException ignored) {
-            return null;
-        }
+        if (!map.containsKey(surname)) throw new NullPointerException();
+        map.replace(surname, address);
         return this;
     }
 
     Address getAdds(String surname) {
-        Address adds;
-        try {
-            adds = map.get(surname);
-        } catch (ClassCastException | NullPointerException ignored) {
-            return null;
-        }
-        return adds;
+        if (!map.containsKey(surname)) throw new NullPointerException();
+        return map.get(surname);
     }
 
-    ArrayList<String> filterStreet(String street) {
-        ArrayList<String> people = new ArrayList<>();
+    List<String> filterStreet(String street) {
+        List<String> people = new ArrayList<>();
         for (Map.Entry<String, Address> element : this.map.entrySet()) {
             if (element.getValue().getStreet().equals(street)) people.add(element.getKey());
         }
         return people;
     }
 
-    ArrayList<String> filterHouse(String street, String house) {
-        ArrayList<String> people = new ArrayList<>();
+    List<String> filterHouse(String street, String house) {
+        List<String> people = new ArrayList<>();
         for (Map.Entry<String, Address> element : this.map.entrySet()) {
             if (element.getValue().getStreet().equals(street) && element.getValue().getHouse().equals(house))
                 people.add(element.getKey());
