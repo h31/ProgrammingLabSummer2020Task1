@@ -16,58 +16,81 @@ public class AddressBookTest {
                 new Pair<>("Kuznecova", new Address("Nevskiy", "35", "3")),
                 new Pair<>("Sergeev", new Address("Primorskaya", "19", "2")),
                 new Pair<>("Petryaeva", new Address("Lesnaya", "22", "269")));
-
     }
 
     @Test
     public void add() {
-        assertEquals(8,
-                createDictionary().add("Sidorov", new Address("Lesnaya", "52", "24")).size());
-        assertEquals(1, new AddressBook().add("Krivitskii", new Address("Komendantskii", "1", "1")).size());
+        assertEquals(8, createDictionary()
+                .add("Sidorov", new Address("Lesnaya", "52", "24"))
+                .size());
+        assertEquals(1, new AddressBook()
+                .add("Krivitskii", new Address("Komendantskii", "1", "1"))
+                .size());
     }
 
     @Test
     public void remove() {
-        assertEquals(6,
-                createDictionary().remove("Galieva").size());
+        assertEquals(6, createDictionary()
+                .remove("Galieva")
+                .size());
     }
 
     @Test(expected = NullPointerException.class)
     public void removeNull() {
-        new AddressBook().remove("Test");
+        new AddressBook()
+                .remove("Test");
     }
 
     @Test
     public void changeAdds() {
-        assertEquals("Komendantskii", createDictionary().changeAdds("Galieva", new Address("Komendantskii", "35", "3")).getAdds("Galieva").getStreet());
+        assertEquals("Komendantskii", createDictionary()
+                .changeAdds("Galieva", new Address("Komendantskii", "35", "3"))
+                .getAdds("Galieva").getStreet());
     }
 
     @Test(expected = NullPointerException.class)
     public void changeAddsNull() {
-        new AddressBook().changeAdds("Krivitskii", new Address("Nevskiy", "35", "3"));
+        new AddressBook()
+                .changeAdds("Krivitskii", new Address("Nevskiy", "35", "3"));
     }
 
     @Test
     public void getAdds() {
         assertTrue(new AddressBook(
-                new Pair<>("Shadaev", new Address("Komendantskii", "22", "269"))).getAdds("Shadaev")
+                new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")))
+                .getAdds("Shadaev")
                 .equals(new Address("Komendantskii", "22", "269")));
     }
 
     @Test(expected = NullPointerException.class)
     public void getAddsNull() {
-        new AddressBook().getAdds("Krivitskii");
+        new AddressBook()
+                .getAdds("Krivitskii");
     }
 
     @Test
     public void filterStreet() {
-        assertTrue(Arrays.asList("Krivitskii", "Shadaev", "Shomov").containsAll(createDictionary().filterStreet("Komendantskii")));
-        assertTrue(createDictionary().filterStreet("Spasskaya").isEmpty());
+        assertTrue(Arrays.asList("Krivitskii", "Shadaev", "Shomov")
+                .containsAll(createDictionary().filterStreet("Komendantskii")));
+        assertTrue(createDictionary()
+                .filterStreet("Spasskaya")
+                .isEmpty());
     }
 
     @Test
     public void filterHouse() {
-        assertTrue(Arrays.asList("Galieva", "Kuznecova").containsAll(createDictionary().filterHouse("Nevskiy", "35")));
-        assertTrue(createDictionary().filterHouse("Komendantskii", "228").isEmpty());
+        assertTrue(Arrays.asList("Galieva", "Kuznecova")
+                .containsAll(createDictionary().filterHouse("Nevskiy", "35")));
+        assertTrue(createDictionary().filterHouse("Komendantskii", "228")
+                .isEmpty());
+    }
+
+    @Test
+    public void size() {
+        assertEquals(8, createDictionary()
+                .add("Orlov", new Address("Nevskiy", "35", "222"))
+                .size());
+        assertEquals(0, new AddressBook()
+                .size());
     }
 }
