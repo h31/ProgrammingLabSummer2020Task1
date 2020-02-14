@@ -76,10 +76,10 @@ public class AddressBookTest {
     }
 
     @Test
-    public void filterHouse() {
+    public void filterBuilding() {
         assertTrue(Arrays.asList("Galieva", "Kuznecova")
-                .containsAll(createDictionary().filterHouse("Nevskiy", "35")));
-        assertTrue(createDictionary().filterHouse("Komendantskii", "228")
+                .containsAll(createDictionary().filterBuilding("Nevskiy", "35")));
+        assertTrue(createDictionary().filterBuilding("Komendantskii", "228")
                 .isEmpty());
     }
 
@@ -99,9 +99,9 @@ public class AddressBookTest {
     }
 
     @Test
-    public void getHouse() {
+    public void getBuilding() {
         assertEquals("35", new Address("Nevskiy", "35", "261")
-                .getHouse());
+                .getBuilding());
     }
 
     @Test

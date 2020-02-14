@@ -6,8 +6,8 @@ class AddressBook {
 
     @SafeVarargs
     AddressBook(Pair<String, Address>... people) {
-        for (int i = 0; i != people.length; i++) {
-            map.put(people[i].getKey(), people[i].getValue());
+        for (Pair<String, Address> element: people) {
+            map.put(element.getKey(), element.getValue());
         }
     }
 
@@ -21,7 +21,7 @@ class AddressBook {
     }
 
     AddressBook remove(String surname) {
-        if (!map.containsKey(surname)) throw new NullPointerException();
+        if (!map.containsKey(surname)) throw new IllegalArgumentException();
         map.remove(surname);
         return this;
     }
@@ -45,10 +45,10 @@ class AddressBook {
         return people;
     }
 
-    List<String> filterHouse(String street, String house) {
+    List<String> filterBuilding(String street, String building) {
         List<String> people = new ArrayList<>();
         for (Map.Entry<String, Address> element : this.map.entrySet()) {
-            if (element.getValue().getStreet().equals(street) && element.getValue().getHouse().equals(house))
+            if (element.getValue().getStreet().equals(street) && element.getValue().getBuilding().equals(building))
                 people.add(element.getKey());
         }
         return people;
@@ -61,12 +61,12 @@ class AddressBook {
 
 class Address {
     private String street;
-    private String house;
+    private String building;
     private String apartment;
 
-    Address(String street, String house, String apartment) {
+    Address(String street, String building, String apartment) {
         this.street = street;
-        this.house = house;
+        this.building = building;
         this.apartment = apartment;
     }
 
@@ -74,8 +74,8 @@ class Address {
         return this.street;
     }
 
-    String getHouse() {
-        return this.house;
+    String getBuilding() {
+        return this.building;
     }
 
     String getApartment() {
@@ -83,6 +83,6 @@ class Address {
     }
 
     boolean equals(Address address) {
-        return this.apartment.equals(address.apartment) & this.house.equals(address.house) & this.street.equals(address.street);
+        return this.apartment.equals(address.apartment) & this.building.equals(address.building) & this.street.equals(address.street);
     }
 }
