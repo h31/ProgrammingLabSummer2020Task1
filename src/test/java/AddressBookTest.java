@@ -33,7 +33,7 @@ public class AddressBookTest {
                 .size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void removeNull() {
         new AddressBook()
                 .remove("Test");
@@ -54,10 +54,9 @@ public class AddressBookTest {
 
     @Test
     public void getAdds() {
-        assertTrue(new AddressBook(
+        assertEquals(new AddressBook(
                 new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")))
-                .getAdds("Shadaev")
-                .equals(new Address("Komendantskii", "22", "269")));
+                .getAdds("Shadaev"), new Address("Komendantskii", "22", "269"));
     }
 
     @Test(expected = NullPointerException.class)
@@ -112,9 +111,7 @@ public class AddressBookTest {
 
     @Test
     public void testEquals() {
-        assertTrue(new Address("Primorskaya", "24", "118")
-                .equals(new Address("Primorskaya", "24", "118")));
-        assertFalse(new Address("Shavrova", "54", "32")
-                .equals(new Address("Shavrova", "54", "87")));
+        assertEquals(new Address("Primorskaya", "24", "118"), new Address("Primorskaya", "24", "118"));
+        assertNotEquals(new Address("Shavrova", "54", "32"), new Address("Shavrova", "54", "87"));
     }
 }

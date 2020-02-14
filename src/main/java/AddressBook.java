@@ -57,6 +57,26 @@ class AddressBook {
     int size() {
         return this.map.size();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddressBook that = (AddressBook) o;
+        return map.equals(that.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(map);
+    }
+
+    @Override
+    public String toString() {
+        return "AddressBook{" +
+                "map=" + map +
+                '}';
+    }
 }
 
 class Address {
@@ -82,7 +102,28 @@ class Address {
         return this.apartment;
     }
 
-    boolean equals(Address address) {
-        return this.apartment.equals(address.apartment) & this.building.equals(address.building) & this.street.equals(address.street);
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", building='" + building + '\'' +
+                ", apartment='" + apartment + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return street.equals(address.street) &&
+                building.equals(address.building) &&
+                apartment.equals(address.apartment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(street, building, apartment);
     }
 }
