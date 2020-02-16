@@ -322,6 +322,7 @@ public class Cube {
             sb.append(Arrays.toString(front[i]));
             sb.append('\n');
         }
+        turnLeft();
         sb.append("}");
 
         return sb.toString();
