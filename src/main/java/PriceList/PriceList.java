@@ -1,35 +1,21 @@
 package PriceList;
 
-import javafx.util.Pair;
-
 import java.util.HashMap;
+import java.util.Objects;
 
 public class PriceList {
 
     private HashMap<Item, Double> items = new HashMap<>();
-
-
-    @SafeVarargs
-    PriceList(Pair<Item, Double>... newItems) {
-        for (Pair<Item, Double> element: newItems) {
-            items.put(element.getKey(), element.getValue());
-        }
+    PriceList() {
+        items = new HashMap<Item, Double>();
     }
 
-    public PriceList add(Pair<Item, Double> newItem) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(newItem.getKey().getName())) throw new IllegalArgumentException();
-            if (item.getId() == newItem.getKey().getId()) throw new IllegalArgumentException();
-        }
-        items.put(newItem.getKey(), newItem.getValue());
-        return this;
-    }
     public PriceList add(Item newItem, Double price) {
         for (Item item: items.keySet()) {
             if (item.getName().equals(newItem.getName())) throw new IllegalArgumentException();
             if (item.getId() == newItem.getId()) throw new IllegalArgumentException();
         }
-        items.put(newItem, price);
+        items.put(newItem, Math.floor(price*100)/100);
         return this;
     }
     public PriceList add(String name,Integer id, Double price) {
@@ -37,7 +23,7 @@ public class PriceList {
             if (item.getName().equals(name)) throw new IllegalArgumentException();
             if (item.getId() == id) throw new IllegalArgumentException();
         }
-        items.put(new Item(name,id), price);
+        items.put(new Item(name,id), Math.floor(price*100)/100);
         return this;
     }
 
@@ -131,6 +117,18 @@ public class PriceList {
         return items.size();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PriceList priceList = (PriceList) o;
+        return items.equals(priceList.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(items);
+    }
 }
 
 class Item {
@@ -141,10 +139,6 @@ class Item {
         name = newName;
         id = newId;
     }
-
-
-
-
     public String getName() {
         return name;
     }
@@ -154,13 +148,28 @@ class Item {
     }
 
 
-    public void changeName(String newName) {
+    public Item changeName(String newName) {
         name = newName;
+        return this;
     }
 
-    public void changeId(int newId) {
+    public Item changeId(int newId) {
         id = newId;
+        return this;
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return name.equals(item.name) &&
+                id.equals(item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, id);
+    }
 }
