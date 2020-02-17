@@ -6,11 +6,11 @@ import java.util.Objects;
 enum Colour{
 
     RED,
-    WHITE,
+    GREEN,
     ORANGE,
-    YELLOW,
     BLUE,
-    GREEN
+    WHITE,
+    YELLOW,
 }
 
 public class Cube {
@@ -217,6 +217,120 @@ public class Cube {
         return result;
     }
 
+    //алгоритм пиф-паф
+    private void pifPuf() {
+        rightFaceClockwise(0);
+        upFaceClockwise(0);
+        leftFaceClockwise(1);
+        downFaceClockwise(1);
+    }
+
+    //алгоритм перемещения 2-х кубиков между собой
+    private void replaceMiniCubes() {
+        rightFaceClockwise(0);
+        upFaceClockwise(0);
+        leftFaceClockwise(1);
+        backFaceClockwise(1);
+        rightFaceClockwise(0);
+        upFaceClockwise(0);
+        leftFaceClockwise(1);
+        downFaceClockwise(1);
+        leftFaceClockwise(1);
+        frontFaceClockwise(0);
+        rightFaceClockwise(0);
+        rightFaceClockwise(0);
+        downFaceClockwise(1);
+        leftFaceClockwise(1);
+        downFaceClockwise(1);
+    }
+
+    //поиск и установка миникубиков таким образом
+    private void placingMiniCube(Colour colour1, Colour colour2) {
+        int k = 0;
+        if (colour1 == Colour.RED) k = -1;
+        boolean[] otherColoursTests = new boolean[2];
+        turnUp();
+        while (!otherColoursTests[0] && !otherColoursTests[1] && k < 3) {
+            turnDown();
+            if ((front[0][0] == colour1 || front[0][0] == colour2  || front[0][0] == Colour.WHITE)
+                    && (left[1][1] == colour1 || left[1][1] == colour2  || left[1][1] == Colour.WHITE)
+                    && (up[1][0] == colour2 || up[1][0] == colour1  || up[1][0] == Colour.WHITE))
+                otherColoursTests[0] = true;
+            if ((front[0][1] == colour1 || front[0][1] == colour2  || front[0][1] == Colour.WHITE)
+                    && (up[1][1] == colour1 || up[1][1] == colour2 || up[1][1] == Colour.WHITE)
+                    && (right[1][0] == colour2 || right[1][0] == colour1 || right[1][0] == Colour.WHITE))
+                otherColoursTests[1] = true;
+            k++;
+        }
+        for (int i = 1; i < k; i++) {
+            turnUp();
+            if(otherColoursTests[0]) {
+                downFaceClockwise(1);
+            } else if (otherColoursTests[1] && colour1 != Colour.BLUE) {
+                leftFaceClockwise(1);
+            } else if (otherColoursTests[1]) upFaceClockwise(0);
+        }
+        k = 0;
+        if (otherColoursTests[0]) {
+            downFaceClockwise(1);
+            otherColoursTests[0] = false;
+        }
+        otherColoursTests[1] = false;
+    }
+
+    //решение кубика 2x2x2
+    public void solution() {
+        int k = 0;
+        boolean flag = true;
+        //сборка белой стороны и полосы
+        for (int i = 1; i < 4; i++) {
+            placingMiniCube(Colour.values()[i - 1], Colour.values()[i]);
+            while (front[1][1] != Colour.values()[i - 1] || right[1][1] != Colour.values()[i] || down[0][1] != Colour.WHITE) {
+                pifPuf();
+            }
+            turnLeft();
+        }
+        placingMiniCube(Colour.BLUE, Colour.RED);
+        while (front[1][1] != Colour.BLUE || right[1][1] != Colour.RED || down[0][1] != Colour.WHITE) {
+            pifPuf();
+        }
+        //собрал сторону и полосу
+        turnClockwise();
+        turnClockwise();
+        for (int i = 0; i < 4; i++) {
+            while (down[0][1] != Colour.YELLOW) {
+                pifPuf();
+            }
+            upFaceClockwise(1);
+        }
+        turnClockwise();
+        turnClockwise();
+        //перевернул жёлтую сторону, осталось только поставить одну линию
+        while (flag) {
+            k++;
+            turnRight();
+            if (front[0][0] == front[0][1]) {
+                while (flag) {
+                    downFaceClockwise(0);
+                    if (front[0][0] == front[1][0] && front[0][1] == front[1][1]) flag = false;
+                }
+            }
+            if (k > 4) {
+                replaceMiniCubes();
+                k = 0;
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            if (front[0][0] != front[1][0]) {
+                if (front[0][1] != front[1][1]) turnLeft();
+                turnRight();
+                turnRight();
+                replaceMiniCubes();
+            } else if (front[0][1] != front[1][1]) replaceMiniCubes();
+            turnLeft();
+        }
+    }
+
     private Boolean equalsOfFaces(Cube other, Colour[][] Face) {
         boolean flag = false;
         for (int i = 1; i < repeats + 1; i++) {
@@ -292,14 +406,8 @@ public class Cube {
                     break;
                 case 3:
                     face = "Back";
-                    turnClockwise();
-                    turnClockwise();
                     break;
                 default:
-                    turnUp();
-                    turnClockwise();
-                    turnClockwise();
-                    turnDown();
                     face = "Down";
             }
             sb.append(face).append(" \n");

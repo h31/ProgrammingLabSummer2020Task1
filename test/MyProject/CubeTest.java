@@ -163,17 +163,14 @@ class CubeTest {
     //тесты для проверки что перемешивание кубика работает правильно
     @Test
     void randomPosition() {
-        Colour[][] side = {{Colour.RED, Colour.RED}, {Colour.RED, Colour.RED}};
-        Assertions.assertArrayEquals(duo.status(), side);
+        Cube test = new Cube(2);
+        Assertions.assertEquals(duo, test);
         duo.shuffle();
-        Assertions.assertNotEquals(duo.status(), side);
+        Assertions.assertNotEquals(duo, test);
         duo.turnLeft();
-        Assertions.assertNotEquals(duo.status(), side);
+        Assertions.assertNotEquals(duo, test);
         duo.shuffle();
-        Assertions.assertNotEquals(duo.status(), side);
-        side = duo.status();
-        duo.shuffle();
-        Assertions.assertNotEquals(duo.status(), side);
+        Assertions.assertNotEquals(duo, test);
     }
 
     //тесты для проверки правильности выбрасывания исключений
@@ -199,6 +196,16 @@ class CubeTest {
             Assertions.fail();
         } catch (IllegalArgumentException e) {
         }
+    }
+
+    //тесты для проверки что перемешивание кубика работает правильно
+    @Test
+    void solutionTest() {
+        duo = new Cube(2);
+        duo.shuffle();
+        duo.solution();
+        Cube c = new Cube (2);
+        Assertions.assertEquals(c, duo);
     }
 
     //тесты для проверки правильности equals()
