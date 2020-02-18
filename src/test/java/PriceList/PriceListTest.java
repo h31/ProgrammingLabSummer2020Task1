@@ -38,6 +38,13 @@ class PriceListTest {
                     .changePrice(0, 34.99);
 
         });
+        assertEquals(10.44, createPriceList().changePrice("Товар 1", 10.444).getPrice(1)
+        );
+        assertThrows(IllegalArgumentException.class, () -> {
+            createPriceList()
+                    .changePrice("test", 34.99);
+
+        });
     }
     @Test
     public void changeName() {
@@ -92,7 +99,7 @@ class PriceListTest {
     }
     @Test
     public void itemGetId() {
-        assertEquals(0, new Item("name", 0).getName());
+        assertEquals(0, new Item("name", 0).getId());
     }
     @Test
     public void itemChangeName() {
