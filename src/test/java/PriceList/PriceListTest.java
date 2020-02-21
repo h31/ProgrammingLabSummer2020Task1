@@ -111,5 +111,8 @@ class PriceListTest {
         Item test = new Item("name", 123);
         assertEquals(test, new Item("name", 0).changeId(123));
     }
+
+
+
 }
 

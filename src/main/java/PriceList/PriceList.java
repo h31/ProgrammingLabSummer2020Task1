@@ -129,7 +129,15 @@ public class PriceList {
     public int hashCode() {
         return Objects.hash(items);
     }
+
+    @Override
+    public String toString() {
+        return "PriceList{" +
+                "items=" + items +
+                '}';
+    }
 }
+
 
 class Item {
     private String name;
@@ -171,5 +179,13 @@ class Item {
     @Override
     public int hashCode() {
         return Objects.hash(name, id);
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
