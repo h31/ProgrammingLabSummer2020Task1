@@ -270,7 +270,6 @@ public class Cube {
                 leftFaceClockwise(1);
             } else if (otherColoursTests[1]) upFaceClockwise(0);
         }
-        k = 0;
         if (otherColoursTests[0]) {
             downFaceClockwise(1);
             otherColoursTests[0] = false;
