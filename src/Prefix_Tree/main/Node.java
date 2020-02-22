@@ -1,20 +1,28 @@
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class Node {
-    private char symbol;
-    private Map<Character, Node> nextNodes;
+    public char symbol;
+    public Map<Character, Node> nextNodes;
     public String prefix;
     public boolean isEnd;
 
-    Node(char symbol, Map<Character, Node> nextNodes) {
+    Node(char symbol) {
         this.symbol = symbol;
-        this.nextNodes = nextNodes;
+        nextNodes = new HashMap<>();
     }
 
-    public Node root = new Node('\0', Collections.emptyMap());
+    /*public void add(Node newNode) {
+        nextNodes.put(newNode.symbol, newNode);
+    }
+     */
 
-    public Node add(Node newNode) {
-        return nextNodes.put(newNode.symbol, newNode);
+    @Override
+    public String toString() {
+        return "Узел{" +
+                "символ: " + symbol +
+                ", следующие символы: " + nextNodes +
+                ", префикс: " + prefix + '\'' +
+                '}';
     }
 }
