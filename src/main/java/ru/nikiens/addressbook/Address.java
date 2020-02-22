@@ -10,8 +10,11 @@ public final class Address {
     private final int flat;
 
     public Address(String street, int building, int flat) {
-        if (building <= 0 || flat <= 0) throw new IllegalArgumentException();
-        if (!street.matches(REGEX)) throw new IllegalArgumentException();
+        if (building <= 0 ||
+                flat <= 0 ||
+                !street.matches(REGEX)) {
+            throw new IllegalArgumentException();
+        }
 
         this.street = street;
         this.building = building;
