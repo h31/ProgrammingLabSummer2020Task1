@@ -3,7 +3,7 @@ package ru.nikiens.addressbook;
 import java.util.Objects;
 
 public final class Address {
-    private static final String REGEX = "(?i:[a-zа-я0-9\\-]+)";
+    private static final String REGEX = "(?Ui:[\\w\\-]+)";
 
     private final String street;
     private final int building;
@@ -12,9 +12,7 @@ public final class Address {
     public Address(String street, int building, int flat) {
         if (building <= 0 ||
                 flat <= 0 ||
-                !street.matches(REGEX)) {
-            throw new IllegalArgumentException();
-        }
+                !street.matches(REGEX)) throw new IllegalArgumentException();
 
         this.street = street;
         this.building = building;
