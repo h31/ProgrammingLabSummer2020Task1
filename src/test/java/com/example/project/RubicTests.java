@@ -9,8 +9,19 @@ class RubicTests {
     void showTheCurrentSize() {
         Rubic cube = new Rubic();
         String[][] front = {{"R", "R", "R"}, {"R", "R", "R"}, {"R", "R", "R"}};
-        String[][] left = {{"G", "G", "G"}, {"G", "G", "G"}, {"G", "G", "G"}};
+        String[][] right = {{"G", "G", "G"}, {"G", "G", "G"}, {"G", "G", "G"}};
         assertArrayEquals(front, cube.getSide('F'));
-        assertArrayEquals(left, cube.getSide('L'));
+        assertArrayEquals(right, cube.getSide('R'));
+    }
+
+    @Test
+    void rotate() {
+        Rubic cube = new Rubic();
+        String[][] expected1 = {{"G", "G", "G"}, {"G", "G", "G"}, {"G", "G", "G"}};
+        String[][] expected2 = {{"R", "R", "R"}, {"R", "R", "R"}, {"R", "R", "R"}};
+        cube.rotate("x");
+        assertArrayEquals(expected1, cube.getSide('F'));
+        cube.rotate("x'");
+        assertArrayEquals(expected2, cube.getSide('F'));
     }
 }
