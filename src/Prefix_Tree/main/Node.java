@@ -6,16 +6,13 @@ public final class Node {
     public Map<Character, Node> nextNodes;
     public String prefix;
     public boolean isEnd;
+    public Node previous;
 
-    Node(char symbol) {
+    Node(char symbol, Node previous) {
         this.symbol = symbol;
         nextNodes = new HashMap<>();
+        this.previous = previous;
     }
-
-    /*public void add(Node newNode) {
-        nextNodes.put(newNode.symbol, newNode);
-    }
-     */
 
     @Override
     public String toString() {

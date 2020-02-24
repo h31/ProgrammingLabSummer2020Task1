@@ -1,35 +1,59 @@
 import java.util.*;
 
 public final class Trie {
-    private static Node root = new Node('\0');
+    private static Node root;
 
-    public static void addWord(String word) {
+    public Trie() {
+        root = new Node('\0', null); //???????????????????
+        root.isEnd = true;
+    }
+
+    public void addWord(String word) {
         Node node = root;
         for (char ch : word.toLowerCase().toCharArray()) {
             if (!node.nextNodes.containsKey(ch)) {
-                node.nextNodes.put(ch, new Node(ch));
+                node.nextNodes.put(ch, new Node(ch, node));
             }
             node = node.nextNodes.get(ch);
         }
         node.isEnd = true;
     }
 
-    public static void deleteWord(String word) {
-
-    }
-
-    public static boolean findWord(String word) {
+    private Node findNode(String word) {
         Node node = root;
         for (char ch : word.toLowerCase().toCharArray()) {
             if (!node.nextNodes.containsKey(ch)) {
-                return false;
+                return null;
             }
             node = node.nextNodes.get(ch);
         }
-        return true;
+        return node.isEnd ? node : null;
     }
 
-    public static void findByPrefix(String word) {
+    public void deleteWord(String word) {
+        Node node = findNode(word);
+        if (node != null) {
+            Node previous = node.previous;
+            node.isEnd = false;
+            while (node.nextNodes.size() == 0 && !node.isEnd) {
+                previous.nextNodes.remove(node.symbol, node);
+                node = previous;
+                previous = node.previous;
+            }
+        }
+    }
 
+    public boolean findWord(String word) {
+        return findNode(word) != null;
+    }
+
+    public List<String> findByPrefix(String word) {
+        Node node = root;
+        for (char ch : word.toLowerCase().toCharArray()) {
+            if (!node.nextNodes.containsKey(ch)) {
+                return Collections.emptyList();
+            }
+        }
+        return Collections.emptyList(); //не доделано, поставил, чтобы не было ошибок
     }
 }
