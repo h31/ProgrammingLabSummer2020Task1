@@ -3,25 +3,51 @@ package com.example.project;
 import java.util.Arrays;
 
 public class Rubic {
-    public static final String red = "\u001b[31mR\u001b[0m";
-    public static final String blue = "\u001b[34mB\u001b[0m";
-    public static final String yellow = "\u001b[33mY\u001b[0m";
-    public static final String green = "\u001b[32mG\u001b[0m";
-    public static final String white = "\u001b[37mW\u001b[0m";
-    public static final String orange = "\u001b[38;5;202mO\u001b[0m";
+    private int size;
+
+    Rubic() {
+        this.setSize(3);
+    }
+    Rubic(int s) {
+        this.setSize(s);
+    }
+
+    private String[][] frontSide;
+    private String[][] backSide;
+    private String[][] upSide;
+    private String[][] downSide;
+    private String[][] rightSide;
+    private String[][] leftSide;
 
 
-    private String[][] frontSide = {{red, red, red}, {red, red, red}, {red, red, red}};
-    private String[][] backSide = {{orange, orange, orange}, {orange, orange, orange}, {orange, orange, orange}};
-    private String[][] upSide = {{yellow, yellow, yellow}, {yellow, yellow, yellow}, {yellow, yellow, yellow}};
-    private String[][] downSide = {{white, white, white}, {white, white, white}, {white, white, white}};
-    private String[][] rightSide = {{green, green, green}, {green, green, green}, {green, green, green}};
-    private String[][] leftSide = {{blue, blue, blue}, {blue, blue, blue}, {blue, blue, blue}};
+    private void setSize(int s) {
+        this.size = s;
+        frontSide = new String[s][s];
+        backSide = new String[s][s];
+        upSide = new String[s][s];
+        downSide = new String[s][s];
+        rightSide = new String[s][s];
+        leftSide = new String[s][s];
+        for (int i = 0; i < s; i++) {
+            for (int j = 0; j < s; j++) {
+                frontSide[i][j] = "R";
+                backSide[i][j] = "O";
+                upSide[i][j] = "Y";
+                downSide[i][j] = "W";
+                rightSide[i][j] = "G";
+                leftSide[i][j] = "B";
+            }
+        }
+    }
 
-    public enum CubeSides {
+    public enum Sides {
         LEFT, FRONT, RIGHT, BACK, UP, DOWN,
-        FRONT_, BACK_, LEFT_, RIGHT_, UP_, DOWN_,
-        X, Y, Z, X_, Y_, Z_;
+    }
+    public enum Layers {
+        MID, EQUATOR, STANDING
+    }
+    public enum Rotates {
+         X, Y, Z, X_, Y_, Z_
     }
 
     @Override
@@ -29,28 +55,32 @@ public class Rubic {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rubic rubic = (Rubic) o;
-        while (rubic.frontSide[1][1].equals(frontSide[1][1])) {
-            rubic.rotate(CubeSides.X);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (sidesEqual(rubic, this)) return true;
+                rubic.rotateCW(Rotates.Z);
+            }
+            rubic.rotateCW(Rotates.X);
         }
-        while (rubic.upSide[1][1].equals(upSide[1][1])) {
-            rubic.rotate(CubeSides.Z);
+        for (int i = 0; i < 3; i++) {
+            rubic.rotateCW(Rotates.Y);
+            for (int j = 0; j < 4; j++) {
+                if (sidesEqual(rubic, this)) return true;
+                rubic.rotateCW(Rotates.Z);
+            }
         }
-        return Arrays.equals(frontSide, rubic.frontSide) &&
-                Arrays.equals(backSide, rubic.backSide) &&
-                Arrays.equals(upSide, rubic.upSide) &&
-                Arrays.equals(downSide, rubic.downSide) &&
-                Arrays.equals(rightSide, rubic.rightSide) &&
-                Arrays.equals(leftSide, rubic.leftSide);
+        rubic.rotateCW(Rotates.Y);
+        return false;
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(frontSide);
-        result = 31 * result + Arrays.hashCode(backSide);
-        result = 31 * result + Arrays.hashCode(upSide);
-        result = 31 * result + Arrays.hashCode(downSide);
-        result = 31 * result + Arrays.hashCode(rightSide);
-        result = 31 * result + Arrays.hashCode(leftSide);
+        int result = Arrays.deepHashCode(frontSide);
+        result = 31 * result + Arrays.deepHashCode(backSide);
+        result = 31 * result + Arrays.deepHashCode(upSide);
+        result = 31 * result + Arrays.deepHashCode(downSide);
+        result = 31 * result + Arrays.deepHashCode(rightSide);
+        result = 31 * result + Arrays.deepHashCode(leftSide);
         return result;
     }
 
@@ -59,35 +89,36 @@ public class Rubic {
         StringBuilder result = new StringBuilder();
         String[][][] cube = {leftSide, frontSide, rightSide, downSide, backSide, upSide};
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < size; i++) {
             for (int k = 0; k < 3; k++) {
-                for (int j = 0; j < 3; j++) {
-                    result.append(cube[k][i][j]).append(" ");
+                for (int j = 0; j < size; j++) {
+                    result.append(cube[k][i][j]);
+                    if (j != size - 1) result.append(" ");
                 }
+                if (k != 2) result.append("  ");
             }
             result.append("\n");
         }
+        result.append("\n");
         for (int k = 3; k < 6; k++) {
-            for (int i = 0; i < 3; i++) {
-                result.append("      ");
-                for (int j = 0; j < 3; j++) {
-                    result.append(cube[k][i][j]).append(" ");
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < 2 * size + 1; j++) {
+                    result.append(" ");
+                }
+                for (int j = 0; j < size; j++) {
+                    result.append(cube[k][i][j]);
+                    if (j != size - 1) result.append(" ");
                 }
                 result.append("\n");
             }
+            if (k != 5) result.append("\n");
         }
 
         return result.toString();
     }
 
-    public static void main(String[] args) {
-        Rubic cube = new Rubic();
-        System.out.println(cube.toString());
-    }
-
-
     //Запрос нужной грани
-    public String[][] getSide(CubeSides side) {
+    public String[][] getSide(Sides side) {
         switch (side) {
             case FRONT:
                 return frontSide;
@@ -106,10 +137,8 @@ public class Rubic {
         }
     }
 
-
-
     //Поворот кубика
-    public void rotate(CubeSides rotation) {
+    public void rotateCW(Rotates rotation) {
         String[][] t = frontSide;
         switch (rotation) {
             case X: {
@@ -117,17 +146,8 @@ public class Rubic {
                 rightSide = backSide;
                 backSide = leftSide;
                 leftSide = t;
-                rotateSide(CubeSides.X, upSide);
-                rotateSide(CubeSides.X_, downSide);
-                break;
-            }
-            case X_: {
-                frontSide = leftSide;
-                leftSide = backSide;
-                backSide = rightSide;
-                rightSide = t;
-                rotateSide(CubeSides.X_, upSide);
-                rotateSide(CubeSides.X, downSide);
+                rotateSideCW(upSide);
+                rotateSideAntiCW(downSide);
                 break;
             }
             case Y: {
@@ -135,17 +155,8 @@ public class Rubic {
                 upSide = backSide;
                 backSide = downSide;
                 downSide = t;
-                rotateSide(CubeSides.X, rightSide);
-                rotateSide(CubeSides.X_, leftSide);
-                break;
-            }
-            case Y_: {
-                frontSide = downSide;
-                downSide = backSide;
-                backSide = upSide;
-                upSide = t;
-                rotateSide(CubeSides.X_, rightSide);
-                rotateSide(CubeSides.X, leftSide);
+                rotateSideCW(rightSide);
+                rotateSideAntiCW(leftSide);
                 break;
             }
             case Z: {
@@ -154,58 +165,225 @@ public class Rubic {
                 leftSide = downSide;
                 downSide = rightSide;
                 rightSide = t;
-                rotateSide(CubeSides.X, frontSide);
-                rotateSide(CubeSides.X_, backSide);
+                rotateSideCW(frontSide);
+                rotateSideAntiCW(backSide);
                 break;
             }
-            case Z_: {
+
+        }
+    }
+
+    public void rotateAntiCW(Rotates rotation) {
+        String[][] t = frontSide;
+        switch (rotation) {
+            case X: {
+                frontSide = leftSide;
+                leftSide = backSide;
+                backSide = rightSide;
+                rightSide = t;
+                rotateSideAntiCW(upSide);
+                rotateSideCW(downSide);
+                break;
+            }
+            case Y: {
+                frontSide = downSide;
+                downSide = backSide;
+                backSide = upSide;
+                upSide = t;
+                rotateSideAntiCW(rightSide);
+                rotateSideCW(leftSide);
+                break;
+            }
+            case Z: {
                 t = upSide;
                 upSide = rightSide;
                 rightSide = downSide;
                 downSide = leftSide;
                 leftSide = t;
-                rotateSide(CubeSides.X_, frontSide);
-                rotateSide(CubeSides.X, backSide);
+                rotateSideAntiCW(frontSide);
+                rotateSideCW(backSide);
                 break;
             }
-            default: throw new IllegalArgumentException();
         }
     }
 
-    /*public void turn(CubeSides layer) {
+    //Поворот грани
+    public void turnFaceSideCW(Sides side) {
+        switch (side) {
+            case FRONT: {
+                rotateLayerCW(Layers.STANDING, 1);
+                rotateSideCW(frontSide);
+                break;
+            }
 
-    }*/
+            case BACK: {
+                rotateLayerAntiCW(Layers.STANDING, size);
+                rotateSideCW(backSide);
+                break;
+            }
 
+            case RIGHT: {
+                rotateLayerCW(Layers.MID, size);
+                rotateSideCW(rightSide);
+                break;
+            }
+
+            case LEFT: {
+                rotateLayerAntiCW(Layers.MID, 1);
+                rotateSideCW(leftSide);
+                break;
+            }
+
+            case UP: {
+                rotateLayerCW(Layers.EQUATOR, 1);
+                rotateSideCW(upSide);
+                break;
+            }
+
+            case DOWN: {
+                rotateLayerAntiCW(Layers.EQUATOR, size);
+                rotateSideCW(downSide);
+                break;
+            }
+
+        }
+    }
+
+    public void turnFaceSideAntiCW(Sides side) {
+        switch (side) {
+            case FRONT: {
+                rotateLayerAntiCW(Layers.STANDING, 1);
+                rotateSideAntiCW(frontSide);
+                break;
+            }
+            case BACK: {
+                rotateLayerCW(Layers.STANDING, size);
+                rotateSideAntiCW(backSide);
+                break;
+            }
+            case RIGHT: {
+                rotateLayerAntiCW(Layers.MID, size);
+                rotateSideAntiCW(rightSide);
+                break;
+            }
+            case LEFT: {
+                rotateLayerCW(Layers.MID, 1);
+                rotateSideAntiCW(leftSide);
+            }
+            case UP: {
+                rotateLayerAntiCW(Layers.EQUATOR, 1);
+                rotateSideAntiCW(upSide);
+                break;
+            }
+            case DOWN: {
+                rotateLayerCW(Layers.EQUATOR, size);
+                rotateSideAntiCW(downSide);
+            }
+        }
+    }
 
     //Вспомогательные методы:
 
-
-    private void rotateSide(CubeSides rotation, String[][] side) {
-        String t = side[0][0];
-        switch (rotation) {
-            case X: {
-                side[0][0] = side[2][0];
-                side[2][0] = side[2][2];
-                side[2][2] = side[0][2];
-                side[0][2] = t;
-                t = side[0][1];
-                side[0][1] = side[1][0];
-                side[1][0] = side[2][1];
-                side[2][1] = side[1][2];
-                side[1][2] = t;
-                break;
-            }
-            case X_: {
-                side[0][0] = side[0][2];
-                side[0][2] = side[2][2];
-                side[2][2] = side[2][0];
-                side[2][0] = t;
-                t = side[0][1];
-                side[0][1] = side[1][2];
-                side[1][2] = side[2][1];
-                side[2][1] = side[1][0];
-                side[1][0] = t;
+    private void rotateSideCW(String[][] side) {
+        for (int i = 0; i < size / 2; i++) {
+            int s = size - 1 - i;
+            for (int j = i; j < size - i; j++) {
+                String t = side[i][j];
+                side[i][j] = side[s - j][i];
+                side[s - j][i] = side[s - i][s - j];
+                side[s - i][s - j] = side[j][s - i];
+                side[j][s - i] = t;
             }
         }
+    }
+
+    private void rotateSideAntiCW(String[][] side) {
+        for (int i = 0; i < size / 2; i++) {
+            int s = size - 1 - i;
+            for (int j = i; j < size - i; j++) {
+                String t = side[i][j];
+                side[i][j] = side[j][s - i];
+                side[j][s - i] = side[s - i][s - j];
+                side[s - i][s - j] = side[s - j][i];
+                side[s - j][i] = t;
+            }
+        }
+    }
+
+    private void rotateLayerCW(Layers layer, int order) {
+        switch (layer) {
+            case STANDING: {
+                for (int i = 0; i < size; i++) {
+                    String t = upSide[size - order][i];
+                    upSide[size - order][i] = leftSide[size - 1 - i][order - 1];
+                    leftSide[size - 1 - i][order - 1] = downSide[order - 1][size - 1 - i];
+                    downSide[order - 1][size - 1 - i] = rightSide[i][order - 1];
+                    rightSide[i][order - 1] = t;
+                }
+                break;
+            }
+            case EQUATOR: {
+                for (int i = 0; i < size; i++) {
+                    String[] t = frontSide[order - 1];
+                    frontSide[order - 1] = rightSide[order - 1];
+                    rightSide[order - 1] = backSide[size - order];
+                    backSide[size - order] = leftSide[order - 1];
+                    leftSide[order - 1] = t;
+                }
+                break;
+            }
+            case MID: {
+                for (int i = 0; i < size; i++) {
+                    String t = frontSide[i][order - 1];
+                    frontSide[i][order - 1] = downSide[i][order - 1];
+                    downSide[i][order - 1] = backSide[i][order - 1];
+                    backSide[i][order - 1] = upSide[i][order - 1];
+                    upSide[i][order - 1] = t;
+                }
+            }
+        }
+    }
+
+    private void rotateLayerAntiCW(Layers layer, int order) {
+        switch (layer) {
+            case STANDING: {
+                for (int i = 0; i < 3; i++) {
+                    String t = upSide[size - order][i];
+                    upSide[size - order][i] = rightSide[i][order - 1];
+                    rightSide[i][order - 1] = downSide[order - 1][size - 1 - i];
+                    downSide[order - 1][size - 1 - i] = leftSide[size - 1 - i][size - order];
+                    leftSide[size - 1 - i][size - order] = t;
+                }
+                break;
+            }
+            case EQUATOR: {
+                for (int i = 0; i < size; i++) {
+                    String[] t = frontSide[order - 1];
+                    frontSide[order - 1] = leftSide[order - 1];
+                    leftSide[order - 1] = backSide[size - order];
+                    backSide[size - order] = rightSide[order - 1];
+                    rightSide[order - 1] = t;
+                }
+                break;
+            }
+            case MID: {
+                for (int i = 0; i < size; i++) {
+                    String t = frontSide[i][order - 1];
+                    frontSide[i][order - 1] = upSide[i][order - 1];
+                    upSide[i][order - 1] = backSide[i][order - 1];
+                    backSide[i][order - 1] = downSide[i][order - 1];
+                    downSide[i][order - 1] = t;
+                }
+            }
+        }
+    }
+
+    private boolean sidesEqual(Rubic current, Rubic other) {
+        return Arrays.deepEquals(current.frontSide, other.frontSide) &&
+                Arrays.deepEquals(current.backSide, other.backSide) &&
+                Arrays.deepEquals(current.leftSide, other.leftSide) &&
+                Arrays.deepEquals(current.rightSide, other.rightSide) &&
+                Arrays.deepEquals(current.upSide, other.upSide) &&
+                Arrays.deepEquals(current.downSide, other.downSide);
     }
 }
