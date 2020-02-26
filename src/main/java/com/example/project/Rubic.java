@@ -47,7 +47,10 @@ public class Rubic {
         MID, EQUATOR, STANDING
     }
     public enum Rotates {
-         X, Y, Z, X_, Y_, Z_
+         X, Y, Z
+    }
+    public enum Positions {
+        BEFORE, AFTER
     }
 
     @Override
@@ -207,49 +210,78 @@ public class Rubic {
         }
     }
 
-    //Поворот грани
-    public void turnFaceSideCW(Sides side) {
+    //Поворот грани:
+
+    //***лицевой:
+    public void turnFaceSideCW(Sides side) {//по часовой
         switch (side) {
             case FRONT: {
                 rotateLayerCW(Layers.STANDING, 1);
                 rotateSideCW(frontSide);
                 break;
             }
-
             case BACK: {
-                rotateLayerAntiCW(Layers.STANDING, size);
-                rotateSideCW(backSide);
+                rotateLayerCW(Layers.STANDING, size);
+                rotateSideAntiCW(backSide);
                 break;
             }
-
             case RIGHT: {
-                rotateLayerCW(Layers.MID, size);
+                rotateLayerCW(Layers.MID, 1);
                 rotateSideCW(rightSide);
                 break;
             }
-
             case LEFT: {
-                rotateLayerAntiCW(Layers.MID, 1);
-                rotateSideCW(leftSide);
+                rotateLayerCW(Layers.MID, size);
+                rotateSideAntiCW(leftSide);
                 break;
             }
-
             case UP: {
                 rotateLayerCW(Layers.EQUATOR, 1);
                 rotateSideCW(upSide);
                 break;
             }
-
             case DOWN: {
-                rotateLayerAntiCW(Layers.EQUATOR, size);
-                rotateSideCW(downSide);
+                rotateLayerCW(Layers.EQUATOR, size);
+                rotateSideAntiCW(downSide);
                 break;
             }
 
         }
     }
 
-    public void turnFaceSideAntiCW(Sides side) {
+    public void turnFaceSideCW(Sides side, int amount) {//с указанием количества
+        if (amount >= size || amount < 1) throw new IllegalArgumentException();
+
+        turnFaceSideCW(side);
+        if (amount > 1) switch (side) {
+            case FRONT: {
+                turnInnerSideCW(Layers.STANDING, 1, amount - 1, Positions.AFTER);
+                break;
+            }
+            case BACK: {
+                 turnInnerSideCW(Layers.STANDING, size - 1, amount - 1, Positions.BEFORE);
+                 break;
+            }
+            case UP: {
+                turnInnerSideCW(Layers.EQUATOR, 1, amount - 1, Positions.AFTER);
+                break;
+            }
+            case DOWN: {
+                turnInnerSideCW(Layers.EQUATOR, size - 1, amount - 1, Positions.BEFORE);
+                break;
+            }
+            case RIGHT: {
+                turnInnerSideCW(Layers.MID, 1, amount - 1, Positions.AFTER);
+                break;
+            }
+            case LEFT: {
+                turnInnerSideCW(Layers.MID, size - 1, amount - 1, Positions.BEFORE);
+            }
+        }
+    }
+
+
+    public void turnFaceSideAntiCW(Sides side) {//против часовой
         switch (side) {
             case FRONT: {
                 rotateLayerAntiCW(Layers.STANDING, 1);
@@ -282,6 +314,56 @@ public class Rubic {
         }
     }
 
+
+
+    //***внутренней:
+    public void turnInnerSideCW(Layers layer, int order) {
+        if (order < 1 || order > size - 2) throw new IllegalArgumentException();
+        rotateLayerCW(layer, order + 1);
+    }
+
+    public void turnInnerSideCW(Layers layer, int order, int amount, Positions position) {
+        if (amount < 1) throw new IllegalArgumentException();
+        if (amount == 1) turnInnerSideCW(layer, order);
+        if (amount > 1) switch (position) {
+            case AFTER: {
+                if (amount > size - order - 1) throw new IllegalArgumentException();
+                for (int i = 0; i < amount; i++) {
+                    turnInnerSideCW(layer, order + i);
+                }
+                break;
+            }
+            case BEFORE: {
+                if (amount > order - 1) throw new IllegalArgumentException();
+                for (int i = 0; i < amount; i++) {
+                    turnInnerSideCW(layer, order - i);
+                }
+            }
+        }
+    }
+
+    public void turnInnerSideAntiCW(Layers layer, int order) {
+        if (order < 1 || order > size - 1) throw new IllegalArgumentException();
+        rotateLayerAntiCW(layer, order + 1);
+    }
+
+    public void turnInnerSideAntiCW(Layers layer, int order, int amount, Positions position) {
+        switch (position) {
+            case AFTER: {
+                if (amount > size - order) throw new IllegalArgumentException();
+                for (int i = 0; i < amount; i++) {
+                    turnInnerSideAntiCW(layer, order + i);
+                }
+                break;
+            }
+            case BEFORE: {
+                if (amount > order)
+                    for (int i = 0; i < amount; i++) {
+                        turnInnerSideAntiCW(layer, order - i);
+                    }
+            }
+        }
+    }
     //Вспомогательные методы:
 
     private void rotateSideCW(String[][] side) {
@@ -311,6 +393,7 @@ public class Rubic {
     }
 
     private void rotateLayerCW(Layers layer, int order) {
+        if (order < 1 || order > size) throw new IllegalArgumentException();
         switch (layer) {
             case STANDING: {
                 for (int i = 0; i < size; i++) {
@@ -334,17 +417,18 @@ public class Rubic {
             }
             case MID: {
                 for (int i = 0; i < size; i++) {
-                    String t = frontSide[i][order - 1];
-                    frontSide[i][order - 1] = downSide[i][order - 1];
-                    downSide[i][order - 1] = backSide[i][order - 1];
-                    backSide[i][order - 1] = upSide[i][order - 1];
-                    upSide[i][order - 1] = t;
+                    String t = frontSide[size - 1 - i][size - order];
+                    frontSide[size - 1 - i][size - order] = downSide[size - 1 - i][size - order];
+                    downSide[size - 1 - i][size - order] = backSide[size - 1 - i][size - order];
+                    backSide[size - 1 - i][size - order] = upSide[size - 1 - i][size - order];
+                    upSide[size - 1 - i][size - order] = t;
                 }
             }
         }
     }
 
     private void rotateLayerAntiCW(Layers layer, int order) {
+        if (order < 1 || order > size) throw new IllegalArgumentException();
         switch (layer) {
             case STANDING: {
                 for (int i = 0; i < 3; i++) {
@@ -368,11 +452,11 @@ public class Rubic {
             }
             case MID: {
                 for (int i = 0; i < size; i++) {
-                    String t = frontSide[i][order - 1];
-                    frontSide[i][order - 1] = upSide[i][order - 1];
-                    upSide[i][order - 1] = backSide[i][order - 1];
-                    backSide[i][order - 1] = downSide[i][order - 1];
-                    downSide[i][order - 1] = t;
+                    String t = frontSide[size - 1 - i][size - order];
+                    frontSide[size - 1 - i][size - order] = upSide[size - 1 - i][size - order];
+                    upSide[size - 1 - i][size - order] = backSide[size - 1 - i][size - order];
+                    backSide[size - 1 - i][size - order] = downSide[size - 1 - i][size - order];
+                    downSide[size - 1 - i][size - order] = t;
                 }
             }
         }
