@@ -6,7 +6,7 @@ public class Rubic {
     private int size;
 
     Rubic() { this.setSize(3); }
-    Rubic(int s) { this.setSize(s); }
+    Rubic(int size) { this.setSize(size); }
 
     private String[][] frontSide;
     private String[][] backSide;
@@ -16,16 +16,17 @@ public class Rubic {
     private String[][] leftSide;
 
 
-    private void setSize(int s) {
-        this.size = s;
-        frontSide = new String[s][s];
-        backSide = new String[s][s];
-        upSide = new String[s][s];
-        downSide = new String[s][s];
-        rightSide = new String[s][s];
-        leftSide = new String[s][s];
-        for (int i = 0; i < s; i++) {
-            for (int j = 0; j < s; j++) {
+    private void setSize(int size) {
+        if (size < 2) throw new IllegalArgumentException();
+        this.size = size;
+        frontSide = new String[size][size];
+        backSide = new String[size][size];
+        upSide = new String[size][size];
+        downSide = new String[size][size];
+        rightSide = new String[size][size];
+        leftSide = new String[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 frontSide[i][j] = "R";
                 backSide[i][j] = "O";
                 upSide[i][j] = "Y";
@@ -435,7 +436,7 @@ public class Rubic {
         int s = size - 1;
         switch (layer) {
             case STANDING: {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < size; i++) {
                     String t = upSide[s - order][i];
                     upSide[s - order][i] = rightSide[i][order];
                     rightSide[i][order] = downSide[order][s - i];

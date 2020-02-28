@@ -123,7 +123,48 @@ class RubicTests {
         cube2.turnFaceSideAntiCW(Rubic.Sides.LEFT, 2);
         System.out.println(cube2);
         assertEquals(cube, cube2);
-
     }
 
+
+    @Test
+    void turnInnerSide() {
+        Rubic cube = new Rubic(5);
+        String expected = "B Y Y Y B  R R W W R  G W W W G\n" +
+                "B R R R B  R R W W R  G O O O G\n" +
+                "R R R R R  G G G G G  O O O O O\n" +
+                "B Y Y Y B  R R W W R  G W W W G\n" +
+                "B Y Y Y B  R R W W R  G W W W G\n" +
+                "\n" +
+                "           W W O O W\n" +
+                "           B B W B B\n" +
+                "           B B W B B\n" +
+                "           B B R B B\n" +
+                "           W W O O W\n" +
+                "\n" +
+                "           O O Y Y O\n" +
+                "           O O Y Y O\n" +
+                "           B B B B B\n" +
+                "           O O Y Y O\n" +
+                "           O O Y Y O\n" +
+                "\n" +
+                "           Y Y R R Y\n" +
+                "           G G O G G\n" +
+                "           G G Y G G\n" +
+                "           G G Y G G\n" +
+                "           Y Y R R Y\n";
+        cube.turnInnerSideCW(Rubic.Layers.MID, 1, 2, Rubic.Positions.AFTER);
+        cube.turnInnerSideCW(Rubic.Layers.EQUATOR, 2);
+        cube.turnInnerSideAntiCW(Rubic.Layers.STANDING, 3, 3, Rubic.Positions.BEFORE);
+        assertEquals(expected, cube.toString());
+    }
+
+    @Test
+    void exceptions() {
+        Rubic test = new Rubic();
+        assertThrows(IllegalArgumentException.class, () -> { Rubic cube = new Rubic(0); });
+        assertThrows(IllegalArgumentException.class, () -> { Rubic cube = new Rubic(-3); });
+        assertThrows(IllegalArgumentException.class, () -> test.turnInnerSideAntiCW(Rubic.Layers.MID, 4));
+        assertThrows(IllegalArgumentException.class, () -> test.turnInnerSideCW(Rubic.Layers.EQUATOR, 1, 3, Rubic.Positions.AFTER));
+        assertThrows(IllegalArgumentException.class, () -> test.turnFaceSideCW(Rubic.Sides.FRONT, 3));
+    }
 }
