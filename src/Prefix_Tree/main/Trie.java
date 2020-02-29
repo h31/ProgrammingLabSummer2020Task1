@@ -4,7 +4,7 @@ public final class Trie {
     private static Node root;
 
     public Trie() {
-        root = new Node('\0', null); //???????????????????
+        root = new Node('\0', null);
         root.isEnd = true;
     }
 
@@ -27,7 +27,7 @@ public final class Trie {
             }
             node = node.nextNodes.get(ch);
         }
-        return node.isEnd ? node : null;
+        return node;
     }
 
     public void deleteWord(String word) {
@@ -44,10 +44,20 @@ public final class Trie {
     }
 
     public boolean findWord(String word) {
-        return findNode(word) != null;
+        Node founded = findNode(word);
+        return founded != null && founded.isEnd;
     }
 
     public List<String> findByPrefix(String word) {
+        Node node = findNode(word);
+        for (Node subNode : node.nextNodes.values()) {
+
+        }
+
+        return Collections.emptyList();
+    }
+
+    /*public List<String> findByPrefix(String word) {
         Node node = root;
         for (char ch : word.toLowerCase().toCharArray()) {
             if (!node.nextNodes.containsKey(ch)) {
@@ -56,4 +66,5 @@ public final class Trie {
         }
         return Collections.emptyList(); //не доделано, поставил, чтобы не было ошибок
     }
+     */
 }

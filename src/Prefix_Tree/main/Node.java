@@ -4,7 +4,7 @@ import java.util.Map;
 public final class Node {
     public char symbol;
     public Map<Character, Node> nextNodes;
-    public String prefix;
+    public StringBuilder prefix;
     public boolean isEnd;
     public Node previous;
 
@@ -12,14 +12,18 @@ public final class Node {
         this.symbol = symbol;
         nextNodes = new HashMap<>();
         this.previous = previous;
+        prefix = new StringBuilder();
+        if (previous != null) prefix.append(previous.prefix);
+        prefix.append(symbol);
     }
 
     @Override
     public String toString() {
-        return "Узел{" +
-                "символ: " + symbol +
-                ", следующие символы: " + nextNodes +
-                ", префикс: " + prefix + '\'' +
+        return "Node{" +
+                "symbol: " + symbol +
+                ", next symbols: " + nextNodes +
+                ", prefix: " + prefix + '\'' +
+                ", is node end: " + isEnd + '\'' +
                 '}';
     }
 }
