@@ -2,9 +2,11 @@ package ru.nikiens.addressbook
 
 import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class AddressTest extends Specification {
-    def "Test invalid args"() {
+    @Unroll
+    def "Test invalid args: #street, #building, #flat"() {
         when:
             new Address(street, building, flat)
         then:
@@ -17,7 +19,8 @@ class AddressTest extends Specification {
             ""        | 13       | 2
     }
 
-    def "Test valid args"() {
+    @Unroll
+    def "Test valid args: #street, #building, #flat"() {
         when:
             new Address(street, building, flat)
         then:
@@ -28,13 +31,14 @@ class AddressTest extends Specification {
             "bar2"    | 3        | 4
             "baz-qux" | 5        | 6
             "Улица"   | 1        | 2
+            "Foo Bar" | 2        | 2
     }
 
     def "Test toString()"() {
         given:
             def address = new Address("Foo", 15, 51)
         expect:
-            address.toString() == "Address{street='Foo', building=15, flat=51}"
+            address.toString() == "Foo, 15, 51"
     }
 
     def "Test equals() and hashCode() contract"() {

@@ -5,18 +5,18 @@ import spock.lang.Specification
 
 class AddressBookTest extends Specification {
     def testBook = new AddressBook(
-            new AbstractMap.SimpleEntry("foo", new Address("Foo", 1, 2)),
-            new AbstractMap.SimpleEntry("Bar", new Address("Foo", 1, 2)),
-            new AbstractMap.SimpleEntry("Baz", new Address("Bar", 2, 2)),
+            new AbstractMap.SimpleEntry(new Name("foo"), new Address("Foo", 1, 2)),
+            new AbstractMap.SimpleEntry(new Name("Bar"), new Address("Foo", 1, 2)),
+            new AbstractMap.SimpleEntry(new Name("Baz"), new Address("Bar", 2, 2)),
     )
 
     def "Test put()"() {
         given:
             def addr = new Address("Qux", 5, 5)
         and: "Should be null"
-            def result1 = testBook.put("qux", addr)
+            def result1 = testBook.put(new Name("qux"), addr)
         and: "Should be the previous value"
-            def result2 = testBook.put("foo", addr)
+            def result2 = testBook.put(new Name("foo"), addr)
         expect:
             result1 == null
             result2 == new Address("Foo", 1, 2)
@@ -24,9 +24,9 @@ class AddressBookTest extends Specification {
 
     def "Test remove()"() {
         given: "Should be the associated value"
-            def entry1 = testBook.remove("foo")
+            def entry1 = testBook.remove(new Name("foo"))
         and: "Should be null"
-            def entry2 = testBook.remove("бар")
+            def entry2 = testBook.remove(new Name("бар"))
         expect:
             entry1 == new Address("Foo", 1, 2)
             entry2 == null
@@ -36,9 +36,9 @@ class AddressBookTest extends Specification {
         given:
             def addr = new Address("Qux", 5, 5)
         and: "Should be the previous associated value"
-            def entry1 = testBook.setAddr("Bar", addr)
+            def entry1 = testBook.setAddr(new Name("Bar"), addr)
         and: "Should be null"
-            def entry2 = testBook.setAddr("Баз", addr)
+            def entry2 = testBook.setAddr(new Name("Баз"), addr)
         expect:
             entry1 == new Address("Foo", 1, 2)
             entry2 == null
@@ -46,9 +46,9 @@ class AddressBookTest extends Specification {
 
     def "Test getAddr()"() {
         given: "Should be the associated value"
-            def entry1 = testBook.getAddr("Baz")
+            def entry1 = testBook.getAddr(new Name("Baz"))
         and: "Should be null"
-            def entry2 = testBook.getAddr("Баз")
+            def entry2 = testBook.getAddr(new Name("Баз"))
         expect:
             entry1 == new Address("Bar", 2, 2)
             entry2 == null
@@ -56,7 +56,7 @@ class AddressBookTest extends Specification {
 
     def "Test getPeople()"() {
         given:
-            def people = List.of("Bar", "foo")
+            def people = List.of(new Name("Bar"), new Name("foo"))
             def result1 = testBook.getPeople("Foo")
         and:
             def empty = Collections.emptyList()
@@ -68,7 +68,7 @@ class AddressBookTest extends Specification {
 
     def "Test getPeople() with building"() {
         given:
-            def people = List.of("Bar", "foo")
+            def people = List.of(new Name("Bar"), new Name("foo"))
             def result1 = testBook.getPeople("Foo", 1)
         and:
             def empty = Collections.emptyList()
@@ -83,5 +83,14 @@ class AddressBookTest extends Specification {
             EqualsVerifier.forClass(AddressBook.class).verify()
         then:
             noExceptionThrown()
+    }
+
+    def "Test toString()"() {
+        given:
+            def expected = "Bar -> Foo, 1, 2\n" +
+                    "foo -> Foo, 1, 2\n"+
+                    "Baz -> Bar, 2, 2\n"
+        expect:
+            testBook.toString() == expected
     }
 }

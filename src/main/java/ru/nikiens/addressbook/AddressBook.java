@@ -5,37 +5,37 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class AddressBook {
-    private final Map<String, Address> addressMap = new HashMap<>();
+    private final Map<Name, Address> addressMap = new HashMap<>();
 
     @SafeVarargs
-    public AddressBook(AbstractMap.SimpleEntry<String, Address>... addresses) {
+    public AddressBook(AbstractMap.SimpleEntry<Name, Address>... addresses) {
         Stream.of(addresses).forEach(e -> put(e.getKey(), e.getValue()));
     }
 
-    public Address put(String surname, Address address) {
+    public Address put(Name surname, Address address) {
         return addressMap.putIfAbsent(surname, address);
     }
 
-    public Address remove(String surname) {
+    public Address remove(Name surname) {
         return addressMap.remove(surname);
     }
 
-    public Address setAddr(String surname, Address address) {
+    public Address setAddr(Name surname, Address address) {
         return addressMap.replace(surname, address);
     }
 
-    public Address getAddr(String surname) {
+    public Address getAddr(Name surname) {
         return addressMap.get(surname);
     }
 
-    public List<String> getPeople(String street) {
+    public List<Name> getPeople(String street) {
         return addressMap.entrySet().stream()
                 .filter(entry -> entry.getValue().getStreet().equals(street))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 
-    public List<String> getPeople(String street, int building) {
+    public List<Name> getPeople(String street, int building) {
         return addressMap.entrySet().stream()
                 .filter(e -> e.getValue().getStreet().equals(street) &&
                         e.getValue().getBuilding() == building)
@@ -60,6 +60,15 @@ public final class AddressBook {
 
     @Override
     public String toString() {
-        return "AddressBook{" + addressMap + '}';
+        StringBuilder builder = new StringBuilder();
+
+        addressMap.forEach((k, v) ->
+                builder
+                        .append(k.toString())
+                        .append(" -> ")
+                        .append(v.toString())
+                        .append("\n"));
+
+        return builder.toString();
     }
 }
