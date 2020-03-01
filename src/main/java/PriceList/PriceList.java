@@ -6,7 +6,8 @@ import java.util.Objects;
 public class PriceList {
 
     private HashMap<Item, Double> items = new HashMap<>();
-    PriceList() {
+
+    public PriceList() {
         items = new HashMap<Item, Double>();
     }
 
@@ -113,9 +114,11 @@ public class PriceList {
         }
         throw new IllegalArgumentException();
     }
+
     public int size() {
         return items.size();
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -132,6 +135,8 @@ public class PriceList {
 
     @Override
     public String toString() {
+        if (items.size() == 0) return "PriceList{}";
+        if (items.size() == 1) return "PriceList{"+ items + "}";
         return "PriceList{" +
                 "items=" + items +
                 '}';
@@ -140,6 +145,7 @@ public class PriceList {
 
 
 class Item {
+
     private String name;
     private Integer id;
 
@@ -147,6 +153,7 @@ class Item {
         name = newName;
         id = newId;
     }
+
     public String getName() {
         return name;
     }
@@ -172,8 +179,7 @@ class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return name.equals(item.name) &&
-                id.equals(item.id);
+        return name.equals(item.name) || id.equals(item.id);
     }
 
     @Override
