@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TicTacTest {
     TicTac exampleTicTacT(){
-        TicTac myField = new TicTac(3);
+        TicTac myField = new TicTac(5);
         return myField;
     }
     TicTac myField = exampleTicTacT();
@@ -12,7 +12,25 @@ class TicTacTest {
         myField.add(0,0,1);
         myField.add(1,0,1);
         myField.add(2,0,1);
-        return myField.search(3, 1);
+        return myField.search( 1);
+    }
+
+    String reaserch2() {
+        myField.add(0,0,1);
+        myField.add(1,1,1);
+        myField.add(2,2,1);
+        myField.add(3,3,1);
+        myField.add(4,4,1);
+        myField.add(2,0,1);
+        return myField.search( 1);
+    }
+    String reaserch3() {
+        myField.add(4,0,2);
+        myField.add(3,1,2);
+        myField.add(2,2,2);
+        myField.add(1,3,2);
+        myField.add(0,4,2);
+        return myField.search( 2);
     }
     int addField0(){
         myField.add(0, 0, 1);
@@ -43,7 +61,10 @@ class TicTacTest {
     }
 
     @Test
-    void search() { assertEquals("3 0 0 2 0", reaserch1());
+    void search() {
+        assertEquals("Максимальное число 1 - 3", reaserch1());
+        assertEquals("Максимальное число 1 - 5", reaserch2());
+        assertEquals("Максимальное число 2 - 5", reaserch3());
 
     }
     @Test
