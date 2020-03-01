@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
-class CubeTest {
+class CubeWhiteBoxTest {
     Cube duo = new Cube(2);
 
-    //тесты для проверки правильности поворота отдельных граней (проверка "белым ящиком")
+    //тесты для проверки правильности поворота отдельных граней
     @Test
     void turns() {
         //поворачиваю грань кубика и сравниваю с ожидаемым результатом
@@ -72,7 +72,7 @@ class CubeTest {
         duo.turnLeft();
     }
 
-    //тесты для проверки правильности поворотов кубика (проверка "белым ящиком")
+    //тесты для проверки правильности поворотов кубика
     @Test
     void flips() {
         //поворачиваю весь кубик и сравниваю с ожидаемым результатом
@@ -112,7 +112,7 @@ class CubeTest {
         Assertions.assertNotEquals(duo.status(), side);
     }
 
-    //тесты для проверки правильности поворотов передней и задней грани (проверка "белым ящиком")
+    //тесты для проверки правильности поворотов передней и задней грани
     @Test
     void frontTurns() {
         //поворачиваю переднюю грань, затем поворачиваю кубик, чтобы проверить правильность
@@ -160,54 +160,15 @@ class CubeTest {
         Assertions.assertArrayEquals(duo.status(), side);
     }
 
-    //тесты для проверки что перемешивание кубика работает правильно (проверка "чёрным ящиком")
-    @Test
-    void randomPosition() {
-        Cube test = new Cube(2);
-        Assertions.assertEquals(duo, test);
-        duo.shuffle();
-        Assertions.assertNotEquals(duo, test);
-        duo.turnLeft();
-        Assertions.assertNotEquals(duo, test);
-        duo.shuffle();
-        Assertions.assertNotEquals(duo, test);
-    }
-
     //тесты для проверки правильности выбрасывания исключений
     @Test
     void illegalArguments() {
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> duo.rightFaceClockwise(3));
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> duo.upFaceClockwise(3));
-        Assertions.assertThrows(IllegalArgumentException.class, ()->duo.frontFaceClockwise(3));
-        Assertions.assertThrows(IllegalArgumentException.class, ()->{Cube a = new Cube (-1);});
+        Assertions.assertThrows(IllegalArgumentException.class, () -> duo.rightFaceClockwise(3));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> duo.upFaceClockwise(3));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> duo.frontFaceClockwise(3));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Cube a = new Cube(-1);
+        });
     }
 
-    //тесты для проверки что перемешивание кубика работает правильно (проверка "чёрным ящиком")
-    @Test
-    void solutionTest() {
-        duo = new Cube(2);
-        duo.shuffle();
-        duo.solution();
-        Cube c = new Cube (2);
-        Assertions.assertEquals(c, duo);
-    }
-
-    //тесты для проверки правильности equals() (проверка "чёрным ящиком")
-    @Test
-    void equalsTest() {
-        Cube a = new Cube(2);
-        Cube b = new Cube(2);
-        Assertions.assertEquals(a, b); //проверка что два одинаковых кубика равны
-        a.turnUp(); //поворачивем один из кубиков
-        Assertions.assertEquals(a, b); //проверяем что кубики всё равно равны, не смотря на поворот
-        a.turnDown(); //возвращаем в изначальное положение
-        a.rightFaceClockwise(0); //поворачиваем одну из граней
-        a.turnClockwise(); //делаем несколько поворотов всего кубика
-        a.turnDown();
-        b.rightFaceClockwise(0); // поворачиваем ту же грань что и у кубика a
-        Assertions.assertEquals(a, b); ////проверяем что кубики всё равно равны, не смотря на манипуляции
-        b.rightFaceClockwise(0);
-        Assertions.assertNotEquals(a, b);
-        b.leftFaceClockwise(1);
-    }
 }

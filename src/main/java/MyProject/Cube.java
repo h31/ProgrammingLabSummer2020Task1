@@ -3,7 +3,7 @@ package MyProject;
 import java.util.Arrays;
 import java.util.Objects;
 
-enum Colour{
+enum Colour {
 
     RED,
     GREEN,
@@ -48,10 +48,11 @@ public class Cube {
     }
 
 
-    //Методы поворотов кубика (Язык поворотов кубика стандартный), чтобы указать какое "кольцо" надо поворачивать
-    //необходимо в метод передать его номер (от 0 до размера кубика - 1)
-
-    //поворот грани, отсчитывая справа на 90 градусов по часовой стрелке
+    /**
+     * поворот грани, отсчитывая справа на 90 градусов по часовой стрелке
+     *
+     * @param k - указатель кольца
+     */
     public void rightFaceClockwise(int k) {
         if (k > size || k < 0) {
             throw new IllegalArgumentException();
@@ -64,15 +65,15 @@ public class Cube {
             down[i][size - k] = back[i][size - k];
             back[i][size - k] = turn[i];
         }
-        if (k == 0) right = rotate(right);
-        else if (k == size) {
-            for (int i = 1; i < repeats; i++) {
-                left = rotate(left);
-            }
-        }
+        if (k == 0) right = rotateClockwise(right);
+        else if (k == size) left = rotateCounterClockwise(left);
     }
 
-    //поворот грани, отсчитывая сверху на 90 градусов по часовой стрелке
+    /**
+     * поворот грани, отсчитывая сверху на 90 градусов по часовой стрелке
+     *
+     * @param k - указатель кольца
+     */
     public void upFaceClockwise(int k) {
         if (k > size || k < 0) {
             throw new IllegalArgumentException();
@@ -85,15 +86,15 @@ public class Cube {
             back[size - k][(i + 1) % (size + 1)] = left[i][size - k];
             left[i][size - k] = turn[i];
         }
-        if (k == 0) up = rotate(up);
-        else if (k == size) {
-            for (int i = 1; i < repeats; i++) {
-                down = rotate(down);
-            }
-        }
+        if (k == 0) up = rotateClockwise(up);
+        else if (k == size) down = rotateCounterClockwise(down);
     }
 
-    //поворот грани, отсчитывая спереди на 90 градусов по часовой стрелке
+    /**
+     * поворот грани, отсчитывая спереди на 90 градусов по часовой стрелке
+     *
+     * @param k - указатель кольца
+     */
     public void frontFaceClockwise(int k) {
         if (k > size || k < 0) {
             throw new IllegalArgumentException();
@@ -106,29 +107,37 @@ public class Cube {
             down[k][(i + 1) % (size + 1)] = right[size - k][i];
             right[size - k][i] = turn[i];
         }
-        if (k == 0) front = rotate(front);
-        else if (k == size) {
-            for (int i = 1; i < repeats; i++) {
-                back = rotate(back);
-            }
-        }
+        if (k == 0) front = rotateClockwise(front);
+        else if (k == size) back = rotateCounterClockwise(back);
     }
 
-    // поворот грани, отсчитывая слева на 90 градусов по часовой стрелке
+    /**
+     * поворот грани, отсчитывая слева на 90 градусов по часовой стрелке
+     *
+     * @param k - указатель кольца
+     */
     public void leftFaceClockwise(int k) {
         for (int i = 1; i < repeats; i++) {
             rightFaceClockwise(size - k);
         }
     }
 
-    // поворот грани, отсчитывая сзади на 90 градусов по часовой стрелке
+    /**
+     * поворот грани, отсчитывая сзади на 90 градусов по часовой стрелке
+     *
+     * @param k - указатель кольца
+     */
     public void backFaceClockwise(int k) {
         for (int i = 1; i < repeats; i++) {
             frontFaceClockwise(size - k);
         }
     }
 
-    // поворот грани, отсчитывая снизу на 90 градусов по часовой стрелке
+    /**
+     * поворот грани, отсчитывая снизу на 90 градусов по часовой стрелке
+     *
+     * @param k - указатель кольца
+     */
     public void downFaceClockwise(int k) {
         for (int i = 1; i < repeats; i++) {
             upFaceClockwise(size - k);
@@ -136,55 +145,72 @@ public class Cube {
     }
 
 
-    //Повороты кубика
-    //Поворот кубика влево
+    /**
+     * Поворот кубика влево
+     */
     public void turnLeft() {
         for (int i = 0; i < size + 1; i++) {
             upFaceClockwise(i);
         }
     }
 
-    //Поворот кубика вправо
+    /**
+     * Поворот кубика вправо
+     */
     public void turnRight() {
         for (int i = 0; i < size + 1; i++) {
             downFaceClockwise(i);
         }
     }
 
-    //Поворот кубика вверх
+    /**
+     * Поворот кубика вверх
+     */
     public void turnUp() {
         for (int i = 0; i < size + 1; i++) {
             rightFaceClockwise(i);
         }
     }
 
-    //Поворот кубика вниз
+    /**
+     * Поворот кубика вниз
+     */
     public void turnDown() {
         for (int i = 0; i < size + 1; i++) {
             leftFaceClockwise(i);
         }
     }
 
-    //Поворот кубика по часовой стрелке
+    /**
+     * Поворот кубика по часовой стрелке
+     */
     public void turnClockwise() {
         for (int i = 0; i < size + 1; i++) {
             frontFaceClockwise(i);
         }
     }
 
-    //Поворот кубика по часовой стрелке
+    /**
+     * Поворот кубика по часовой стрелке
+     */
     public void turnCounterClockwise() {
         for (int i = 0; i < size + 1; i++) {
             backFaceClockwise(i);
         }
     }
 
-    //запрос состояния грани
+    /**
+     * запрос состояния фронтальной грани
+     *
+     * @return возвращает переднюю грань в виде двумерного массива
+     */
     public Colour[][] status() {
         return front;
     }
 
-    //случайная установка состояния кубика
+    /**
+     * случайная установка состояния кубика
+     */
     public void shuffle() {
         int n = (int) (Math.random() * 3);
         for (int i = 1; i < 3 + n; i++) {
@@ -206,8 +232,10 @@ public class Cube {
         }
     }
 
-    //поворот содержимого грани на 90 градусов по часовой стрелке
-    private Colour[][] rotate (Colour[][] face) {
+    /**
+     * поворот содержимого грани на 90 градусов по часовой стрелке
+     */
+    private Colour[][] rotateClockwise(Colour[][] face) {
         Colour[][] result = new Colour[face[0].length][face[0].length];
         for (int i = 0; i < face[0].length; i++) {
             for (int j = face[0].length - 1; j >= 0; j--) {
@@ -217,34 +245,62 @@ public class Cube {
         return result;
     }
 
-    //алгоритм пиф-паф
-    private void pifPuf() {
-        rightFaceClockwise(0);
-        upFaceClockwise(0);
-        leftFaceClockwise(1);
-        downFaceClockwise(1);
+    /**
+     * поворот содержимого грани на 90 градусов против часовой стрелке
+     */
+    private Colour[][] rotateCounterClockwise(Colour[][] face) {
+        Colour[][] result = face;
+        for (int i = 1; i < repeats; i++) {
+            result = rotateClockwise(result);
+        }
+        return result;
     }
 
-    //алгоритм перемещения 2-х кубиков между собой
-    private void replaceMiniCubes() {
+    /**
+     * метод, который делает поворот "пиф-паф"
+     */
+    public void pifPuf() {
         rightFaceClockwise(0);
         upFaceClockwise(0);
-        leftFaceClockwise(1);
-        backFaceClockwise(1);
+        leftFaceClockwise(size);
+        downFaceClockwise(size);
+    }
+
+    /**
+     * метод, который перемещает 2 миникубика между собой
+     */
+    public void replaceMiniCubes() {
         rightFaceClockwise(0);
         upFaceClockwise(0);
-        leftFaceClockwise(1);
-        downFaceClockwise(1);
-        leftFaceClockwise(1);
+        leftFaceClockwise(size);
+        backFaceClockwise(size);
+        rightFaceClockwise(0);
+        upFaceClockwise(0);
+        leftFaceClockwise(size);
+        downFaceClockwise(size);
+        leftFaceClockwise(size);
         frontFaceClockwise(0);
         rightFaceClockwise(0);
         rightFaceClockwise(0);
-        downFaceClockwise(1);
-        leftFaceClockwise(1);
-        downFaceClockwise(1);
+        downFaceClockwise(size);
+        leftFaceClockwise(size);
+        downFaceClockwise(size);
     }
 
-    //поиск и установка миникубиков таким образом
+    /**
+     * Использованные материалы:
+     * 1)https://www.youtube.com/watch?v=AJCW5xTjmTk
+     * 2)https://www.youtube.com/watch?v=QUPLE6VuNBM
+     * 3)https://www.orientmuseum.ru/museum/23_file_1.pdf
+     * поиск и установка миникубиков таким образом
+     * миникубики - это составляющие части кубика Рубика. На них на несены цвета, которые составляют грани.
+     * в кубике 2x2x2 все миникубики содержат на себе 3 разных цвета.
+     * всегда ищется миникубик, содержащий белый цвет и два других, которые задаются через параметры
+     * colour1 и colour2 - разные цвета.
+     *
+     * @param colour1 - цвет, помимо белого, который ищется.
+     * @param colour2 - цвет, помимо белого и colour1, который ищется.
+     */
     private void placingMiniCube(Colour colour1, Colour colour2) {
         int k = 0;
         if (colour1 == Colour.RED) k = -1;
@@ -252,11 +308,11 @@ public class Cube {
         turnUp();
         while (!otherColoursTests[0] && !otherColoursTests[1] && k < 3) {
             turnDown();
-            if ((front[0][0] == colour1 || front[0][0] == colour2  || front[0][0] == Colour.WHITE)
-                    && (left[1][1] == colour1 || left[1][1] == colour2  || left[1][1] == Colour.WHITE)
-                    && (up[1][0] == colour2 || up[1][0] == colour1  || up[1][0] == Colour.WHITE))
+            if ((front[0][0] == colour1 || front[0][0] == colour2 || front[0][0] == Colour.WHITE)
+                    && (left[1][1] == colour1 || left[1][1] == colour2 || left[1][1] == Colour.WHITE)
+                    && (up[1][0] == colour2 || up[1][0] == colour1 || up[1][0] == Colour.WHITE))
                 otherColoursTests[0] = true;
-            if ((front[0][1] == colour1 || front[0][1] == colour2  || front[0][1] == Colour.WHITE)
+            if ((front[0][1] == colour1 || front[0][1] == colour2 || front[0][1] == Colour.WHITE)
                     && (up[1][1] == colour1 || up[1][1] == colour2 || up[1][1] == Colour.WHITE)
                     && (right[1][0] == colour2 || right[1][0] == colour1 || right[1][0] == Colour.WHITE))
                 otherColoursTests[1] = true;
@@ -264,7 +320,7 @@ public class Cube {
         }
         for (int i = 1; i < k; i++) {
             turnUp();
-            if(otherColoursTests[0]) {
+            if (otherColoursTests[0]) {
                 downFaceClockwise(1);
             } else if (otherColoursTests[1] && colour1 != Colour.BLUE) {
                 leftFaceClockwise(1);
@@ -277,7 +333,9 @@ public class Cube {
         otherColoursTests[1] = false;
     }
 
-    //решение кубика 2x2x2
+    /**
+     * решение кубика 2x2x2
+     */
     public void solution() {
         int k = 0;
         boolean flag = true;
@@ -328,15 +386,9 @@ public class Cube {
             } else if (front[0][1] != front[1][1]) replaceMiniCubes();
             turnLeft();
         }
-    }
-
-    private Boolean equalsOfFaces(Cube other, Colour[][] Face) {
-        boolean flag = false;
-        for (int i = 1; i < repeats + 1; i++) {
-            if (Arrays.deepEquals(other.status(), Face)) flag = true;
-            else other.turnClockwise();
-        }
-        return flag;
+        while (front[0][0] != Colour.RED) turnLeft();
+        turnClockwise();
+        turnClockwise();
     }
 
     @Override
@@ -345,36 +397,10 @@ public class Cube {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Cube other = (Cube) obj;
-        Boolean flag = false;
-        other.turnUp();
-        for (int i = 1; i < repeats + 1; i++) {
-            if (!flag) {
-                other.turnDown();
-                flag = equalsOfFaces(other, front);
-            }
-        }
-        if (!flag) {
-            other.turnDown();
-            other.turnLeft();
-            flag = equalsOfFaces(other, front);
-        }
-        if (!flag) {
-            other.turnRight();
-            other.turnRight();
-            flag = equalsOfFaces(other, front);
-        }
-        if (!flag) other.turnLeft();
-        if (flag) {
-            other.turnCounterClockwise();
-            for (int i = 1; i < repeats + 1; i++) {
-                other.turnClockwise();
-                if (Arrays.deepEquals(other.up, up)) {
-                    return Arrays.deepEquals(other.back, back) && Arrays.deepEquals(other.down, down)
-                            && Arrays.deepEquals(other.right, right) && Arrays.deepEquals(other.left, left);
-                }
-            }
-            return false;
-        } else return false;
+        return (Arrays.deepEquals(other.front, front) && Arrays.deepEquals(other.up, up)
+                && Arrays.deepEquals(other.back, back) && Arrays.deepEquals(other.down, down)
+                && Arrays.deepEquals(other.right, right) && Arrays.deepEquals(other.left, left));
+
     }
 
     @Override
@@ -391,47 +417,12 @@ public class Cube {
 
     @Override
     public String toString() {
-        String face;
-        final StringBuilder sb = new StringBuilder("Cube{\n");
-        turnUp();
-        for (int j = 1; j < repeats + 1; j++) {
-            turnDown();
-            switch (j) {
-                case 1:
-                    face = "Front";
-                    break;
-                case 2:
-                    face = "Up";
-                    break;
-                case 3:
-                    face = "Back";
-                    break;
-                default:
-                    face = "Down";
-            }
-            sb.append(face).append(" \n");
-            for (int i = 0; i < size + 1; i++) {
-                sb.append(Arrays.toString(front[i]));
-                sb.append('\n');
-            }
-        }
-        turnDown();
-        turnLeft();
-        sb.append("Right").append(" \n");
-        for (int i = 0; i < size + 1; i++) {
-            sb.append(Arrays.toString(front[i]));
-            sb.append('\n');
-        }
-        turnRight();
-        turnRight();
-        sb.append("Left").append(" \n");
-        for (int i = 0; i < size + 1; i++) {
-            sb.append(Arrays.toString(front[i]));
-            sb.append('\n');
-        }
-        turnLeft();
-        sb.append("}");
-
-        return sb.toString();
+        return "Cube{\n" + "Front:\n" + Arrays.deepToString(front) + "\n" +
+                "Up:\n" + Arrays.deepToString(up) + "\n" +
+                "Back:\n" + Arrays.deepToString(back) + "\n" +
+                "Down:\n" + Arrays.deepToString(down) + "\n" +
+                "Right:\n" + Arrays.deepToString(right) + "\n" +
+                "Left:\n" + Arrays.deepToString(left) + "\n" +
+                "}";
     }
 }
