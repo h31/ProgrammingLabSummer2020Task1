@@ -30,7 +30,7 @@ public final class AddressBook {
 
     public List<Name> getPeople(String street) {
         return addressMap.entrySet().stream()
-                .filter(entry -> entry.getValue().getStreet().equals(street))
+                .filter(e -> e.getValue().getStreet().equals(street))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
