@@ -2,6 +2,8 @@ import java.util.*;
 
 public final class Trie {
     private static Node root;
+    private static List<String> used = new ArrayList<>(); //for depthFirstSearch
+    private static List<String> words = new ArrayList<>(); //for findByPrefix
 
     public Trie() {
         root = new Node('\0', null);
@@ -48,23 +50,30 @@ public final class Trie {
         return founded != null && founded.isEnd;
     }
 
+    private static void depthFirstSearch(Node node) {
+        used.add(node.prefix.toString());
+        if (node.isEnd) words.add(node.prefix.toString());
+        for (Node next : node.nextNodes.values()) {
+            if (!used.contains(next.prefix.toString())) depthFirstSearch(next);
+        }
+    }
+
     public List<String> findByPrefix(String word) {
         Node node = findNode(word);
-        for (Node subNode : node.nextNodes.values()) {
-
+        if (node != null) {
+            used.clear();
+            words.clear();
+            depthFirstSearch(node);
+            return words;
         }
-
         return Collections.emptyList();
     }
 
-    /*public List<String> findByPrefix(String word) {
-        Node node = root;
-        for (char ch : word.toLowerCase().toCharArray()) {
-            if (!node.nextNodes.containsKey(ch)) {
-                return Collections.emptyList();
-            }
-        }
-        return Collections.emptyList(); //не доделано, поставил, чтобы не было ошибок
+    @Override
+    public String toString() {
+        used.clear();
+        words.clear();
+        depthFirstSearch(root);
+        return words.toString();
     }
-     */
 }
