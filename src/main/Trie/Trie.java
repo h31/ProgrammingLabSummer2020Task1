@@ -13,8 +13,10 @@ public final class Trie {
             nextNodes = new HashMap<>();
             this.previous = previous;
             prefix = new StringBuilder();
-            if (previous != null) prefix.append(previous.prefix);
-            prefix.append(symbol);
+            if (previous != null) {
+                prefix.append(previous.prefix);
+                prefix.append(symbol);
+            }
         }
     }
 
@@ -24,7 +26,6 @@ public final class Trie {
 
     public Trie() {
         root = new Node('\0', null);
-        root.isEnd = true;
     }
 
     public void addWord(String word) {
@@ -73,7 +74,9 @@ public final class Trie {
             words.add(node.prefix.toString());
         }
         for (Node next : node.nextNodes.values()) {
-            if (!used.contains(next.prefix.toString())) depthFirstSearch(next);
+            if (!used.contains(next.prefix.toString())) {
+                depthFirstSearch(next);
+            }
         }
     }
 
@@ -106,6 +109,6 @@ public final class Trie {
 
     @Override
     public int hashCode() {
-        return Objects.hash(root, used, words);
+        return Objects.hash(root);
     }
 }
