@@ -2,11 +2,11 @@ import java.util.*;
 
 public final class Trie {
     private static final class Node {
-        public char symbol;
-        public Map<Character, Node> nextNodes;
-        public StringBuilder prefix;
-        public boolean isEnd;
-        public Node previous;
+        char symbol;
+        Map<Character, Node> nextNodes;
+        StringBuilder prefix;
+        boolean isEnd;
+        Node previous;
 
         Node(char symbol, Node previous) {
             this.symbol = symbol;
@@ -18,9 +18,9 @@ public final class Trie {
         }
     }
 
-    private static Node root;
-    private static List<String> used = new ArrayList<>(); //for depthFirstSearch
-    private static List<String> words = new ArrayList<>(); //for findByPrefix
+    private Node root;
+    private List<String> used = new ArrayList<>(); //for depthFirstSearch
+    private List<String> words = new ArrayList<>(); //for findByPrefix
 
     public Trie() {
         root = new Node('\0', null);
@@ -67,7 +67,7 @@ public final class Trie {
         return found != null && found.isEnd;
     }
 
-    private static void depthFirstSearch(Node node) {
+    private void depthFirstSearch(Node node) {
         used.add(node.prefix.toString());
         if (node.isEnd) {
             words.add(node.prefix.toString());
@@ -94,5 +94,18 @@ public final class Trie {
         words.clear();
         depthFirstSearch(root);
         return words.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Trie trie = (Trie) o;
+        return this.toString().equals(trie.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(root, used, words);
     }
 }
