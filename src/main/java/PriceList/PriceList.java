@@ -1,49 +1,49 @@
 package PriceList;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class PriceList {
 
-    private HashMap<Item, Double> items = new HashMap<>();
+    private ArrayList<Item> items;
 
     public PriceList() {
-        items = new HashMap<Item, Double>();
+        items = new ArrayList<Item>();
     }
 
-    public PriceList add(Item newItem, Double price) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(newItem.getName())) throw new IllegalArgumentException();
-            if (item.getId() == newItem.getId()) throw new IllegalArgumentException();
+    public PriceList add(Item newItem) {
+        for (Item i : items) {
+            if (i.getName().equals(newItem.getName())) throw new IllegalArgumentException();
+            if (i.getId() == newItem.getId()) throw new IllegalArgumentException();
         }
-        items.put(newItem, Math.floor(price*100)/100);
-        return this;
-    }
-    public PriceList add(String name,Integer id, Double price) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(name)) throw new IllegalArgumentException();
-            if (item.getId() == id) throw new IllegalArgumentException();
-        }
-        items.put(new Item(name,id), Math.floor(price*100)/100);
+        items.add(newItem);
         return this;
     }
 
-    public PriceList changePrice(String name, Double newPrice) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(name)) {
-                items.put(item, Math.floor(newPrice*100)/100);
+    public PriceList add(String name, Integer id, Double price) {
+        for (Item i : items) {
+            if (i.getName().equals(name)) throw new IllegalArgumentException();
+            if (i.getId() == id) throw new IllegalArgumentException();
+        }
+        items.add(new Item(name, id, Math.floor(price * 100) / 100));
+        return this;
+    }
+
+    public PriceList changePrice(int id, Double newPrice) {
+        for (Item i : items) {
+            if (i.getId() == id) {
+                i.changePrice(Math.floor(newPrice * 100) / 100);
                 return this;
             }
 
         }
         throw new IllegalArgumentException();
-
     }
 
-    public PriceList changePrice(int id, Double newPrice) {
-        for (Item item: items.keySet()) {
-            if (item.getId() == id) {
-                items.put(item, Math.floor(newPrice*100)/100);
+    public PriceList changePrice(String name, Double newPrice) {
+        for (Item i : items) {
+            if (i.getName().equals(name)) {
+                i.changePrice(Math.floor(newPrice * 100) / 100);
                 return this;
             }
 
@@ -52,10 +52,10 @@ public class PriceList {
     }
 
     public PriceList changeName(int id, String newName) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(newName)) throw new IllegalArgumentException();
-            if (item.getId() == id) {
-                item.changeName(newName);
+        for (Item i : items) {
+            if (i.getName().equals(newName)) throw new IllegalArgumentException();
+            if (i.getId() == id) {
+                i.changeName(newName);
                 return this;
             }
 
@@ -64,10 +64,10 @@ public class PriceList {
     }
 
     public PriceList changeName(String oldName, String newName) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(newName)) throw new IllegalArgumentException();
-            if (item.getName().equals(oldName)) {
-                item.changeName(newName);
+        for (Item i : items) {
+            if (i.getName().equals(newName)) throw new IllegalArgumentException();
+            if (i.getName().equals(oldName)) {
+                i.changeName(newName);
                 return this;
             }
 
@@ -76,9 +76,9 @@ public class PriceList {
     }
 
     public PriceList remove(String name) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(name)) {
-                items.remove(item);
+        for (Item i : items) {
+            if (i.getName().equals(name)) {
+                items.remove(i);
                 return this;
             }
 
@@ -87,9 +87,9 @@ public class PriceList {
     }
 
     public PriceList remove(int id) {
-        for (Item item: items.keySet()) {
-            if (item.getId() == id) {
-                items.remove(item);
+        for (Item i : items) {
+            if (i.getId() == id) {
+                items.remove(i);
                 return this;
             }
         }
@@ -97,9 +97,9 @@ public class PriceList {
     }
 
     public double getPrice(String name) {
-        for (Item item: items.keySet()) {
-            if (item.getName().equals(name)) {
-                return items.get(item);
+        for (Item i : items) {
+            if (i.getName().equals(name)) {
+                return i.getPrice();
             }
         }
         throw new IllegalArgumentException();
@@ -107,9 +107,9 @@ public class PriceList {
     }
 
     public double getPrice(int id) {
-        for (Item item: items.keySet()) {
-            if (item.getId() == id) {
-                return items.get(item);
+        for (Item i : items) {
+            if (i.getId() == id) {
+                return i.getPrice();
             }
         }
         throw new IllegalArgumentException();
@@ -135,11 +135,7 @@ public class PriceList {
 
     @Override
     public String toString() {
-        if (items.size() == 0) return "PriceList{}";
-        if (items.size() == 1) return "PriceList{"+ items + "}";
-        return "PriceList{" +
-                "items=" + items +
-                '}';
+        return "PriceList{" + items + '}';
     }
 }
 
@@ -148,10 +144,12 @@ class Item {
 
     private String name;
     private Integer id;
+    private Double price;
 
-    public Item(String newName, int newId) {
+    public Item(String newName, int newId, double newPrice) {
         name = newName;
         id = newId;
+        price = Math.floor(newPrice * 100) / 100;
     }
 
     public String getName() {
@@ -162,6 +160,9 @@ class Item {
         return id;
     }
 
+    public double getPrice() {
+        return price;
+    }
 
     public Item changeName(String newName) {
         name = newName;
@@ -173,25 +174,28 @@ class Item {
         return this;
     }
 
+    public Item changePrice(double newPrice) {
+        price = Math.floor(newPrice * 100) / 100;
+        return this;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return name.equals(item.name) || id.equals(item.id);
+        return name.equals(item.name) && id.equals(item.id) && price.equals(item.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, id);
+        return Objects.hash(name, id, price);
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "name='" + name + '\'' +
-                ", id=" + id +
-                '}';
+                ", id=" + id + ", price=" + price + '}';
     }
 }
