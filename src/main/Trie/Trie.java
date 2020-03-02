@@ -1,6 +1,23 @@
 import java.util.*;
 
 public final class Trie {
+    private static final class Node {
+        public char symbol;
+        public Map<Character, Node> nextNodes;
+        public StringBuilder prefix;
+        public boolean isEnd;
+        public Node previous;
+
+        Node(char symbol, Node previous) {
+            this.symbol = symbol;
+            nextNodes = new HashMap<>();
+            this.previous = previous;
+            prefix = new StringBuilder();
+            if (previous != null) prefix.append(previous.prefix);
+            prefix.append(symbol);
+        }
+    }
+
     private static Node root;
     private static List<String> used = new ArrayList<>(); //for depthFirstSearch
     private static List<String> words = new ArrayList<>(); //for findByPrefix
@@ -46,13 +63,15 @@ public final class Trie {
     }
 
     public boolean findWord(String word) {
-        Node founded = findNode(word);
-        return founded != null && founded.isEnd;
+        Node found = findNode(word);
+        return found != null && found.isEnd;
     }
 
     private static void depthFirstSearch(Node node) {
         used.add(node.prefix.toString());
-        if (node.isEnd) words.add(node.prefix.toString());
+        if (node.isEnd) {
+            words.add(node.prefix.toString());
+        }
         for (Node next : node.nextNodes.values()) {
             if (!used.contains(next.prefix.toString())) depthFirstSearch(next);
         }
