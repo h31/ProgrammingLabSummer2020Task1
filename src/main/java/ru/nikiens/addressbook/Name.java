@@ -2,8 +2,8 @@ package ru.nikiens.addressbook;
 
 import java.util.Objects;
 
-class Name {
-    enum Format {
+public final class Name {
+    public enum Format {
         SINGLE("(?Ui:([\\w-])+)"),
         MULTIPLE("(?Ui:([\\w-])+(\\s[\\w-]*)*)");
 
@@ -21,13 +21,13 @@ class Name {
 
     private String name;
 
-    Name(String name) {
+    public Name(String name) {
         if (!name.matches(Format.SINGLE.toString())) throw new IllegalArgumentException();
 
         this.name = name;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 

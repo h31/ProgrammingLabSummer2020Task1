@@ -20,11 +20,11 @@ public final class AddressBook {
         return addressMap.remove(surname);
     }
 
-    public Address setAddr(Name surname, Address address) {
+    public Address setAddress(Name surname, Address address) {
         return addressMap.replace(surname, address);
     }
 
-    public Address getAddr(Name surname) {
+    public Address getAddress(Name surname) {
         return addressMap.get(surname);
     }
 

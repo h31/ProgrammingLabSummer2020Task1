@@ -32,23 +32,23 @@ class AddressBookTest extends Specification {
             entry2 == null
     }
 
-    def "Test setAddr()"() {
+    def "Test setAddress()"() {
         given:
             def addr = new Address("Qux", 5, 5)
         and: "Should be the previous associated value"
-            def entry1 = testBook.setAddr(new Name("Bar"), addr)
+            def entry1 = testBook.setAddress(new Name("Bar"), addr)
         and: "Should be null"
-            def entry2 = testBook.setAddr(new Name("Баз"), addr)
+            def entry2 = testBook.setAddress(new Name("Баз"), addr)
         expect:
             entry1 == new Address("Foo", 1, 2)
             entry2 == null
     }
 
-    def "Test getAddr()"() {
+    def "Test getAddress()"() {
         given: "Should be the associated value"
-            def entry1 = testBook.getAddr(new Name("Baz"))
+            def entry1 = testBook.getAddress(new Name("Baz"))
         and: "Should be null"
-            def entry2 = testBook.getAddr(new Name("Баз"))
+            def entry2 = testBook.getAddress(new Name("Баз"))
         expect:
             entry1 == new Address("Bar", 2, 2)
             entry2 == null
