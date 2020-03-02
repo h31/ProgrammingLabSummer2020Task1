@@ -1,5 +1,4 @@
 import java.util.*;
-import javafx.util.Pair;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -7,13 +6,13 @@ public class AddressBookTest {
 
     private static AddressBook createDictionary() {
         return new AddressBook(
-                new Pair<>("Krivitskii", new Address("Komendantskii", "1", "1")),
-                new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")),
-                new Pair<>("Galieva", new Address("Nevskiy", "35", "3")),
-                new Pair<>("Shomov", new Address("Komendantskii", "35", "5")),
-                new Pair<>("Kuznecova", new Address("Nevskiy", "35", "3")),
-                new Pair<>("Sergeev", new Address("Primorskaya", "19", "2")),
-                new Pair<>("Petryaeva", new Address("Lesnaya", "22", "269")));
+                new Pair("Krivitskii", new Address("Komendantskii", "1", "1")),
+                new Pair("Shadaev", new Address("Komendantskii", "22", "269")),
+                new Pair("Galieva", new Address("Nevskiy", "35", "3")),
+                new Pair("Shomov", new Address("Komendantskii", "35", "5")),
+                new Pair("Kuznecova", new Address("Nevskiy", "35", "3")),
+                new Pair("Sergeev", new Address("Primorskaya", "19", "2")),
+                new Pair("Petryaeva", new Address("Lesnaya", "22", "269")));
     }
 
     @Test
@@ -40,29 +39,29 @@ public class AddressBookTest {
     }
 
     @Test
-    public void changeAdds() {
+    public void changeAddress() {
         assertEquals("Komendantskii", createDictionary()
-                .changeAdds("Galieva", new Address("Komendantskii", "35", "3"))
-                .getAdds("Galieva").getStreet());
+                .changeAddress("Galieva", new Address("Komendantskii", "35", "3"))
+                .getAddress("Galieva").getStreet());
     }
 
     @Test(expected = NullPointerException.class)
-    public void changeAddsNull() {
+    public void changeAddressNull() {
         new AddressBook()
-                .changeAdds("Krivitskii", new Address("Nevskiy", "35", "3"));
+                .changeAddress("Krivitskii", new Address("Nevskiy", "35", "3"));
     }
 
     @Test
     public void getAdds() {
         assertEquals(new AddressBook(
-                new Pair<>("Shadaev", new Address("Komendantskii", "22", "269")))
-                .getAdds("Shadaev"), new Address("Komendantskii", "22", "269"));
+                new Pair("Shadaev", new Address("Komendantskii", "22", "269")))
+                .getAddress("Shadaev"), new Address("Komendantskii", "22", "269"));
     }
 
     @Test(expected = NullPointerException.class)
-    public void getAddsNull() {
+    public void getAddressNull() {
         new AddressBook()
-                .getAdds("Krivitskii");
+                .getAddress("Krivitskii");
     }
 
     @Test

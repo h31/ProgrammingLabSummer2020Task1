@@ -1,12 +1,10 @@
-import javafx.util.Pair;
 import java.util.*;
 
-class AddressBook {
+public class AddressBook {
     private HashMap<String, Address> map = new HashMap<>();
 
-    @SafeVarargs
-    AddressBook(Pair<String, Address>... people) {
-        for (Pair<String, Address> element: people) {
+    AddressBook(Pair ... people) {
+        for (Pair element: people) {
             map.put(element.getKey(), element.getValue());
         }
     }
@@ -26,14 +24,14 @@ class AddressBook {
         return this;
     }
 
-    AddressBook changeAdds(String surname, Address address) {
-        if (!map.containsKey(surname)) throw new NullPointerException();
+    AddressBook changeAddress(String surname, Address address) {
+        if (!map.containsKey(surname)) throw new IllegalArgumentException();
         map.replace(surname, address);
         return this;
     }
 
-    Address getAdds(String surname) {
-        if (!map.containsKey(surname)) throw new NullPointerException();
+    Address getAddress(String surname) {
+        if (!map.containsKey(surname)) throw new IllegalArgumentException();
         return map.get(surname);
     }
 
