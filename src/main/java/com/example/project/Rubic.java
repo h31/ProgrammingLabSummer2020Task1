@@ -5,8 +5,8 @@ import java.util.Arrays;
 public class Rubic {
     private int size;
 
-    Rubic() { this.setSize(3); }
-    Rubic(int size) { this.setSize(size); }
+    public Rubic() { this.setSize(3); }
+    public Rubic(int size) { this.setSize(size); }
 
     private String[][] frontSide;
     private String[][] backSide;

@@ -93,7 +93,6 @@ class RubicTests {
         cube.turnFaceSideAntiCW(Rubic.Sides.LEFT);
         cube.turnFaceSideCW(Rubic.Sides.UP);
         cube.turnFaceSideAntiCW(Rubic.Sides.DOWN);
-        System.out.println(cube);
         assertEquals(expected, cube.toString());
 
         Rubic cube2 = new Rubic();
@@ -121,7 +120,6 @@ class RubicTests {
         cube2.turnFaceSideAntiCW(Rubic.Sides.BACK, 2);
         cube2.turnFaceSideCW(Rubic.Sides.RIGHT, 2);
         cube2.turnFaceSideAntiCW(Rubic.Sides.LEFT, 2);
-        System.out.println(cube2);
         assertEquals(cube, cube2);
     }
 
