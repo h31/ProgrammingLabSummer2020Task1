@@ -12,7 +12,7 @@ class PricelistTest {
         myPricelist.add("Tess", new Product(12345, 105.55));
         return  myPricelist;
     }
-    Pricelist myPricelist = examplePricelist();
+    private Pricelist myPricelist = examplePricelist();
     int newPricelistSize(){
         myPricelist.add("Bon Aqua", new Product(1234455,38.00));
         return myPricelist.size();
@@ -25,6 +25,14 @@ class PricelistTest {
         myPricelist.remove("Tess");
         return myPricelist.size();
     }
+    @Test
+    void contains(){
+        assertTrue(examplePricelist().contains("Coca cola"));
+    }
+    @Test
+    void size(){
+        assertEquals(6, examplePricelist().size());
+    }
 
     @Test
     void add() {
@@ -33,11 +41,25 @@ class PricelistTest {
 
     @Test
     void changeName() { assertTrue(this::checkName);
+        assertThrows(IllegalArgumentException.class, () -> {
+            examplePricelist().remove("Remove");
+        });
     }
 
     @Test
     void remove() {
         assertEquals(5, afterRemoveProduct());
+        assertThrows(IllegalArgumentException.class, () -> {
+            examplePricelist().remove("Remove");
+        });
+    }
+    @Test
+    void getProduct(){
+        assertEquals(new Product(12, 56.50).toString(), examplePricelist().getProduct("Coca cola").toString());
+        assertThrows(IllegalArgumentException.class, () -> {
+            examplePricelist().getProduct("Remove");
+        });
+
     }
 
     @Test
