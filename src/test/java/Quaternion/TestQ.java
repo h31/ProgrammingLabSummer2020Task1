@@ -9,16 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestQ {
     public static void eq(Quaternion a, Quaternion b) {
-        assertEquals(a.w, b.w, 10e-5);
-        assertEquals(a.x, b.x, 10e-5);
-        assertEquals(a.y, b.y, 10e-5);
-        assertEquals(a.z, b.z, 10e-5);
+        assertEquals(a.w, b.w, 1e-5);
+        assertEquals(a.x, b.x, 1e-5);
+        assertEquals(a.y, b.y, 1e-5);
+        assertEquals(a.z, b.z, 1e-5);
     }
 
     @Test
     public void sum() {
         eq(new Quaternion(4.0, -2.0, 5.0, 25.0),
-                (new Quaternion(0.0, 0.0, 0.0, 0.0)).sum(new Quaternion(4.0, -2.0, 5.0, 25.0)));
+                (new Quaternion(0.0,0.0,0.0,0.0)).sum(new Quaternion(4.0, -2.0, 5.0, 25.0)));
     }
 
     @Test
@@ -59,18 +59,18 @@ public class TestQ {
     public void inv() {
         eq(new Quaternion(-0.0358543, 0.0179272, -0.0291317, -0.0806723), new Quaternion(-4.0, -2.0, 3.25, 9).inv());
         assertThrows(ArithmeticException.class, () -> {
-            new Quaternion(0.0, 0.0, 0.0, 0.0).inv();
+            new Quaternion(0.0,0.0,0.0,0.0).inv();
         });
     }
 
     @Test
     public void scal() {
-        assertEquals(2.8, new Quaternion(2.8, 0.0, 0.0, 0.0).scal(), 10e-10);
+        assertEquals(2.8, new Quaternion(2.8, 0.0, 0.0, 0.0).scal(), 1e-5);
     }
 
     @Test
     public void vec() {
-        assertArrayEquals(new double[]{2.1, 3.5, -9.1}, new Quaternion(0.0, 2.1, 3.5, -9.1).vec(), 10e-10);
+        assertArrayEquals(new double[]{2.1, 3.5, -9.1}, new Quaternion(0.0, 2.1, 3.5, -9.1).vec(), 1e-5);
     }
 
     @Test
@@ -82,9 +82,9 @@ public class TestQ {
     @Test
     public void get() {
         double a = sin(PI / 6);
-        assertArrayEquals(new double[]{60.0, 2.0, 2.5, 9.8}, Quaternion.build(60.0, 2.0, 2.5, 9.8).get(), 10e-10);
+        assertArrayEquals(new double[]{60.0, 2.0, 2.5, 9.8}, Quaternion.build(60.0, 2.0, 2.5, 9.8).getAngleAxis(), 1e-5);
         assertThrows(ArithmeticException.class, () -> {
-            new Quaternion(1.0, 0.0, 0.0, 0.0).get();
+            new Quaternion(1.0, 0.0, 0.0, 0.0).getAngleAxis();
         });
     }
 

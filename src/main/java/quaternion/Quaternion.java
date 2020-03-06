@@ -8,13 +8,6 @@ public class Quaternion {
     public double y;
     public double z;
 
-    Quaternion() {
-        w = 0.0;
-        x = 0.0;
-        y = 0.0;
-        z = 0.0;
-    }
-
     public Quaternion(double w, double x, double y, double z) {
         this.w = w;
         this.x = x;
@@ -66,7 +59,7 @@ public class Quaternion {
 
     public Quaternion normalize() {
         double p = this.norm();
-        if (abs(p) < 10e-10) throw new ArithmeticException();
+        if (abs(p) < 1e-5) throw new ArithmeticException();
         return new Quaternion(w / p, x / p, y / p, z / p);
     }
 
@@ -108,9 +101,9 @@ public class Quaternion {
         return new Quaternion(cos(an), sin(an) * x, sin(an) * y, sin(an) * z);
     }
 
-    public double[] get() {
+    public double[] getAngleAxis() {
         double s = (sin(acos(w)));
-        if (abs(s) < 10e-10) throw new ArithmeticException();
+        if (abs(s) < 1e-5) throw new ArithmeticException();
         return new double[]{toDegrees(acos(w)) * 2, x / s, y / s, z / s};
     }
 }
