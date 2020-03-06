@@ -127,7 +127,7 @@ public final class TicTacToe {
         char findSymbol = '*';
         int max = 0;
         Line answer = new Line(0, new Point(0, 0), new Point(0, 0));
-        Line result = new Line(0, new Point(0, 0), new Point(0, 0));
+        Line result;
         switch (symbol) {
             case CROSS:
                 findSymbol = 'X';
