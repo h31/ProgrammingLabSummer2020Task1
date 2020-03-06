@@ -21,64 +21,66 @@ class PricelistTest {
         myPricelist.changeName("Kit kat","Twix");
         return (myPricelist.contains("Twix"));
     }
+
     int afterRemoveProduct(){
         myPricelist.remove("Tess");
         return myPricelist.size();
     }
+
     @Test
-    void contains(){
+    public void contains(){
         assertTrue(examplePricelist().contains("Coca cola"));
     }
+
     @Test
-    void size(){
+    public void size(){
         assertEquals(6, examplePricelist().size());
     }
 
     @Test
-    void add() {
-       assertEquals(7, newPricelistSize());
+    public void add() {
+        assertEquals(7, newPricelistSize());
   }
 
     @Test
-    void changeName() { assertTrue(this::checkName);
+    public void changeName() {
+        assertTrue(this::checkName);
         assertThrows(IllegalArgumentException.class, () -> {
-            examplePricelist().remove("Remove");
+            myPricelist.changeName("Mars","Twix");
         });
     }
 
     @Test
-    void remove() {
+    public void remove() {
         assertEquals(5, afterRemoveProduct());
-        assertThrows(IllegalArgumentException.class, () -> {
-            examplePricelist().remove("Remove");
-        });
     }
+
     @Test
-    void getProduct(){
+    public void getProduct(){
         assertEquals(new Product(12, 56.50).toString(), examplePricelist().getProduct("Coca cola").toString());
-        assertThrows(IllegalArgumentException.class, () -> {
-            examplePricelist().getProduct("Remove");
-        });
-
     }
 
     @Test
-    void costOfProductCode() {
+    public void costOfProductCode() {
         assertEquals(105, myPricelist.costOfProductCode(1234));
     }
     @Test
-    void getPrice() { assertEquals(56.50, myPricelist.getProduct("Coca cola").getPrice() );
+    void getPrice() {
+        assertEquals(56.50, myPricelist.getProduct("Coca cola").getPrice() );
     }
+
     double newPrice(){
         myPricelist.getProduct("Coca cola").setPrice(26.00);
         return myPricelist.getProduct("Coca cola").getPrice();
     }
 
     @Test
-    void setPrice() { assertEquals(26.00, newPrice());
+    void setPrice() {
+        assertEquals(26.00, newPrice());
     }
 
     @Test
-    void getCode() { assertEquals(12, myPricelist.getProduct("Coca cola").getCode());
+    void getCode() {
+        assertEquals(12, myPricelist.getProduct("Coca cola").getCode());
     }
 }
