@@ -123,7 +123,11 @@ public class Rubic {
         return result.toString();
     }
 
-    //Запрос нужной грани
+    /**
+     * Запрос нужной грани:
+     * на вход принимает название грани, возвращает массив
+     */
+
     public Cells[][] getSide(Sides side) {
         switch (side) {
             case FRONT:
@@ -143,9 +147,11 @@ public class Rubic {
         }
     }
 
-    //Поворот кубика
+    /**
+     * Поворот кубика:
+     * реализует поворот кубика по уквзвнной оси X, Y, Z; CW - по часовой, AntiCW - против
+     */
     public void rotateCW(Rotates rotation) {
-        Cells[][] t = frontSide;
         switch (rotation) {
             case X: {
                 turnFaceSideCW(Sides.UP, size - 1);
@@ -162,7 +168,6 @@ public class Rubic {
                 turnFaceSideCW(Sides.BACK);
                 break;
             }
-
         }
     }
 
@@ -187,10 +192,13 @@ public class Rubic {
         }
     }
 
-    //Поворот грани:
-
-    //***лицевой:
-    public void turnFaceSideCW(Sides side) {//по часовой
+    /**
+     * Поворот грани:
+     * реализует поворот указанной лицевой грани (FaceSide) или внутренней (InnerSide):
+     * CW - по часовой, AntiCW - против часовой стрелки;
+     * amount - количество граней, которые необходимо повернуть (по умолчанию - 1)
+     */
+    public void turnFaceSideCW(Sides side) {
         switch (side) {
             case FRONT: {
                 rotateLayerCW(Layers.STANDING, 0);
@@ -225,7 +233,7 @@ public class Rubic {
         }
     }
 
-    public void turnFaceSideCW(Sides side, int amount) {//с указанием количества
+    public void turnFaceSideCW(Sides side, int amount) {
         if (amount >= size || amount < 1) throw new IllegalArgumentException();
         turnFaceSideCW(side);
         if (amount > 1) switch (side) {
@@ -291,7 +299,7 @@ public class Rubic {
         }
     }
 
-    public void turnFaceSideAntiCW(Sides side, int amount) {//с указанием количества
+    public void turnFaceSideAntiCW(Sides side, int amount) {
         if (amount >= size || amount < 1) throw new IllegalArgumentException();
         turnFaceSideAntiCW(side);
         if (amount > 1) switch (side) {
@@ -321,8 +329,8 @@ public class Rubic {
         }
     }
 
-    //***внутренней:
-    public void turnInnerSideCW(Layers layer, int order) {//по часовай
+
+    public void turnInnerSideCW(Layers layer, int order) {
         if (order < 1 || order > size - 2) throw new IllegalArgumentException();
         rotateLayerCW(layer, order);
     }
@@ -373,7 +381,10 @@ public class Rubic {
     }
 
 
-    //Вспомогательные методы:
+    /**
+     * Вспомогательные методы:
+     * используются в реализуемых функциях
+     */
 
     private void rotateSideCW(Cells[][] side) {
         for (int i = 0; i < size / 2; i++) {
