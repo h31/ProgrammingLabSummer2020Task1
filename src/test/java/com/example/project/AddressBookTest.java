@@ -12,9 +12,9 @@ class AddressBookTest {
     void add() {
         // 1 Добавление в пустую книгу
         AddressBook actual1 = new AddressBook(new HashMap());
-        actual1.add("Забей ворота", new Address("Героев-Панфиловцев", 38, 2767));
+        actual1.add("Забей ворота", new Address("2-я Советская", 38, 2767));
         AddressBook expected1 = new AddressBook(new HashMap<>() {{
-            put("Забей ворота", new Address("Героев-Панфиловцев", 38, 2767));
+            put("Забей ворота", new Address("2-я Советская", 38, 2767));
         }});
         assertEquals(expected1.mapAddressBook.size(), actual1.mapAddressBook.size());
 

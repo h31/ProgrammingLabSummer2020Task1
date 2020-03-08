@@ -97,7 +97,7 @@ public class AddressBook {
         // Создаем пустой Set фамилий
         HashSet<String> listSurnames = new HashSet<>();
         // Перебираем все ключи и сравниваем названия улиц в значениях для каждого ключа с streetName
-        // добавляем нужные элементы в Set
+        // Добавляем нужные элементы в Set
         for (String key : mapAddressBook.keySet()) {
             if (mapAddressBook.get(key).street.equals(streetName)) listSurnames.add(key);
         }
@@ -109,7 +109,7 @@ public class AddressBook {
         // Создаем пустой Set фамилий
         HashSet<String> listSurnames = new HashSet<>();
         // Перебираем все ключи и сравниваем названия улиц и номера домов с streetName и numberOfHouse
-        // добавляем нужные элементы в Set
+        // Добавляем нужные элементы в Set
         for (String key : mapAddressBook.keySet()) {
             if (mapAddressBook.get(key).street.equals(streetName) &&
                     mapAddressBook.get(key).house == numberOfHouse) listSurnames.add(key);
