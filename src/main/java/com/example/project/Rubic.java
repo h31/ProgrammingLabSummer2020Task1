@@ -2,52 +2,56 @@ package com.example.project;
 
 import java.util.Arrays;
 
+enum Sides {
+    LEFT, FRONT, RIGHT, BACK, UP, DOWN,
+}
+enum Layers {
+    MID, EQUATOR, STANDING
+}
+enum Rotates {
+    X, Y, Z
+}
+enum Positions {
+    BEFORE, AFTER
+}
+
+enum Cells {
+    R, G, B, Y, O, W
+}
+
 public class Rubic {
     private int size;
 
-    Rubic() { this.setSize(3); }
-    Rubic(int size) { this.setSize(size); }
+    public Rubic() { setSize(3); }
+    public Rubic(int size) { setSize(size); }
 
-    private String[][] frontSide;
-    private String[][] backSide;
-    private String[][] upSide;
-    private String[][] downSide;
-    private String[][] rightSide;
-    private String[][] leftSide;
+    private Cells[][] frontSide;
+    private Cells[][] backSide;
+    private Cells[][] upSide;
+    private Cells[][] downSide;
+    private Cells[][] rightSide;
+    private Cells[][] leftSide;
 
 
     private void setSize(int size) {
         if (size < 2) throw new IllegalArgumentException();
         this.size = size;
-        frontSide = new String[size][size];
-        backSide = new String[size][size];
-        upSide = new String[size][size];
-        downSide = new String[size][size];
-        rightSide = new String[size][size];
-        leftSide = new String[size][size];
+        frontSide = new Cells[size][size];
+        backSide = new Cells[size][size];
+        upSide = new Cells[size][size];
+        downSide = new Cells[size][size];
+        rightSide = new Cells[size][size];
+        leftSide = new Cells[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                frontSide[i][j] = "R";
-                backSide[i][j] = "O";
-                upSide[i][j] = "Y";
-                downSide[i][j] = "W";
-                rightSide[i][j] = "G";
-                leftSide[i][j] = "B";
+                frontSide[i][j] = Cells.R;
+                backSide[i][j] = Cells.O;
+                upSide[i][j] = Cells.Y;
+                downSide[i][j] = Cells.W;
+                rightSide[i][j] = Cells.G;
+                leftSide[i][j] = Cells.B;
             }
         }
-    }
-
-    public enum Sides {
-        LEFT, FRONT, RIGHT, BACK, UP, DOWN,
-    }
-    public enum Layers {
-        MID, EQUATOR, STANDING
-    }
-    public enum Rotates {
-         X, Y, Z
-    }
-    public enum Positions {
-        BEFORE, AFTER
     }
 
     @Override
@@ -55,22 +59,13 @@ public class Rubic {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rubic rubic = (Rubic) o;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (sidesEqual(rubic, this)) return true;
-                rubic.rotateCW(Rotates.Z);
-            }
-            rubic.rotateCW(Rotates.X);
-        }
-        for (int i = 0; i < 3; i++) {
-            rubic.rotateCW(Rotates.Y);
-            for (int j = 0; j < 4; j++) {
-                if (sidesEqual(rubic, this)) return true;
-                rubic.rotateCW(Rotates.Z);
-            }
-        }
-        rubic.rotateCW(Rotates.Y);
-        return false;
+        return size == rubic.size &&
+                Arrays.deepEquals(frontSide, rubic.frontSide) &&
+                Arrays.deepEquals(backSide, rubic.backSide) &&
+                Arrays.deepEquals(upSide, rubic.upSide) &&
+                Arrays.deepEquals(downSide, rubic.downSide) &&
+                Arrays.deepEquals(rightSide, rubic.rightSide) &&
+                Arrays.deepEquals(leftSide, rubic.leftSide);
     }
 
     @Override
@@ -87,8 +82,15 @@ public class Rubic {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        String[][][] cube = {leftSide, frontSide, rightSide, downSide, backSide, upSide};
+        Cells[][][] cube = {leftSide, frontSide, rightSide, downSide, backSide, upSide};
+        String[] sides = {"left", "face", "right", "back", "up"};
 
+        for (int i = 0; i < 3; i++) {
+            result.append(sides[i]);
+            if (i != 2)
+                for (int j = 0; j < size * 2 - sides[i].length() + 1; j++) result.append(" ");
+        }
+        result.append("\n");
         for (int i = 0; i < size; i++) {
             for (int k = 0; k < 3; k++) {
                 for (int j = 0; j < size; j++) {
@@ -99,26 +101,30 @@ public class Rubic {
             }
             result.append("\n");
         }
-        result.append("\n");
+        for (int i = 0; i < size * 2 + 1; i++) result.append(" ");
+        result.append("down\n");
         for (int k = 3; k < 6; k++) {
             for (int i = 0; i < size; i++) {
-                for (int j = 0; j < 2 * size + 1; j++) {
+                for (int j = 0; j < 2 * size; j++) {
                     result.append(" ");
                 }
                 for (int j = 0; j < size; j++) {
+                    result.append(" ");
                     result.append(cube[k][i][j]);
-                    if (j != size - 1) result.append(" ");
                 }
                 result.append("\n");
             }
-            if (k != 5) result.append("\n");
+            if (k != 5) {
+                for (int i = 0; i < size * 2 + 1; i++) result.append(" ");
+                result.append(sides[k]).append("\n");
+            }
         }
 
         return result.toString();
     }
 
     //Запрос нужной грани
-    public String[][] getSide(Sides side) {
+    public Cells[][] getSide(Sides side) {
         switch (side) {
             case FRONT:
                 return frontSide;
@@ -139,7 +145,7 @@ public class Rubic {
 
     //Поворот кубика
     public void rotateCW(Rotates rotation) {
-        String[][] t = frontSide;
+        Cells[][] t = frontSide;
         switch (rotation) {
             case X: {
                 turnFaceSideCW(Sides.UP, size - 1);
@@ -161,7 +167,7 @@ public class Rubic {
     }
 
     public void rotateAntiCW(Rotates rotation) {
-        String[][] t = frontSide;
+        Cells[][] t = frontSide;
         switch (rotation) {
             case X: {
                 turnFaceSideAntiCW(Sides.UP, size - 1);
@@ -369,11 +375,11 @@ public class Rubic {
 
     //Вспомогательные методы:
 
-    private void rotateSideCW(String[][] side) {
+    private void rotateSideCW(Cells[][] side) {
         for (int i = 0; i < size / 2; i++) {
             int s = size - 1 - i;
             for (int j = i; j < s - i; j++) {
-                String t = side[i][j];
+                Cells t = side[i][j];
                 side[i][j] = side[s - j][i];
                 side[s - j][i] = side[s - i][s - j];
                 side[s - i][s - j] = side[j][s - i];
@@ -382,11 +388,11 @@ public class Rubic {
         }
     }
 
-    private void rotateSideAntiCW(String[][] side) {
+    private void rotateSideAntiCW(Cells[][] side) {
         for (int i = 0; i < size / 2; i++) {
             int s = size - 1 - i;
             for (int j = i; j < s - i; j++) {
-                String t = side[i][j];
+                Cells t = side[i][j];
                 side[i][j] = side[j][s - i];
                 side[j][s - i] = side[s - i][s - j];
                 side[s - i][s - j] = side[s - j][i];
@@ -401,7 +407,7 @@ public class Rubic {
         switch (layer) {
             case STANDING: {
                 for (int i = 0; i < size; i++) {
-                    String t = upSide[s - order][i];
+                    Cells t = upSide[s - order][i];
                     upSide[s - order][i] = leftSide[s - i][s - order];
                     leftSide[s - i][s - order] = downSide[order][s - i];
                     downSide[order][s - i] = rightSide[i][order];
@@ -411,7 +417,7 @@ public class Rubic {
             }
             case EQUATOR: {
                 for (int i = 0; i < size; i++) {
-                    String t = frontSide[order][i];
+                    Cells t = frontSide[order][i];
                     frontSide[order][i] = rightSide[order][i];
                     rightSide[order][i] = backSide[s - order][s - i];
                     backSide[s - order][s - i] = leftSide[order][i];
@@ -421,7 +427,7 @@ public class Rubic {
             }
             case MID: {
                 for (int i = 0; i < size; i++) {
-                    String t = frontSide[s - i][s - order];
+                    Cells t = frontSide[s - i][s - order];
                     frontSide[s - i][s - order] = downSide[s - i][s - order];
                     downSide[s - i][s - order] = backSide[s - i][s - order];
                     backSide[s - i][s - order] = upSide[s - i][s - order];
@@ -437,7 +443,7 @@ public class Rubic {
         switch (layer) {
             case STANDING: {
                 for (int i = 0; i < size; i++) {
-                    String t = upSide[s - order][i];
+                    Cells t = upSide[s - order][i];
                     upSide[s - order][i] = rightSide[i][order];
                     rightSide[i][order] = downSide[order][s - i];
                     downSide[order][s - i] = leftSide[s - i][s - order];
@@ -447,7 +453,7 @@ public class Rubic {
             }
             case EQUATOR: {
                 for (int i = 0; i < size; i++) {
-                    String t = frontSide[order][i];
+                    Cells t = frontSide[order][i];
                     frontSide[order][i] = leftSide[order][i];
                     leftSide[order][i] = backSide[s - order][s - i];
                     backSide[s - order][s - i] = rightSide[order][i];
@@ -457,7 +463,7 @@ public class Rubic {
             }
             case MID: {
                 for (int i = 0; i < size; i++) {
-                    String t = frontSide[s - i][s - order];
+                    Cells t = frontSide[s - i][s - order];
                     frontSide[s - i][s - order] = upSide[s - i][s - order];
                     upSide[s - i][s - order] = backSide[s - i][s - order];
                     backSide[s - i][s - order] = downSide[s - i][s - order];
@@ -465,14 +471,5 @@ public class Rubic {
                 }
             }
         }
-    }
-
-    private boolean sidesEqual(Rubic current, Rubic other) {
-        return Arrays.deepEquals(current.frontSide, other.frontSide) &&
-                Arrays.deepEquals(current.backSide, other.backSide) &&
-                Arrays.deepEquals(current.leftSide, other.leftSide) &&
-                Arrays.deepEquals(current.rightSide, other.rightSide) &&
-                Arrays.deepEquals(current.upSide, other.upSide) &&
-                Arrays.deepEquals(current.downSide, other.downSide);
     }
 }
