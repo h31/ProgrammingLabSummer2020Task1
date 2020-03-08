@@ -63,11 +63,7 @@ class AddressBookTest {
         actual2.remove("Салтыков-Щедрин");
         assertEquals(expected2.mapAddressBook.size(), actual2.mapAddressBook.size());
 
-        // 3 Фамилия не удовлетворяет
-        assertThrows(IllegalArgumentException.class,
-                () -> actual2.remove(".."));
-
-        // 4 Фамилия не содержится в книге
+        // 3 Фамилия не содержится в книге
         assertThrows(NoSuchElementException.class,
                 () -> actual2.remove("Петряева"));
     }
@@ -119,46 +115,44 @@ class AddressBookTest {
     }
 
     @Test
-    void streetGetName() {
+    void streetGetNames() {
         // 1
         AddressBook book = new AddressBook(new HashMap<>());
         book.add("Меркучева", new Address("Харченко", 16, 316));
         book.add("Петряева", new Address("Харченко", 15, 316));
         book.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        List<String> actual1 = book.streetGetName("Харченко");
-        List<String> expected1 = new ArrayList(List.of("Меркучева", "Петряева"));
-        Collections.sort(expected1);
+        HashSet<String> actual1 = book.streetGetNames("Харченко");
+        HashSet<String> expected1 = new HashSet<>(List.of("Меркучева", "Петряева"));
         assertEquals(expected1, actual1);
 
         // 2 Улица не содержится в адресах
-        List<String> actual2 = book.streetGetName("Героев-Панфиловцев");
-        List<String> expected2 = new ArrayList(List.of());
+        HashSet<String> actual2 = book.streetGetNames("Героев-Панфиловцев");
+        HashSet<String> expected2 = new HashSet<>();
         assertEquals(expected2, actual2);
 
         // 3 Название улицы не удовлетворяет
         assertThrows(IllegalArgumentException.class,
-                () -> book.streetGetName("Героев^Панфиловцев"));
+                () -> book.streetGetNames("Героев^Панфиловцев"));
     }
 
     @Test
-    void houseGetName() {
+    void houseGetNames() {
         // 1
         AddressBook book = new AddressBook(new HashMap<>());
         book.add("Галиева", new Address("Харченко", 16, 318));
         book.add("Петряева", new Address("Харченко", 16, 316));
         book.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        List<String> actual1 = book.houseGetName("Харченко", 16);
-        List<String> expected1 = new ArrayList(List.of("Галиева", "Петряева"));
-        Collections.sort(expected1);
+        HashSet<String> actual1 = book.houseGetNames("Харченко", 16);
+        HashSet<String> expected1 = new HashSet<>(List.of("Галиева", "Петряева"));
         assertEquals(expected1, actual1);
 
         // 2 Улица не содержится в адресах
-        List<String> actual2 = book.houseGetName("Героев-Панфиловцев", 1);
-        List<String> expected2 = new ArrayList(List.of());
+        HashSet<String> actual2 = book.houseGetNames("Героев-Панфиловцев", 1);
+        HashSet<String> expected2 = new HashSet<>();
         assertEquals(expected2, actual2);
 
         // 3 Название улицы не удовлетворяет
         assertThrows(IllegalArgumentException.class,
-                () -> book.houseGetName("Героев^Панфиловцев", 1));
+                () -> book.houseGetNames("Героев^Панфиловцев", 1));
     }
 }
