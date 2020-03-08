@@ -1,6 +1,6 @@
 package com.example.project;
 
-import java.util.Arrays;
+import java.util.*;
 
 enum Sides {
     LEFT, FRONT, RIGHT, BACK, UP, DOWN,
@@ -123,6 +123,21 @@ public class Rubic {
         return result.toString();
     }
 
+    public void randomize() {
+        Random num = new Random();
+        ArrayList<Sides> sides = new ArrayList<Sides>(Arrays.asList(Sides.values()));
+        for (int i = 0; i < num.nextInt(5) + 5; i++) {
+            Collections.shuffle(sides);
+            for (Sides side : sides) {
+                Random numOfTurnings = new Random();
+                Random numOfSides = new Random();
+                for (int j = 0; j < numOfTurnings.nextInt(3) + 1; j++) {
+                    turnFaceSideCW(side, numOfSides.nextInt(size - 1) + 1);
+                }
+            }
+        }
+    }
+
     /**
      * Запрос нужной грани:
      * на вход принимает название грани, возвращает массив
@@ -196,7 +211,8 @@ public class Rubic {
      * Поворот грани:
      * реализует поворот указанной лицевой грани (FaceSide) или внутренней (InnerSide):
      * CW - по часовой, AntiCW - против часовой стрелки;
-     * amount - количество граней, которые необходимо повернуть (по умолчанию - 1)
+     * amount - количество граней, которые необходимо повернуть (по умолчанию - 1),
+     * amount не может быть меньше 1 и должен быть меньше размера кубика
      */
     public void turnFaceSideCW(Sides side) {
         switch (side) {
@@ -265,7 +281,7 @@ public class Rubic {
 
     //***************************************************
 
-    public void turnFaceSideAntiCW(Sides side) {//против часовой
+    public void turnFaceSideAntiCW(Sides side) {
         switch (side) {
             case FRONT: {
                 rotateLayerAntiCW(Layers.STANDING, 0);
@@ -335,19 +351,19 @@ public class Rubic {
         rotateLayerCW(layer, order);
     }
 
-    public void turnInnerSideCW(Layers layer, int order, int amount, Positions position) {//с указанием количества
+    public void turnInnerSideCW(Layers layer, int order, int amount, Positions position) {
         if (amount < 1) throw new IllegalArgumentException();
         if (amount == 1) turnInnerSideCW(layer, order);
         if (amount > 1) switch (position) {
             case AFTER: {
-                if (amount > size - order - 1) throw new IllegalArgumentException();
+                if (amount > size - order) throw new IllegalArgumentException();
                 for (int i = 0; i < amount; i++) {
                     turnInnerSideCW(layer, order + i);
                 }
                 break;
             }
             case BEFORE: {
-                if (amount > order - 1) throw new IllegalArgumentException();
+                if (amount > order) throw new IllegalArgumentException();
                 for (int i = 0; i < amount; i++) {
                     turnInnerSideCW(layer, order - i);
                 }
@@ -357,12 +373,12 @@ public class Rubic {
 
     //**************************************************
 
-    public void turnInnerSideAntiCW(Layers layer, int order) {//против часовой
+    public void turnInnerSideAntiCW(Layers layer, int order) {
         if (order < 1 || order > size - 1) throw new IllegalArgumentException();
         rotateLayerAntiCW(layer, order);
     }
 
-    public void turnInnerSideAntiCW(Layers layer, int order, int amount, Positions position) {//количество
+    public void turnInnerSideAntiCW(Layers layer, int order, int amount, Positions position) {
         switch (position) {
             case AFTER: {
                 if (amount > size - order) throw new IllegalArgumentException();
