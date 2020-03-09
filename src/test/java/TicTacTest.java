@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TicTacTest {
@@ -8,40 +10,43 @@ class TicTacTest {
         return myField;
     }
     TicTac myField = exampleTicTacT();
-    String reaserch1() {
-        myField.add(0,0,1);
-        myField.add(1,0,1);
-        myField.add(2,0,1);
-        return myField.search( 1);
+    int reaserch1() {
+        myField.set(0,0,'X');
+        myField.set(1,0,'X');
+        myField.set(2,0,'X');
+        return myField.search( 'X');
     }
 
-    String reaserch2() {
-        myField.add(0,0,1);
-        myField.add(1,1,1);
-        myField.add(2,2,1);
-        myField.add(3,3,1);
-        myField.add(4,4,1);
-        myField.add(2,0,1);
-        return myField.search( 1);
+    int reaserch2() {
+        myField.set(0,0,'1');
+        myField.set(1,1,'1');
+        myField.set(2,2,'1');
+        myField.set(3,3,'1');
+        myField.set(4,4,'1');
+        myField.set(2,0,'1');
+        return myField.search( '1');
     }
-    String reaserch3() {
-        myField.add(4,0,2);
-        myField.add(3,1,2);
-        myField.add(2,2,2);
-        myField.add(1,3,2);
-        myField.add(0,4,2);
-        return myField.search( 2);
+    int reaserch3() {
+        myField.set(4,4,'X');
+        myField.set(3,3,'X');
+        myField.set(2,2,'X');
+        myField.set(1,1,'X');
+        myField.set(0,0,'X');
+        myField.set(4,3,'X');
+        myField.set(2,1,'X');
+        return myField.search( 'X');
     }
+
     int addField0(){
-        myField.add(0, 0, 1);
+        myField.set(0, 0, '1');
         return myField.getValue(0,0);
     }
     int addField1(){
-        myField.add(1, 0, 1);
+        myField.set(1, 0, '1');
         return myField.getValue(1,0);
     }
     int addField2(){
-        myField.add(2, 0, 1);
+        myField.set(2, 0, '1');
         return myField.getValue(2,0);
     }
     int deleteField(){
@@ -62,11 +67,13 @@ class TicTacTest {
 
     @Test
     void search() {
-        assertEquals("Максимальное число 1 - 3", reaserch1());
-        assertEquals("Максимальное число 1 - 5", reaserch2());
-        assertEquals("Максимальное число 2 - 5", reaserch3());
+        assertEquals(3, reaserch1());
+        assertEquals(5, reaserch2());
+        assertEquals(5, reaserch3());
 
     }
+
+
     @Test
     void fieldSize() {
     }
