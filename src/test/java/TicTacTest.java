@@ -38,11 +38,11 @@ class TicTacTest {
     }
 
     int addField0(){
-        myField.set(0, 0, '1');
+        myField.set(0, 0, 'X');
         return myField.getValue(0,0);
     }
     int addField1(){
-        myField.set(1, 0, '1');
+        myField.set(1, 0, '0');
         return myField.getValue(1,0);
     }
     int addField2(){
@@ -56,13 +56,13 @@ class TicTacTest {
 
     @Test
     void add() {
-        assertEquals(1, addField0());
-        assertEquals(1, addField1());
+        assertEquals('X', addField0());
+        assertEquals('0', addField1());
     }
 
     @Test
     void delete() {
-        assertEquals(0, deleteField());
+        assertEquals('1', deleteField());
     }
 
     @Test
@@ -70,7 +70,6 @@ class TicTacTest {
         assertEquals(3, reaserch1());
         assertEquals(5, reaserch2());
         assertEquals(5, reaserch3());
-
     }
 
 
