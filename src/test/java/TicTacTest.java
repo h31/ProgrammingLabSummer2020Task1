@@ -37,18 +37,15 @@ class TicTacTest {
         return myField.search( 'X');
     }
 
-    int addField0(){
+    char addField0(){
         myField.set(0, 0, 'X');
         return myField.getValue(0,0);
     }
-    int addField1(){
-        myField.set(1, 0, '0');
-        return myField.getValue(1,0);
+    char addField1() {
+        myField.set(0, 1, '0');
+        return myField.getValue(0, 1);
     }
-    int addField2(){
-        myField.set(2, 0, '1');
-        return myField.getValue(2,0);
-    }
+
     int deleteField(){
         myField.delete(2, 0);
         return myField.getValue(2,0);
@@ -71,10 +68,4 @@ class TicTacTest {
         assertEquals(5, reaserch2());
         assertEquals(5, reaserch3());
     }
-
-
-    @Test
-    void fieldSize() {
-    }
-
 }

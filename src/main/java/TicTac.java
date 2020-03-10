@@ -44,12 +44,11 @@ public class TicTac {
                 field[y][x] = '1';
     }
 
-    public int getValue(int x, int y) { return field[y][x]; }       // возращает элемент ( X ; Y )
+    public char getValue(int x, int y) { return field[y][x]; }       // возращает элемент ( X ; Y )
 
     public void set(int x, int y, char res) {       //добавление крестика/нолика в поле
-        this.res = res;
         if ((x < 0) || (x > size - 1) || (y < 0) || (y > size - 1)) throw new IllegalArgumentException();
-        field[x][y] = res;
+        field[y][x] = res;
     }
 
     public void delete(int x, int y) { field[x][y] = '1';}     // удаление заданного элемента из поля
@@ -61,7 +60,7 @@ public class TicTac {
         for (int y = 0; y < size; y++) {
             start = 0;
             for (int x = 0; x < size; x++) {
-                int[] answer = check(start, x, y, x, result, count);
+                int[] answer = check(start, x, y, x, result, count, res);
                 result = answer[0];
                 start = answer[1];
                 count = answer[2];
@@ -80,7 +79,7 @@ public class TicTac {
             start = 0;
             for (int y = 0; y < size; y++) {
 
-                int[] answer = check(start, x, y, y, result, count);
+                int[] answer = check(start, x, y, y, result, count, res);
                 result = answer[0];
                 start = answer[1];
                 count = answer[2];
@@ -95,7 +94,7 @@ public class TicTac {
         int start = 0;
         for (int x = 0; x < size; x++) {
             start = 0;
-            int[] answer = check(start, x, x, x, result, count);
+            int[] answer = check(start, x, x, x, result, count, res);
             result = answer[0];
             start = answer[1];
             count = answer[2];
@@ -112,7 +111,7 @@ public class TicTac {
         int y = 0;
         for (int x = size - 1; x <= 0; x--, y++) {
             start = 0;
-            int[] answer = check(start, x, y, y, result, count);
+            int[] answer = check(start, x, y, y, result, count, res);
             result = answer[0];
             start = answer[1];
             count = answer[2];
@@ -134,12 +133,10 @@ public class TicTac {
         return max;
     }
 
-    private int[] check(int start, int x, int y, int var, int result, int count) {
+    private int[] check(int start, int x, int y, int var, int result, int count, char res) {
         //считаю самую длинную последовательноть для любого направления
         if (field[y][x] == res) {
-            if (start == 0) {
-                start = 1;
-            }
+            if (start == 0)  start = 1;
             count++;
             if (var == size - 1) {
                 if (count > result) result = count;
@@ -147,9 +144,7 @@ public class TicTac {
             }
         } else {
             start = 0;
-            if (count > result) {
-                result = count;
-            }
+            if (count > result) result = count;
             count = 0;
         }
         return new int[]{result, start, count};
