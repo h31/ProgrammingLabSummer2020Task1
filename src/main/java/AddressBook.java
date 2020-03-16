@@ -1,41 +1,44 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class AddressBook {
-    private HashMap<String, Address> map = new HashMap<>();
+    private Map<String, Address> map = new HashMap<>();
 
-    AddressBook(Pair ... people) {
-        for (Pair element: people) {
+    public AddressBook(Pair... people) {
+        for (Pair element : people) {
             map.put(element.getKey(), element.getValue());
         }
     }
 
-    private AddressBook(HashMap<String, Address> map) {
+    public AddressBook(Map<String, Address> map) {
         this.map = map;
     }
 
-    AddressBook add(String surname, Address address) {
+    public AddressBook add(String surname, Address address) {
         map.put(surname, address);
         return this;
     }
 
-    AddressBook remove(String surname) {
-        if (!map.containsKey(surname)) throw new IllegalArgumentException();
-        map.remove(surname);
+    public AddressBook remove(String surname) {
+        if (map.remove(surname) == null) throw new NoSuchElementException();
         return this;
     }
 
-    AddressBook changeAddress(String surname, Address address) {
-        if (!map.containsKey(surname)) throw new IllegalArgumentException();
-        map.replace(surname, address);
+    public AddressBook changeAddress(String surname, Address address) {
+        if (map.replace(surname, address) == null) throw new NoSuchElementException();
         return this;
     }
 
-    Address getAddress(String surname) {
-        if (!map.containsKey(surname)) throw new IllegalArgumentException();
+    public Address getAddress(String surname) {
+        if (map.get(surname) == null) throw new NoSuchElementException();
         return map.get(surname);
     }
 
-    List<String> filterStreet(String street) {
+    public List<String> filterStreet(String street) {
         List<String> people = new ArrayList<>();
         for (Map.Entry<String, Address> element : this.map.entrySet()) {
             if (element.getValue().getStreet().equals(street)) people.add(element.getKey());
@@ -43,7 +46,7 @@ public class AddressBook {
         return people;
     }
 
-    List<String> filterBuilding(String street, String building) {
+    public List<String> filterBuilding(String street, String building) {
         List<String> people = new ArrayList<>();
         for (Map.Entry<String, Address> element : this.map.entrySet()) {
             if (element.getValue().getStreet().equals(street) && element.getValue().getBuilding().equals(building))
@@ -52,7 +55,7 @@ public class AddressBook {
         return people;
     }
 
-    int size() {
+    public int size() {
         return this.map.size();
     }
 

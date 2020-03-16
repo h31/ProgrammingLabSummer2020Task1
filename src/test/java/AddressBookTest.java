@@ -1,5 +1,8 @@
-import java.util.*;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.*;
 
 public class AddressBookTest {
@@ -32,7 +35,7 @@ public class AddressBookTest {
                 .size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NoSuchElementException.class)
     public void removeNull() {
         new AddressBook()
                 .remove("Test");
@@ -45,7 +48,7 @@ public class AddressBookTest {
                 .getAddress("Galieva").getStreet());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NoSuchElementException.class)
     public void changeAddressNull() {
         new AddressBook()
                 .changeAddress("Krivitskii", new Address("Nevskiy", "35", "3"));
@@ -58,7 +61,7 @@ public class AddressBookTest {
                 .getAddress("Shadaev"), new Address("Komendantskii", "22", "269"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NoSuchElementException.class)
     public void getAddressNull() {
         new AddressBook()
                 .getAddress("Krivitskii");
