@@ -2,18 +2,19 @@ package PriceList;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PriceListTest {
 
     private PriceList createPriceList() {
         PriceList test = new PriceList();
-        test.add("Товар 1", 1, 99.99);
-        test.add("Товар 2", 12, 0.0);
-        test.add("Товар 3", 123, 11.111);
-        test.add("Товар 4", 1234, 1.23);
-        test.add("Товар 5", 12345, 4.90);
+        test.add(new Item("Товар 1", 1, 99.99));
+        test.add(new Item("Товар 2", 12, 0.0));
+        test.add(new Item("Товар 3", 123, 11.111));
+        test.add(new Item("Товар 4", 1234, 1.23));
+        test.add(new Item("Товар 5", 12345, 4.90));
+
         return test;
     }
 
@@ -57,7 +58,7 @@ class PriceListTest {
 
         PriceList test2 = new PriceList().add("Товар 1", 1, 10.44);
 
-        assertEquals(newTest.toString(), test2.changeName("Товар 1", "name").toString());
+        assertEquals(newTest, test2.changeName("Товар 1", "name"));
 
         assertThrows(IllegalArgumentException.class, () -> {
             createPriceList()
