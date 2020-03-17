@@ -13,8 +13,8 @@ public class Item {
         if (newRubles < 0 || newPennies < 0) throw new IllegalArgumentException("Отрицательная стоимость");
         name = newName;
         id = newId;
-        if (newPennies > 99){
-            rubles = newRubles + newPennies/100;
+        if (newPennies > 99) {
+            rubles = newRubles + newPennies / 100;
             pennies = newPennies % 100;
         } else {
             rubles = newRubles;
@@ -39,10 +39,11 @@ public class Item {
         return pennies;
     }
 
-    public String getPrice(){
-        if (pennies < 10) return rubles+".0"+pennies;
-        else return rubles+"."+pennies;
+    public String getPrice() {
+        if (pennies < 10) return rubles + ".0" + pennies;
+        else return rubles + "." + pennies;
     }
+
     public Item changeName(String newName) {
         name = newName;
         return this;
@@ -62,10 +63,9 @@ public class Item {
     public Item changePennies(int newPennies) {
         if (newPennies < 0) throw new IllegalArgumentException("Отрицательная стоимость");
         else if (newPennies > 99) {
-            rubles += newPennies/100;
+            rubles += newPennies / 100;
             pennies = newPennies % 100;
-        }
-        else {
+        } else {
             pennies = newPennies;
         }
         return this;
@@ -94,6 +94,6 @@ public class Item {
     public String toString() {
         return "Item{" +
                 "name='" + name + '\'' +
-                ", id=" + id + ", rubles=" + rubles + ", pennies=" + pennies +'}';
+                ", id=" + id + ", rubles=" + rubles + ", pennies=" + pennies + '}';
     }
 }

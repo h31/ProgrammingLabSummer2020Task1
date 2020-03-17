@@ -17,24 +17,25 @@ public class PriceList {
     }
 
     public PriceList add(Item newItem) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(newItem.getName())) throw new IllegalArgumentException();
             if (i.getId() == newItem.getId()) throw new IllegalArgumentException();
         }
         items.add(newItem);
         return this;
     }
+
     public PriceList add(String name, int id, int rubles, int pennies) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(name)) throw new IllegalArgumentException();
             if (i.getId() == id) throw new IllegalArgumentException();
         }
-        items.add(new Item(name,id, rubles,pennies));
+        items.add(new Item(name, id, rubles, pennies));
         return this;
     }
 
     public PriceList changePrice(int id, int newRubles, int newPennies) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getId() == id) {
                 i.changePrice(newRubles, newPennies);
                 return this;
@@ -45,7 +46,7 @@ public class PriceList {
     }
 
     public PriceList changePrice(String name, int newRubles, int newPennies) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(name)) {
                 i.changePrice(newRubles, newPennies);
                 return this;
@@ -56,7 +57,7 @@ public class PriceList {
     }
 
     public PriceList changeName(int id, String newName) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(newName)) throw new IllegalArgumentException();
             if (i.getId() == id) {
                 i.changeName(newName);
@@ -68,7 +69,7 @@ public class PriceList {
     }
 
     public PriceList changeName(String oldName, String newName) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(newName)) throw new IllegalArgumentException();
             if (i.getName().equals(oldName)) {
                 i.changeName(newName);
@@ -80,7 +81,7 @@ public class PriceList {
     }
 
     public PriceList remove(String name) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(name)) {
                 items.remove(i);
                 return this;
@@ -91,7 +92,7 @@ public class PriceList {
     }
 
     public PriceList remove(int id) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getId() == id) {
                 items.remove(i);
                 return this;
@@ -101,7 +102,7 @@ public class PriceList {
     }
 
     public String getPrice(String name) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getName().equals(name)) {
                 return i.getPrice();
             }
@@ -111,7 +112,7 @@ public class PriceList {
     }
 
     public String getPrice(int id) {
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getId() == id) {
                 return i.getPrice();
             }

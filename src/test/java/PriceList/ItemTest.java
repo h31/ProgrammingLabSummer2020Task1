@@ -50,7 +50,7 @@ class ItemTest {
     public void changeRubles() {
         Item test = new Item("name", 0, 123, 11);
         assertEquals(test, new Item("name", 0, 2, 11).changeRubles(123));
-        assertThrows(IllegalArgumentException.class, () ->{
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item("name", 0, 2, 11).changeRubles(-1);
         });
     }
@@ -59,7 +59,7 @@ class ItemTest {
     public void changePennies() {
         Item test = new Item("name", 0, 2, 99);
         assertEquals(test, new Item("name", 0, 2, 11).changePennies(99));
-        assertThrows(IllegalArgumentException.class, () ->{
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item("name", 0, 2, 11).changePennies(-1);
         });
         assertEquals(test, new Item("name", 0, 1, 11).changePennies(199));
