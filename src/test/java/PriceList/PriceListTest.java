@@ -9,11 +9,11 @@ class PriceListTest {
 
     private PriceList createPriceList() {
         PriceList test = new PriceList();
-        test.add(new Item("Товар 1", 1, 99.99));
-        test.add(new Item("Товар 2", 12, 0.0));
-        test.add(new Item("Товар 3", 123, 11.111));
-        test.add(new Item("Товар 4", 1234, 1.23));
-        test.add(new Item("Товар 5", 12345, 4.90));
+        test.add(new Item("Товар 1", 1, 99,99));
+        test.add(new Item("Товар 2", 12, 0,0));
+        test.add(new Item("Товар 3", 123, 11,11));
+        test.add(new Item("Товар 4", 1234, 1,23));
+        test.add(new Item("Товар 5", 12345, 4,90));
 
         return test;
     }
@@ -21,41 +21,41 @@ class PriceListTest {
     @Test
     public void add() {
         assertEquals(6, createPriceList()
-                .add(new Item("Товар 6", 2, 34.99)).size());
+                .add(new Item("Товар 6", 2, 34,99)).size());
         assertThrows(IllegalArgumentException.class, () -> {
             createPriceList()
-                    .add(new Item("name", 1, 34.99));
+                    .add(new Item("name", 1, 34,99));
         });
     }
 
     @Test
     public void changePrice() {
 
-        assertEquals(10.44, createPriceList().changePrice(1, 10.444).getPrice(1));
+        assertEquals("14.44", createPriceList().changePrice(1, 10,444).getPrice(1));
 
         assertThrows(IllegalArgumentException.class, () -> {
             createPriceList()
-                    .changePrice(0, 34.99);
+                    .changePrice(0, 34,99);
 
         });
 
-        assertEquals(10.44, createPriceList().changePrice("Товар 1", 10.444).getPrice(1));
+        assertEquals("14.44", createPriceList().changePrice("Товар 1", 10,444).getPrice(1));
 
         assertThrows(IllegalArgumentException.class, () -> {
             createPriceList()
-                    .changePrice("", 34.99);
+                    .changePrice("", 34,99);
 
         });
     }
 
     @Test
     public void changeName() {
-        PriceList test = new PriceList().add("Товар 1", 1, 10.44);
-        PriceList newTest = new PriceList().add("name", 1, 10.44);
+        PriceList test = new PriceList().add("Товар 1", 1, 10,44);
+        PriceList newTest = new PriceList().add("name", 1, 10,44);
 
         assertEquals(newTest, test.changeName(1, "name"));
 
-        PriceList test2 = new PriceList().add("Товар 1", 1, 10.44);
+        PriceList test2 = new PriceList().add("Товар 1", 1, 10,44);
 
         assertEquals(newTest, test2.changeName("Товар 1", "name"));
 
@@ -69,9 +69,9 @@ class PriceListTest {
 
     @Test
     public void getPrice() {
-        assertEquals(11.11, createPriceList().getPrice("Товар 3")
+        assertEquals("11.11", createPriceList().getPrice("Товар 3")
         );
-        assertEquals(11.11, createPriceList().getPrice(123)
+        assertEquals("11.11", createPriceList().getPrice(123)
         );
         assertThrows(IllegalArgumentException.class, () -> {
             createPriceList()
@@ -108,4 +108,3 @@ class PriceListTest {
     }
 
 }
-

@@ -24,19 +24,19 @@ public class PriceList {
         items.add(newItem);
         return this;
     }
-    public PriceList add(String name, Integer id, double price) {
+    public PriceList add(String name, int id, int rubles, int pennies) {
         for (Item i: items) {
             if (i.getName().equals(name)) throw new IllegalArgumentException();
             if (i.getId() == id) throw new IllegalArgumentException();
         }
-        items.add(new Item(name,id, Math.floor(price*100)/100));
+        items.add(new Item(name,id, rubles,pennies));
         return this;
     }
 
-    public PriceList changePrice(int id, double newPrice) {
+    public PriceList changePrice(int id, int newRubles, int newPennies) {
         for (Item i: items) {
             if (i.getId() == id) {
-                i.changePrice(Math.floor(newPrice*100)/100);
+                i.changePrice(newRubles, newPennies);
                 return this;
             }
 
@@ -44,10 +44,10 @@ public class PriceList {
         throw new IllegalArgumentException();
     }
 
-    public PriceList changePrice(String name, double newPrice) {
+    public PriceList changePrice(String name, int newRubles, int newPennies) {
         for (Item i: items) {
             if (i.getName().equals(name)) {
-                i.changePrice(Math.floor(newPrice*100)/100);
+                i.changePrice(newRubles, newPennies);
                 return this;
             }
 
@@ -100,7 +100,7 @@ public class PriceList {
         throw new IllegalArgumentException();
     }
 
-    public double getPrice(String name) {
+    public String getPrice(String name) {
         for (Item i: items) {
             if (i.getName().equals(name)) {
                 return i.getPrice();
@@ -110,7 +110,7 @@ public class PriceList {
 
     }
 
-    public double getPrice(int id) {
+    public String getPrice(int id) {
         for (Item i: items) {
             if (i.getId() == id) {
                 return i.getPrice();
