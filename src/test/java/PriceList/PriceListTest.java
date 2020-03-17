@@ -24,8 +24,7 @@ class PriceListTest {
                 .add(new Item("Товар 6", 2, 34.99)).size());
         assertThrows(IllegalArgumentException.class, () -> {
             createPriceList()
-                    .add(new Item("name", 1, 34.99))
-                    .size();
+                    .add(new Item("name", 1, 34.99));
         });
     }
 
@@ -54,7 +53,7 @@ class PriceListTest {
         PriceList test = new PriceList().add("Товар 1", 1, 10.44);
         PriceList newTest = new PriceList().add("name", 1, 10.44);
 
-        assertEquals(newTest.toString(), test.changeName(1, "name").toString());
+        assertEquals(newTest, test.changeName(1, "name"));
 
         PriceList test2 = new PriceList().add("Товар 1", 1, 10.44);
 
