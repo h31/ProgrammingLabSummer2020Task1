@@ -1,13 +1,13 @@
-
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Pricelist {
-    private HashMap<String, Product> map = new HashMap<String, Product>();
+    private Map<String, Product> map = new HashMap<String, Product>();
 
-    public void add(String name, Product product) {
-        map.put(name, product);
+    public Product add(String name, Product product) {
+        return map.put(name, product);
     }
 
     public void changeName(String oldName, String newName) {
@@ -22,15 +22,16 @@ public class Pricelist {
     }
 
     public void remove(String name) {
+        if (!map.containsKey(name)) throw new IllegalArgumentException();
         map.remove(name);
     }
 
-    public double costOfProductCode(int code) {
-        double sum = 0;
+    public BigDecimal costOfProductCode(int code) {
+        BigDecimal res = BigDecimal.ZERO;
         for (Map.Entry<String, Product> element : this.map.entrySet()) {
-            if (code == element.getValue().getCode()) sum += element.getValue().getPrice();
+            if (code == element.getValue().getCode()) res = res.add(element.getValue().getPrice());
         }
-        return sum;
+        return res;
     }
 
     public int size() {
@@ -43,7 +44,7 @@ public class Pricelist {
 
     @Override
     public String toString() {
-        return "Pricelist{" + map +'}';
+        return "Pricelist{" + map + '}';
     }
 
     @Override
@@ -62,18 +63,20 @@ public class Pricelist {
 
 class Product {
     private int code;
-    private double cost;
+    private BigDecimal cost;
 
-    Product(int code, double cost) {
+    Product(int code, BigDecimal cost) {
+        if (code < 0 || cost.compareTo(BigDecimal.ZERO) == 0) throw new IllegalArgumentException();
         this.code = code;
         this.cost = cost;
     }
 
-    double getPrice() {
+    BigDecimal getPrice() {
+
         return cost;
     }
 
-    void setPrice(double cost) {
+    void setPrice(BigDecimal cost) {
         this.cost = cost;
     }
 
@@ -95,7 +98,7 @@ class Product {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return code == product.code &&
-                Double.compare(product.cost, cost) == 0;
+                product.cost.compareTo(cost) == 0;
     }
 
     @Override
