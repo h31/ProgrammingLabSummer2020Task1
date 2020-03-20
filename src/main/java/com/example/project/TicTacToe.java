@@ -90,55 +90,64 @@ final class Line {
 
 public final class TicTacToe {
     private final int size;
-    public char[][] desk; // поле хранится в виде двухмерного массива
+    /*
+    поле хранится в виде двухмерного массива
+     */
+    public TicTacSymbol[][] desk;
 
-    public TicTacToe(int size) { // конструктор
+    /*
+    конструктор
+     */
+    public TicTacToe(int size) {
+        if (size <= 0) throw new IllegalArgumentException();
         this.size = size;
-        this.desk = new char[size][size];
-        for (int i = 0; i < size; i++) // заполнение поля по умолчанию
+        this.desk = new TicTacSymbol[size][size];
+        /*
+        @author Никита Пудов
+        заполнение поля по умолчанию
+         */
+        for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++)
-                this.desk[i][j] = '*';
+                this.desk[i][j] = TicTacSymbol.EMPTY;
     }
 
     // методы
-    public void addCross(int x, int y) { // добавить крестик
+    /*
+    добавить крестик
+     */
+    public void setTicTacSymbol(int x, int y, TicTacSymbol ticTacSymbol) {
         if ((x < 0) || (x > size - 1) || (y < 0) || (y > size - 1)) throw new IllegalArgumentException();
-        desk[x][y] = 'X';
+        desk[x][y] = ticTacSymbol;
     }
 
-    public void addZero(int x, int y) { // добавить нолик
+    /*
+    Очистить заданную клетку
+     */
+    public void cleanCell(int x, int y) {
         if ((x < 0) || (x > size - 1) || (y < 0) || (y > size - 1)) throw new IllegalArgumentException();
-        desk[x][y] = 'O';
+        desk[x][y] = TicTacSymbol.EMPTY;
     }
 
-    public void cleanCell(int x, int y) { // очистить заданную клетку
-        desk[x][y] = '*';
-    }
-
-    public char[][] getDesk() { // запрос текущего состояния поля
+    /*
+    запрос текущего состояния поля
+     */
+    public TicTacSymbol[][] getDesk() {
         return this.desk;
     }
 
-    public char getFieldAt(int x, int y) { // получение конкретного элемента поля по координатам
+    /*
+    получение конкретного элемента поля по координатам
+     */
+    public TicTacSymbol getFieldAt(int x, int y) {
+        if ((x < 0) || (x > size - 1) || (y < 0) || (y > size - 1)) throw new IllegalArgumentException();
         return this.desk[x][y];
     }
 
     public Line getWinner(TicTacSymbol symbol, DirectionSymbol direction) {
-        char findSymbol = '*';
+        TicTacSymbol findSymbol = symbol;
         int max = 0;
         Line answer = new Line(0, new Point(0, 0), new Point(0, 0));
         Line result;
-        switch (symbol) {
-            case CROSS:
-                findSymbol = 'X';
-                break;
-            case ZERO:
-                findSymbol = 'O';
-                break;
-            case EMPTY:
-                findSymbol = '*';
-                break;
-        }
         switch (direction) {
             case VERTICAL:
                 for (int i = 0; i < size; i++) {
@@ -169,7 +178,7 @@ public final class TicTacToe {
         return answer;
     }
 
-    private Line check(char findSymbol, int xCoef, int xShift, int yCoef, int yShift) {
+    private Line check(TicTacSymbol findSymbol, int xCoef, int xShift, int yCoef, int yShift) {
         int i = 0;
         int cnt = 0;
         int max = 0;
@@ -177,12 +186,12 @@ public final class TicTacToe {
         Point endPoint = new Point(-1, -1);
         Point maxStartPoint = new Point(-1, -1);
         Point maxEndPoint = new Point(-1, -1);
-        int previousx = i * xCoef + xShift;
-        int previousy = i * yCoef + yShift;
+        int previousX = i * xCoef + xShift;
+        int previousY = i * yCoef + yShift;
         for (i = 0; i < size; i++) {
             int x = i * xCoef + xShift;
             int y = i * yCoef + yShift;
-            char symbol = desk[x][y];
+            TicTacSymbol symbol = desk[x][y];
             if (symbol == findSymbol) {
                 if (cnt == 0) {
                     startPoint = new Point(x, y);
@@ -198,9 +207,9 @@ public final class TicTacToe {
                 }
             } else {
                 if ((cnt != 0) && (i == size - 1)) {
-                    endPoint = new Point(previousx, previousy);
+                    endPoint = new Point(previousX, previousY);
                 } else if (cnt != 0) {
-                    endPoint = new Point(previousx, previousy);
+                    endPoint = new Point(previousX, previousY);
                 }
                 if (cnt > max) {
                     max = cnt;
@@ -209,8 +218,8 @@ public final class TicTacToe {
                 }
                 cnt = 0;
             }
-            previousx = x;
-            previousy = y;
+            previousX = x;
+            previousY = y;
         }
         return new Line(max, maxStartPoint, maxEndPoint);
     }
@@ -235,13 +244,13 @@ public final class TicTacToe {
 
     @Override
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder("");
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                str += desk[i][j] + " ";
+                str.append(desk[i][j]).append(" ");
             }
-            str += "\n";
+            str.append("\n");
         }
-        return str;
+        return str.toString();
     }
 }
