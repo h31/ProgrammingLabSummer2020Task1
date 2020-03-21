@@ -40,8 +40,9 @@ public class TicTacToeTests {
     @Test
     public void getDesk() {
         TicTacToe game = new TicTacToe(3);
-        assertTrue(game.desk.equals(game.getDesk()));
-
+        assertEquals(game.desk, game.getDesk());
+        game.desk[0][2] = TicTacSymbol.CROSS;
+        assertEquals(game.desk, game.getDesk());
     }
 
     @Test
