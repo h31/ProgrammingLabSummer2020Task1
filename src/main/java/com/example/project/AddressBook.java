@@ -2,55 +2,22 @@ package com.example.project;
 
 import java.util.*;
 
-class Address {
-    String street;
-    int house;
-    int flat;
-
-    Address(String street, int house, int flat) {
-        this.street = street;
-        this.house = house;
-        this.flat = flat;
-    }
-
-    @Override
-    public String toString() {
-        return "ул. " + street +
-                ", д. " + house +
-                ", кв. " + flat;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return house == address.house &&
-                flat == address.flat &&
-                Objects.equals(street, address.street);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(street, house, flat);
-    }
-}
-
 public class AddressBook {
-    public HashMap<String, Address> mapAddressBook;
+    public Map<String, Address> mapAddressBook;
+    private String regex = "[[а-яА-Я]\\d\\w\\s-]+";
 
 
-    public AddressBook(HashMap<String, Address> mapAddressBook) {
-        this.mapAddressBook = mapAddressBook;
+    public AddressBook() {
+        this.mapAddressBook = new HashMap();
     }
 
     @Override
     public String toString() {
-        String res = new String();
+        StringBuilder res = new StringBuilder();
         for (String key : mapAddressBook.keySet()) {
-            res += key + " - " + mapAddressBook.get(key).toString()+ "\n";
+            res.append(key).append(" - ").append(mapAddressBook.get(key).toString()).append("\n");
         }
-        return res;
+        return res.toString();
     }
 
     @Override
@@ -67,35 +34,32 @@ public class AddressBook {
     }
 
     public void add(String name, Address address) {
-        if (!name.matches("[[а-яА-Я]\\d\\w\\s-]+") ||
-                !address.street.matches("[[а-яА-Я]\\d\\w\\s-]+")) throw new IllegalArgumentException();
-        if (mapAddressBook.containsKey(name)) throw new NoSuchElementException();
-        mapAddressBook.put(name, address);
+        if (!name.matches(regex)) throw new IllegalArgumentException();
+        Address value = mapAddressBook.put(name, address);
+        if (value != null) throw new NoSuchElementException();
     }
 
     public void remove(String name) {
-        if (!mapAddressBook.containsKey(name)) throw new NoSuchElementException();
-        mapAddressBook.remove(name);
+        Address value = mapAddressBook.remove(name);
+        if (value == null) throw new NoSuchElementException();
     }
 
     public void change(String name, Address address2) {
-        if (!name.matches("[[а-яА-Я]\\d\\w\\s-]+") ||
-                !address2.street.matches("[[а-яА-Я]\\d\\w\\s-]+")) throw new IllegalArgumentException();
         if (!mapAddressBook.containsKey(name)) throw new NoSuchElementException();
         this.remove(name);
         this.add(name, address2);
     }
 
     public Address getAddress(String name) {
-        if (!name.matches("[[а-яА-Я]\\d\\w\\s-]+")) throw new IllegalArgumentException();
+        if (!name.matches(regex)) throw new IllegalArgumentException();
         if (!mapAddressBook.containsKey(name)) throw new NoSuchElementException();
         return mapAddressBook.get(name);
     }
 
-    public HashSet<String> streetGetNames(String streetName) {
-        if (!streetName.matches("[[а-яА-Я]\\d\\w\\s-]+")) throw new IllegalArgumentException();
+    public Set<String> streetGetNames(String streetName) {
+        if (!streetName.matches(regex)) throw new IllegalArgumentException();
         // Создаем пустой Set фамилий
-        HashSet<String> listSurnames = new HashSet<>();
+        Set<String> listSurnames = new HashSet<>();
         // Перебираем все ключи и сравниваем названия улиц в значениях для каждого ключа с streetName
         // Добавляем нужные элементы в Set
         for (String key : mapAddressBook.keySet()) {
@@ -104,10 +68,10 @@ public class AddressBook {
         return listSurnames;
     }
 
-    public HashSet<String> houseGetNames(String streetName, int numberOfHouse) {
-        if (!streetName.matches("[[а-яА-Я]\\d\\w\\s-]+")) throw new IllegalArgumentException();
+    public Set<String> houseGetNames(String streetName, int numberOfHouse) {
+        if (!streetName.matches(regex)) throw new IllegalArgumentException();
         // Создаем пустой Set фамилий
-        HashSet<String> listSurnames = new HashSet<>();
+        Set<String> listSurnames = new HashSet<>();
         // Перебираем все ключи и сравниваем названия улиц и номера домов с streetName и numberOfHouse
         // Добавляем нужные элементы в Set
         for (String key : mapAddressBook.keySet()) {

@@ -11,25 +11,22 @@ class AddressBookTest {
     @Test
     void add() {
         // 1 Добавление в пустую книгу
-        AddressBook actual1 = new AddressBook(new HashMap());
+        AddressBook actual1 = new AddressBook();
         actual1.add("Забей ворота", new Address("2-я Советская", 38, 2767));
-        AddressBook expected1 = new AddressBook(new HashMap<>() {{
-            put("Забей ворота", new Address("2-я Советская", 38, 2767));
-        }});
-        assertEquals(expected1.mapAddressBook.size(), actual1.mapAddressBook.size());
+        AddressBook expected1 = new AddressBook();
+        expected1.mapAddressBook.put("Забей ворота", new Address("2-я Советская", 38, 2767));
+        assertEquals(expected1, actual1);
 
         // 2 Добаление в непустую книгу
-        AddressBook actual2 = new AddressBook(new HashMap<>() {{
-            put("Галиева", new Address("Харченко", 16, 318));
-            put("Меркучева", new Address("Харченко", 16, 316));
-        }});
+        AddressBook actual2 = new AddressBook();
+        actual2.mapAddressBook.put("Галиева", new Address("Харченко", 16, 318));
+        actual2.mapAddressBook.put("Меркучева", new Address("Харченко", 16, 316));
         actual2.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        AddressBook expected2 = new AddressBook(new HashMap<>() {{
-            put("Галиева", new Address("Харченко", 16, 318));
-            put("Меркучева", new Address("Харченко", 16, 316));
-            put("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        }});
-        assertEquals(expected2.mapAddressBook.size(), actual2.mapAddressBook.size());
+        AddressBook expected2 = new AddressBook();
+        expected2.mapAddressBook.put("Галиева", new Address("Харченко", 16, 318));
+        expected2.mapAddressBook.put("Меркучева", new Address("Харченко", 16, 316));
+        expected2.mapAddressBook.put("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
+        assertEquals(expected2, actual2);
 
         // 3 Фамилия не удовлетворяет
         assertThrows(IllegalArgumentException.class,
@@ -43,25 +40,22 @@ class AddressBookTest {
     @Test
     void remove() {
         // 1 Удаление из книги, состоящей из одного элемента
-        AddressBook actual1 = new AddressBook(new HashMap<>() {{
-            put("Забей ворота", new Address("Героев-Панфиловцев", 38, 2767));
-        }});
-        AddressBook expected1 = new AddressBook(new HashMap());
+        AddressBook actual1 = new AddressBook();
+        actual1.add("Забей ворота", new Address("2-я Советская", 38, 2767));
         actual1.remove("Забей ворота");
-        assertEquals(expected1.mapAddressBook.size(), actual1.mapAddressBook.size());
+        AddressBook expected1 = new AddressBook();
+        assertEquals(expected1, actual1);
 
         // 2 Удаление из книги большего размера
-        AddressBook actual2 = new AddressBook(new HashMap<>() {{
-            put("Галиева", new Address("Харченко", 16, 318));
-            put("Меркучева", new Address("Харченко", 16, 316));
-            put("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        }});
-        AddressBook expected2 = new AddressBook(new HashMap<>() {{
-            put("Галиева", new Address("Харченко", 16, 318));
-            put("Меркучева", new Address("Харченко", 16, 316));
-        }});
+        AddressBook actual2 = new AddressBook();
+        actual2.add("Галиева", new Address("Харченко", 16, 318));
+        actual2.add("Меркучева", new Address("Харченко", 16, 316));
+        actual2.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
         actual2.remove("Салтыков-Щедрин");
-        assertEquals(expected2.mapAddressBook.size(), actual2.mapAddressBook.size());
+        AddressBook expected2 = new AddressBook();
+        expected2.add("Галиева", new Address("Харченко", 16, 318));
+        expected2.add("Меркучева", new Address("Харченко", 16, 316));
+        assertEquals(expected2, actual2);
 
         // 3 Фамилия не содержится в книге
         assertThrows(NoSuchElementException.class,
@@ -71,25 +65,20 @@ class AddressBookTest {
     @Test
     void change() {
         // 1 Изменение элемента
-        AddressBook actual = new AddressBook(new HashMap<>());
+        AddressBook actual = new AddressBook();
         actual.add("Меркучева", new Address("Харченко", 16, 316));
         actual.add("Салтыков-Щедрин", new Address("Митяшкина", 43, 1));
         actual.change("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        AddressBook expected = new AddressBook(new HashMap<>());
+        AddressBook expected = new AddressBook();
         expected.add("Меркучева", new Address("Харченко", 16, 316));
         expected.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        assertEquals(expected.mapAddressBook.get("Салтыков-Щедрин").street,
-                actual.mapAddressBook.get("Салтыков-Щедрин").street);
+        assertEquals(expected, actual);
 
-        // 2 Фамилия не удовлетворяет
-        assertThrows(IllegalArgumentException.class,
-                () -> actual.change("Салтыков!Щедрин", new Address("Героев-Панфиловцев", 38, 2767)));
-
-        // 3 Название улицы не удовлетворяет
+        // 2 Название улицы не удовлетворяет
         assertThrows(IllegalArgumentException.class,
                 () -> actual.change("Салтыков-Щедрин", new Address("Героев*Панфиловцев", 38, 2767)));
 
-        // 4 Фамилия не содержится в книге
+        // 3 Фамилия не содержится в книге
         assertThrows(NoSuchElementException.class,
                 () -> actual.change("Забей ворота", new Address("Героев-Панфиловцев", 38, 2767)));
     }
@@ -97,7 +86,7 @@ class AddressBookTest {
     @Test
     void getAddress() {
         // 1 Получение адреса
-        AddressBook book = new AddressBook(new HashMap<>());
+        AddressBook book = new AddressBook();
         book.add("Меркучева", new Address("Харченко", 16, 316));
         book.add("Петряева", new Address("Митяшкина", 43, 1));
         book.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
@@ -117,17 +106,17 @@ class AddressBookTest {
     @Test
     void streetGetNames() {
         // 1
-        AddressBook book = new AddressBook(new HashMap<>());
+        AddressBook book = new AddressBook();
         book.add("Меркучева", new Address("Харченко", 16, 316));
         book.add("Петряева", new Address("Харченко", 15, 316));
         book.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        HashSet<String> actual1 = book.streetGetNames("Харченко");
-        HashSet<String> expected1 = new HashSet<>(List.of("Меркучева", "Петряева"));
+        Set<String> actual1 = book.streetGetNames("Харченко");
+        Set<String> expected1 = new HashSet<>(List.of("Меркучева", "Петряева"));
         assertEquals(expected1, actual1);
 
         // 2 Улица не содержится в адресах
-        HashSet<String> actual2 = book.streetGetNames("Героев-Панфиловцев");
-        HashSet<String> expected2 = new HashSet<>();
+        Set<String> actual2 = book.streetGetNames("Героев-Панфиловцев");
+        Set<String> expected2 = new HashSet<>();
         assertEquals(expected2, actual2);
 
         // 3 Название улицы не удовлетворяет
@@ -138,17 +127,17 @@ class AddressBookTest {
     @Test
     void houseGetNames() {
         // 1
-        AddressBook book = new AddressBook(new HashMap<>());
+        AddressBook book = new AddressBook();
         book.add("Галиева", new Address("Харченко", 16, 318));
         book.add("Петряева", new Address("Харченко", 16, 316));
         book.add("Салтыков-Щедрин", new Address("Большой проспект", 1, 1));
-        HashSet<String> actual1 = book.houseGetNames("Харченко", 16);
-        HashSet<String> expected1 = new HashSet<>(List.of("Галиева", "Петряева"));
+        Set<String> actual1 = book.houseGetNames("Харченко", 16);
+        Set<String> expected1 = new HashSet<>(List.of("Галиева", "Петряева"));
         assertEquals(expected1, actual1);
 
         // 2 Улица не содержится в адресах
-        HashSet<String> actual2 = book.houseGetNames("Героев-Панфиловцев", 1);
-        HashSet<String> expected2 = new HashSet<>();
+        Set<String> actual2 = book.houseGetNames("Героев-Панфиловцев", 1);
+        Set<String> expected2 = new HashSet<>();
         assertEquals(expected2, actual2);
 
         // 3 Название улицы не удовлетворяет
