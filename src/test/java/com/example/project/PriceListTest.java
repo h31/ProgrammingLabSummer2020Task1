@@ -10,7 +10,7 @@ class PriceListTest {
 
     @Test
     void addProduct() {
-        PriceList productsList = new PriceList(new HashMap<>());
+        PriceList productsList = new PriceList();
         productsList.addProduct(1, new NamePrice("название", 4, 6));
         assertEquals(1, productsList.size());
         productsList.addProduct(3, new NamePrice("название2", 7, 1));
@@ -23,7 +23,7 @@ class PriceListTest {
 
     @Test
     void removeProduct() {
-        PriceList productsList = new PriceList(new HashMap<>());
+        PriceList productsList = new PriceList();
         productsList.addProduct(1, new NamePrice("название", 4, 6));
         productsList.addProduct(3, new NamePrice("название2", 7, 1));
         assertThrows(NoSuchElementException.class,
@@ -36,7 +36,7 @@ class PriceListTest {
 
     @Test
     void changeName() {
-        PriceList productsList = new PriceList(new HashMap<>());
+        PriceList productsList = new PriceList();
         productsList.addProduct(1, new NamePrice("название", 4, 6));
         assertNotEquals(productsList.get(1).name, "название2");
         productsList.changeName(1, "название2");
@@ -48,18 +48,20 @@ class PriceListTest {
     }
 
     @Test
-    void changeCode() {
-        PriceList productsList = new PriceList(new HashMap<>());
+    void changePrice() {
+        PriceList productsList = new PriceList();
         productsList.addProduct(1, new NamePrice("название", 4, 6));
-        productsList.changeCode(1, 2);
-        assertEquals(productsList.get(2).name, "название");
+        productsList.changePrice(1, 3, 5);
+        assertEquals(productsList.get(1).pricePennies, 5);
         assertThrows(NoSuchElementException.class,
-                () -> productsList.changeName(5, "название-3"));
+                () -> productsList.changePrice(5, 1, 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> productsList.changePrice(1, -1, 0));
     }
 
     @Test
     void totalCost() {
-        PriceList productsList = new PriceList(new HashMap<>());
+        PriceList productsList = new PriceList();
         productsList.addProduct(1, new NamePrice("название", 4, 30));
         productsList.addProduct(5, new NamePrice("название2", 9, 50));
         assertEquals(productsList.totalCost(Map.of(1, 3, 5, 4)).first * 100 +

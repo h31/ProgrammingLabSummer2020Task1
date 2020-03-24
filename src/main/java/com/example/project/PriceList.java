@@ -1,64 +1,67 @@
 package com.example.project;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 class NamePrice {
     String name;
-    Integer priceRubles;
-    Integer pricePennies;
+    int priceRubles;
+    int pricePennies;
 
-    NamePrice(String name, Integer rubles, Integer pennies) {
+    NamePrice(String name, int rubles, int pennies) {
         this.name = name;
         this.priceRubles = rubles;
         this.pricePennies = pennies;
+        if (!this.name.matches("([A-Za-zА-Яа-я\\d]+[\\s-]?[A-Za-zА-Яа-я\\d]+)+")
+                || this.pricePennies<0 || this.priceRubles<0 || this.pricePennies >= 100)
+            throw new IllegalArgumentException();
     }
 }
 
 class Pair {
-    Integer first;
-    Integer second;
+    int first;
+    int second;
 
-    Pair(Integer first, Integer second) {
+    Pair(int first, int second) {
         this.first = first;
         this.second = second;
     }
 }
 
-class PriceList {
+public class PriceList {
 
-    Map<Integer, NamePrice> priceList;
+    public Map<Integer, NamePrice> priceList;
 
-    public PriceList(Map<Integer, NamePrice> priceList) {
-        this.priceList = priceList;
+    public PriceList() {
+        priceList = new HashMap<Integer, NamePrice>();
     }
 
     public void addProduct(Integer code, NamePrice namePrice) {
-        if (!namePrice.name.matches("([A-Za-zА-Яа-я\\d]+[\\s-]?[A-Za-zА-Яа-я\\d]+)+"))
-            throw new IllegalArgumentException();
-        if (namePrice.pricePennies >= 100) throw new IllegalArgumentException();
-        priceList.put(code, namePrice);
-    }
+        if (priceList.put(code, namePrice) != null) throw new IllegalArgumentException(); }
 
-    void removeProduct(Integer code) {
-        if (!priceList.containsKey(code)) throw new NoSuchElementException();
+    public void removeProduct(Integer code) {
+        if (priceList.put(code, new NamePrice("any", 0, 0)) == null) {
+            priceList.remove(code);
+            throw new NoSuchElementException();
+        }
         priceList.remove(code);
     }
 
-    public void changeName(Integer code, String name2) {
+    public void changeName(Integer code, String newName) {
         if (!priceList.containsKey(code)) throw new NoSuchElementException();
-        if (!name2.matches("([A-Za-zА-Яа-я\\d]+[\\s-]?[A-Za-zА-Яа-я\\d]+)+")) throw new IllegalArgumentException();
-        Integer rubles = priceList.get(code).priceRubles;
-        Integer pennies = priceList.get(code).pricePennies;
+        int rubles = priceList.get(code).priceRubles;
+        int pennies = priceList.get(code).pricePennies;
         this.removeProduct(code);
-        this.addProduct(code, new NamePrice(name2, rubles, pennies));
+        this.addProduct(code, new NamePrice(newName, rubles, pennies));
     }
 
-    public void changeCode(Integer code1, Integer code2) {
-        if (!priceList.containsKey(code1)) throw new NoSuchElementException();
-        NamePrice constantValues = priceList.get(code1);
-        this.removeProduct(code1);
-        this.addProduct(code2, constantValues);
+    public void changePrice(Integer code, Integer newPriceRubles, Integer newPricePennies) {
+        if (!priceList.containsKey(code)) throw new NoSuchElementException();
+        String name = priceList.get(code).name;
+        this.removeProduct(code);
+        this.addProduct(code, new NamePrice(name, newPriceRubles, newPricePennies));
     }
 
     public Pair totalCost(Map<Integer, Integer> input) { //input keys are codes, values are amount
@@ -80,5 +83,25 @@ class PriceList {
 
     public NamePrice get(Integer code) {
         return priceList.get(code);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PriceList priceList1 = (PriceList) o;
+        return Objects.equals(priceList, priceList1.priceList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(priceList);
+    }
+
+    @Override
+    public String toString() {
+        return "PriceList{" +
+                "priceList=" + priceList +
+                '}';
     }
 }
