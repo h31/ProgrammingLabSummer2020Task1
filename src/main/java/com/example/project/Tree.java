@@ -10,7 +10,7 @@ public class Tree {
     private boolean contains(int key) {
         Node node = new Node();
         node.key = key;
-        return tree.contains(node);//tree.contains(findnode(key));
+        return tree.contains(node);
     }
 
     public Node findNode(int key) {
