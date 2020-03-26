@@ -8,13 +8,13 @@ public class Tree {
     public ArrayList<Node> tree = new ArrayList<>();
 
     private boolean contains(int key) {
-        Node node = new Node();
-        node.key = key;
-        return tree.contains(node);
+        Node unit = new Node();
+        unit.key = key;
+        return tree.contains(unit);
     }
 
     public Node findNode(int key) {
-        Node unit = tree.get(0);
+        Node unit = this.tree.get(0);
         while (unit != null) {
             if (unit.key == key) return unit;
             unit = unit.key < key ? (unit.rightChild): unit.leftChild;
@@ -96,18 +96,31 @@ public class Tree {
         else unit.parent.rightChild = newValue;
     }
 
-    public Node getRightChild(int key){
-
-        return findNode(key).rightChild;
+    public Node getInfo(int key, String who){
+        Node unit = findNode(key);
+        switch (who.toLowerCase()) {
+            case "parent":
+                return unit.parent;
+            case "rightchild":
+                return unit.rightChild;
+            case "leftchild":
+                return unit.leftChild;
+            default: throw new IllegalArgumentException("");
+        }
     }
 
-    public Node getLeftChild(int key){
-        return findNode(key).leftChild;
-    }
-
-    public Node getParent(int key){
-        return findNode(key).parent;
-    }
+//    private Node getRightChild(int key){
+//
+//        return findNode(key).rightChild;
+//    }
+//
+//    private Node getLeftChild(int key){
+//        return findNode(key).leftChild;
+//    }
+//
+//    private Node getParent(int key){
+//        return findNode(key).parent;
+//    }
 
     public void info(int key){
         Node a = findNode(key);
@@ -129,7 +142,7 @@ public class Tree {
 
     @Override
     public String toString() {
-        return "Size = " + tree.size() + " elements: " + tree.toString();
+        return tree.size() + " " + tree.toString();
     }
 
     @Override

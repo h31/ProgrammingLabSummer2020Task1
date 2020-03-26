@@ -10,8 +10,8 @@ public class Node {
 
     @Override
     public boolean equals(Object obj){
-        if (this == obj) return true;
-        if(obj == null || obj.getClass() != this.getClass()) return false;
+        if(this == obj) return true;
+        if(!(obj instanceof Node)) return false;
         Node node = (Node) obj;
         return node.key.equals(this.key);
     }
