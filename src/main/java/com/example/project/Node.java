@@ -13,16 +13,16 @@ public class Node {
         if(this == obj) return true;
         if(!(obj instanceof Node)) return false;
         Node node = (Node) obj;
-        return node.key.equals(this.key);
+        return node.key.equals(key);
     }
 
     @Override
     public String toString() {
-        return this.key.toString();
+        return key.toString();
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(this.key);
+        return Objects.hash(key);
     }
 }

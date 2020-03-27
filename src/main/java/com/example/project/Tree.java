@@ -14,16 +14,17 @@ public class Tree {
     }
 
     public Node findNode(int key) {
-        Node unit = this.tree.get(0);
+        if (tree.isEmpty() || !contains(key)) throw new IllegalArgumentException();
+        Node unit = tree.get(0);
         while (unit != null) {
             if (unit.key == key) return unit;
             unit = unit.key < key ? (unit.rightChild): unit.leftChild;
         }
-        throw new IllegalArgumentException("");
+        return null;
     }
 
     public void insertNode(int key) {
-        if (contains(key)) throw new IllegalArgumentException("");
+        if (contains(key)) throw new IllegalArgumentException();
 
         Node unit = new Node();
         unit.key = key;
@@ -54,8 +55,8 @@ public class Tree {
         }
     }
 
-    public void removeNode(int key){
-        if (!contains(key)) throw new IllegalArgumentException("");
+    public void removeNode(int key) {
+        if (!contains(key)) throw new IllegalArgumentException();
 
         Node unit = findNode(key);
         // Ни одного потомка
@@ -91,12 +92,12 @@ public class Tree {
         tree.remove(unit);
     }
 
-    private void findChild(Node unit, Node newValue){
+    private void findChild(Node unit, Node newValue) {
         if (unit.parent.leftChild == unit) unit.parent.leftChild = newValue;
         else unit.parent.rightChild = newValue;
     }
 
-    public Node getInfo(int key, String who){
+    public Node getInfo(int key, String who) {
         Node unit = findNode(key);
         switch (who.toLowerCase()) {
             case "parent":
@@ -105,7 +106,7 @@ public class Tree {
                 return unit.rightChild;
             case "leftchild":
                 return unit.leftChild;
-            default: throw new IllegalArgumentException("");
+            default: throw new IllegalArgumentException();
         }
     }
 
@@ -122,7 +123,7 @@ public class Tree {
 //        return findNode(key).parent;
 //    }
 
-    public void info(int key){
+    public void info(int key) {
         Node a = findNode(key);
         System.out.print(a.parent + " ");
         System.out.print(a.leftChild + " ");
@@ -130,7 +131,7 @@ public class Tree {
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         if (this == obj) return true;
         if(obj == null || obj.getClass() != this.getClass()) return false;
         Tree oTree = (Tree) obj;
@@ -146,8 +147,8 @@ public class Tree {
     }
 
     @Override
-    public int hashCode(){
-        return Objects.hash(this.tree.get(0).key);
+    public int hashCode() {
+        return Objects.hash(tree.size());
     }
 
 }

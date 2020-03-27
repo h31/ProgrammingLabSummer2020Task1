@@ -9,6 +9,7 @@ class TreeTest {
     @Test
     void findNode() {
         Tree x = new Tree();
+        assertThrows(IllegalArgumentException.class, () -> x.findNode(0));
         x.insertNode(21);
         x.insertNode(32);
         x.insertNode(27);
