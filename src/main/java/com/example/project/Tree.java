@@ -6,6 +6,7 @@ import java.util.Objects;
 public class Tree {
 
     public ArrayList<Node> tree = new ArrayList<>();
+    private Node root;
 
     private boolean contains(int key) {
         Node unit = new Node();
@@ -15,7 +16,7 @@ public class Tree {
 
     public Node findNode(int key) {
         if (tree.isEmpty() || !contains(key)) throw new IllegalArgumentException();
-        Node unit = tree.get(0);
+        Node unit = root;
         while (unit != null) {
             if (unit.key == key) return unit;
             unit = unit.key < key ? (unit.rightChild): unit.leftChild;
@@ -29,9 +30,12 @@ public class Tree {
         Node unit = new Node();
         unit.key = key;
 
-        if (tree.isEmpty()) tree.add(unit);
+        if (tree.isEmpty()){
+            tree.add(unit);
+            root = unit;
+        }
         else {
-            Node parent = tree.get(0);
+            Node parent = root;
             while (true) {
                 if (unit.key < parent.key) {
                     if (parent.leftChild == null) {
@@ -61,22 +65,21 @@ public class Tree {
         Node unit = findNode(key);
         // Ни одного потомка
         if (unit.rightChild == null && unit.leftChild == null) {
-            if (unit.parent.leftChild == unit) unit.parent.leftChild = null;
-            else unit.parent.rightChild = null;
+            changeChild(unit, null);
         }//1 левый потомок
         else if (unit.rightChild == null) {
-            findChild(unit, unit.leftChild);
+            changeChild(unit, unit.leftChild);
             unit.leftChild.parent = unit.parent;
         }//1 правый потомок
         else if (unit.leftChild == null){
-            findChild(unit, unit.rightChild);
+            changeChild(unit, unit.rightChild);
             unit.rightChild.parent = unit.parent;
         } else {// оба потомка 1 случай
             if (unit.rightChild.leftChild == null) {
                 unit.rightChild.leftChild = unit.leftChild;
                 unit.rightChild.parent = unit.parent;
                 unit.leftChild.parent = unit.rightChild;
-                findChild(unit, unit.rightChild);
+                changeChild(unit, unit.rightChild);
             } else {//оба потомка 2 случай
                 Node leftEdge = unit.rightChild;
                 while (leftEdge.leftChild != null) leftEdge = leftEdge.leftChild;
@@ -86,15 +89,19 @@ public class Tree {
                 leftEdge.rightChild = unit.rightChild;
                 unit.leftChild.parent = leftEdge;
                 unit.rightChild.parent = leftEdge;
-                findChild(unit, leftEdge);
+                changeChild(unit, leftEdge);
             }
         }
         tree.remove(unit);
     }
 
-    private void findChild(Node unit, Node newValue) {
-        if (unit.parent.leftChild == unit) unit.parent.leftChild = newValue;
-        else unit.parent.rightChild = newValue;
+    private void changeChild(Node unit, Node newValue) {
+        if (!unit.equals(root)) {
+            if (unit.parent.leftChild == unit) unit.parent.leftChild = newValue;
+            else unit.parent.rightChild = newValue;
+        } else {
+            root = newValue;
+        }
     }
 
     public Node getInfo(int key, String who) {
@@ -106,6 +113,8 @@ public class Tree {
                 return unit.rightChild;
             case "leftchild":
                 return unit.leftChild;
+            case "root":
+                return root;
             default: throw new IllegalArgumentException();
         }
     }
@@ -133,12 +142,18 @@ public class Tree {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if(obj == null || obj.getClass() != this.getClass()) return false;
+        if(!(obj instanceof Tree)) return false;
         Tree oTree = (Tree) obj;
+        if(oTree.tree.size() != tree.size()) return false;
+
+        try {
         for (Node unit: this.tree) {
             if (!oTree.findNode(unit.key).equals(unit)) return false;
         }
         return true;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 
     @Override
@@ -150,7 +165,4 @@ public class Tree {
     public int hashCode() {
         return Objects.hash(tree.size());
     }
-
 }
-
-
