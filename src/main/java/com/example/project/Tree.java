@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class Tree {
 
-    public ArrayList<Node> tree = new ArrayList<>();
+    private ArrayList<Node> tree = new ArrayList<>();
     private Node root;
 
-    private boolean contains(int key) {
-        Node unit = new Node();
+    public boolean contains(int key) {// Оставил public для теста
+        Node unit = new Node();// Я могу оставить unit или стоит назвать node?
         unit.key = key;
         return tree.contains(unit);
     }
@@ -104,7 +104,7 @@ public class Tree {
         }
     }
 
-    public Node getInfo(int key, String who) {
+    public Node getInfo(int key, String who) {// Лучше оставить так или созадть 3 отдельных get'а?
         Node unit = findNode(key);
         switch (who.toLowerCase()) {
             case "parent":
@@ -131,12 +131,16 @@ public class Tree {
 //    private Node getParent(int key){
 //        return findNode(key).parent;
 //    }
+//
+//    public void info(int key) {
+//        Node a = findNode(key);
+//        System.out.print(a.parent + " ");
+//        System.out.print(a.leftChild + " ");
+//        System.out.println(a.rightChild + " ");
+//    }
 
-    public void info(int key) {
-        Node a = findNode(key);
-        System.out.print(a.parent + " ");
-        System.out.print(a.leftChild + " ");
-        System.out.println(a.rightChild + " ");
+    public Node getNodeByIndex(int index) {
+        return tree.get(index);
     }
 
     @Override
@@ -151,14 +155,14 @@ public class Tree {
             if (!oTree.findNode(unit.key).equals(unit)) return false;
         }
         return true;
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
 
     @Override
     public String toString() {
-        return tree.size() + " " + tree.toString();
+        return tree.size() + tree.toString();
     }
 
     @Override

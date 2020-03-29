@@ -13,9 +13,9 @@ class TreeTest {
         x.insertNode(21);
         x.insertNode(32);
         x.insertNode(27);
-        assertSame(x.findNode(21), x.tree.get(0));
-        assertSame(x.findNode(27), x.tree.get(2));
-        assertSame(x.findNode(32), x.tree.get(1));
+        assertSame(x.findNode(21), x.getNodeByIndex(0));
+        assertSame(x.findNode(27), x.getNodeByIndex(2));
+        assertSame(x.findNode(32), x.getNodeByIndex(1));
         assertThrows(IllegalArgumentException.class, () -> x.findNode(0));
     }
 
@@ -24,8 +24,8 @@ class TreeTest {
         Tree x = new Tree();
         x.insertNode(21);
         x.insertNode(32);
-        assertTrue(x.tree.contains(x.findNode(21)));
-        assertTrue(x.tree.contains(x.findNode(32)));
+        assertTrue(x.contains(21));
+        assertTrue(x.contains(32));
         //Дерево не содержит одно и то же число более 1 раза
         assertThrows(IllegalArgumentException.class, () -> x.insertNode(21));
     }
@@ -33,7 +33,7 @@ class TreeTest {
     // https://studref.com/htm/img/15/6352/107.png - это дерево, которое находится ниже
 
     @Test
-    void getInfo() {
+    void getInfo() {// Как стоило назвать, getInfo() или getRelatives()
         Tree x = new Tree();
         x.insertNode(21);
         x.insertNode(32);
