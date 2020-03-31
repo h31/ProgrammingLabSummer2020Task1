@@ -7,6 +7,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CrossZeroTest {
+
     CrossZero game = new CrossZero(5);
 
     Cell cellBeginX = new Cell(0, 0);

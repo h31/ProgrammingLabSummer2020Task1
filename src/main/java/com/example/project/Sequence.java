@@ -3,7 +3,6 @@ package com.example.project;
 import java.util.Objects;
 
 public class Sequence {
-
     private Cell beginX;
     private Cell endX;
     private Cell beginO;

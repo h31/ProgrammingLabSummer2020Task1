@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CrossZero {
+
     private List<Integer> listLengthsO = new ArrayList<>();//листы для нескольких длин,чтобы вернуть максимальную
     private List<Integer> listLengthsX = new ArrayList<>();
     private final int size;
