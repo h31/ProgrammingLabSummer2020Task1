@@ -7,7 +7,6 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CrossZeroTest {
-
     CrossZero game = new CrossZero(5);
 
     Cell cellBeginX = new Cell(0, 0);
@@ -17,6 +16,9 @@ class CrossZeroTest {
 
     Sequence sequenceTest = new Sequence(cellBeginX, cellEndX, cellBeginO, cellEndO, 0, 0);
 
+    /**
+     * Проверка последовательности по вертикали
+     */
     @Test
     public void longestVerticalSequence() {
         for (int i = 0; i <= 4; i++) {
@@ -51,9 +53,11 @@ class CrossZeroTest {
         }
     }
 
+    /**
+     * Проверка последовательности по горизонтали
+     */
     @Test
     public void longestHorizontalSequence() {
-        //последовательность по горизонтали
         for (int i = 0; i < 4; i++) {
             game.setO(0, i);
             game.setX(3, i);
@@ -80,7 +84,9 @@ class CrossZeroTest {
         assertEquals(sequenceTest, game.longestSequence(1, 0));
     }
 
-
+    /**
+     * Проверка последовательности по диагонали(Х)
+     */
     @Test
     void longestDiagonalX() {
         for (int i = 0; i < 4; ) {
@@ -111,6 +117,9 @@ class CrossZeroTest {
         assertEquals(sequenceTest, game.longestSequence(1, 1));
     }
 
+    /**
+     * Проверка последовательности по диагонали(O)
+     */
     @Test
     void longestDiagonalO() {
         for (int i = 0; i < 4; ) {
@@ -140,6 +149,9 @@ class CrossZeroTest {
         assertEquals(sequenceTest, game.longestSequence(1, 1));
     }
 
+    /**
+     * Проверка последовательности по побочной диагонали(Х)
+     */
     @Test
     void longestSideDiagonalX() {
         for (int i = 0; i < 4; ) {
@@ -169,6 +181,9 @@ class CrossZeroTest {
         assertEquals(sequenceTest, game.longestSequence(-1, 1));
     }
 
+    /**
+     * Проверка последовательности по побочной диагонали(O)
+     */
     @Test
     void longestSideDiagonalO() {
         for (int i = 0; i < 4; ) {
@@ -199,6 +214,9 @@ class CrossZeroTest {
         assertEquals(sequenceTest, game.longestSequence(-1, 1));
     }
 
+    /**
+     * Проврка на изменение игрового поля
+     */
     @Test
     void field() {
         CrossZero newGame = new CrossZero(5);
@@ -206,6 +224,9 @@ class CrossZeroTest {
         assertTrue(Arrays.deepEquals(newGame.getGameField(), game.getGameField()));
     }
 
+    /**
+     * Проверка на получение начальной позиции
+     */
     @Test
     void getStartPosition() {
         for (int i = 1; i <= 3; i++) {
@@ -235,6 +256,9 @@ class CrossZeroTest {
         }
     }
 
+    /**
+     * Проверка на установку X в ячейку
+     */
     @Test
     void setX() {
         game.setX(0, 0);
@@ -255,6 +279,9 @@ class CrossZeroTest {
         assertArrayEquals(testArray, game.getGameField());
     }
 
+    /**
+     * Проверка на установку O в ячейку
+     */
     @Test
     void setO() {
         game.setO(0, 3);
@@ -275,6 +302,9 @@ class CrossZeroTest {
         assertArrayEquals(testArray, game.getGameField());
     }
 
+    /**
+     * Проверка на очистку ячейки
+     */
     @Test
     void clear() {
         game.setO(0, 3);
@@ -296,8 +326,11 @@ class CrossZeroTest {
 
     }
 
+    /**
+     * Проверка исключений
+     */
     @Test
-    void ExceptionTest() {
+    void exceptionTest() {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             game.setX(6, 6);
             game.setO(5, 6);

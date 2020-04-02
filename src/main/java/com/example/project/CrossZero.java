@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class CrossZero {
+    private final int size;
 
     private List<Integer> listLengthsO = new ArrayList<>();//листы для нескольких длин,чтобы вернуть максимальную
     private List<Integer> listLengthsX = new ArrayList<>();
-    private final int size;
 
     private int counterX = 1;//поля для метода поиска последовательности
     private int counterO = 1;
@@ -116,7 +116,7 @@ public class CrossZero {
         sequence.setBeginX(cellBeginX);
     }
 
-    public void setValueO() {
+    public void setValuesO() {
         cellEndO.setCellRow(timeRowO);
         cellEndO.setCellColumn(timeColumnO);
         sequence.setEndO(cellEndO);
@@ -173,7 +173,7 @@ public class CrossZero {
                 sequence.setLengthO(Collections.max(listLengthsO));
                 begin = (timeColumnO - (sequence.getLengthO() - 1));
                 if (Math.abs(timeColumnO - begin + 1) == sequence.getLengthO()) {
-                    setValueO();
+                    setValuesO();
                     cellBeginO.setCellRow(timeRowO);
                     cellBeginO.setCellColumn(timeColumnO - (sequence.getLengthO() - 1));
                 }
@@ -220,7 +220,7 @@ public class CrossZero {
                 sequence.setLengthO(Collections.max(listLengthsO));
                 begin = (timeRowO - (sequence.getLengthO() - 1));
                 if (Math.abs(timeRowO - begin + 1) == sequence.getLengthO()) {
-                    setValueO();
+                    setValuesO();
                     cellBeginO.setCellRow(timeRowO - (sequence.getLengthO() - 1));
                     cellBeginO.setCellColumn(timeColumnO);
                 }

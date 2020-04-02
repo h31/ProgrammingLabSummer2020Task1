@@ -3,7 +3,6 @@ package com.example.project;
 import java.util.Objects;
 
 public class Cell {
-
     private int cellRow;
     private int cellColumn;
 
