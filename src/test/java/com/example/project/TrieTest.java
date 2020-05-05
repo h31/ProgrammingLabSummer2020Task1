@@ -1,6 +1,6 @@
-import org.junit.jupiter.api.Test;
+package com.example.project;
 
-import java.util.ArrayList;
+import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,6 +23,9 @@ class TrieTest {
         assertTrue(trie.findWord("БАРАБАН"));
         assertFalse(trie.findWord("б"));
         assertFalse(trie.findWord("бараб"));
+
+        assertFalse(trie.addWord("остров"));
+        assertTrue(trie.addWord("острова"));
     }
 
     @Test
@@ -102,7 +105,7 @@ class TrieTest {
     @Test
     void testEquals() {
         Trie trie1 = new Trie();
-        Trie trie2 = new Trie();
+        Trie trie = new Trie();
 
         trie1.addWord("Воск");
         trie1.addWord("Алебастр");
@@ -111,28 +114,41 @@ class TrieTest {
         trie1.addWord("восковой");
         trie1.addWord("во");
 
-        trie2.addWord("голос");
-        trie2.addWord("во");
-        trie2.addWord("Восковой");
-        trie2.addWord("Воск");
-        trie2.addWord("Лестница");
-        trie2.addWord("Алебастр");
+        trie.addWord("голос");
+        trie.addWord("во");
+        trie.addWord("Восковой");
+        trie.addWord("Воск");
+        trie.addWord("Лестница");
+        trie.addWord("Алебастр");
 
-        assertEquals(trie1, trie2);
-        assertEquals(trie2, trie1);
+        assertEquals(trie1, trie);
+        assertEquals(trie, trie1);
 
         trie1.deleteWord("воск");
-        assertNotEquals(trie1, trie2);
-        assertNotEquals(trie2, trie1);
+        assertNotEquals(trie1, trie);
+        assertNotEquals(trie, trie1);
 
         trie1.addWord("воск");
-        trie2.addWord("вол");
-        assertNotEquals(trie1, trie2);
-        assertNotEquals(trie2, trie1);
+        trie.addWord("вол");
+        assertNotEquals(trie1, trie);
+        assertNotEquals(trie, trie1);
 
         Trie trie3 = new Trie();
         Trie trie4 = new Trie();
         assertEquals(trie3, trie4);
         assertEquals(trie4, trie3);
+    }
+
+    @Test
+    void testHash() {
+        Trie trie1 = new Trie();
+        Trie trie = new Trie();
+
+        trie1.addWord("мама");
+        trie.addWord("папа");
+        assertNotEquals(trie1.hashCode(), trie.hashCode());
+
+        trie1.addWord("папа");
+        assertNotEquals(trie1.hashCode(), trie.hashCode());
     }
 }
