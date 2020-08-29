@@ -8,8 +8,8 @@ public class Tree {
     private ArrayList<Node> tree = new ArrayList<>();
     private Node root;
 
-    public boolean contains(int key) {// Оставил public для теста
-        Node unit = new Node();// Я могу оставить unit или стоит назвать node?
+    public boolean contains(int key) {
+        Node unit = new Node();
         unit.key = key;
         return tree.contains(unit);
     }
@@ -104,7 +104,7 @@ public class Tree {
         }
     }
 
-    public Node getInfo(int key, String who) {// Лучше оставить так или созадть 3 отдельных get'а?
+    public Node getInfo(int key, String who) {
         Node unit = findNode(key);
         switch (who.toLowerCase()) {
             case "parent":
@@ -119,25 +119,25 @@ public class Tree {
         }
     }
 
-//    private Node getRightChild(int key){
-//
-//        return findNode(key).rightChild;
-//    }
-//
-//    private Node getLeftChild(int key){
-//        return findNode(key).leftChild;
-//    }
-//
-//    private Node getParent(int key){
-//        return findNode(key).parent;
-//    }
-//
-//    public void info(int key) {
-//        Node a = findNode(key);
-//        System.out.print(a.parent + " ");
-//        System.out.print(a.leftChild + " ");
-//        System.out.println(a.rightChild + " ");
-//    }
+/*    private Node getRightChild(int key){
+
+        return findNode(key).rightChild;
+    }
+
+    private Node getLeftChild(int key){
+        return findNode(key).leftChild;
+    }
+
+    private Node getParent(int key){
+        return findNode(key).parent;
+    }
+
+    public void info(int key) {
+        Node a = findNode(key);
+        System.out.print(a.parent + " ");
+        System.out.print(a.leftChild + " ");
+        System.out.println(a.rightChild + " ");
+    } */
 
     public Node getNodeByIndex(int index) {
         return tree.get(index);
