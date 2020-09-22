@@ -13,10 +13,9 @@ class TreeTest {
         x.insertNode(21);
         x.insertNode(32);
         x.insertNode(27);
-        assertSame(x.findNode(21), x.getNodeByIndex(0));
-        assertSame(x.findNode(27), x.getNodeByIndex(2));
-        assertSame(x.findNode(32), x.getNodeByIndex(1));
-        assertThrows(IllegalArgumentException.class, () -> x.findNode(0));
+        assertSame(x.findNode(21), x.getRoot());
+        assertSame(x.findNode(32), x.getRoot().rightChild);
+        assertSame(x.findNode(27), x.getRoot().rightChild.leftChild);
     }
 
     @Test
@@ -26,23 +25,11 @@ class TreeTest {
         x.insertNode(32);
         assertTrue(x.contains(21));
         assertTrue(x.contains(32));
-        //Дерево не содержит одно и то же число более 1 раза
+        //Дерево не содержит одно и то же число
         assertThrows(IllegalArgumentException.class, () -> x.insertNode(21));
     }
 
     // https://studref.com/htm/img/15/6352/107.png - это дерево, которое находится ниже
-
-    @Test
-    void getInfo() {// Как стоило назвать, getInfo() или getRelatives()
-        Tree x = new Tree();
-        x.insertNode(21);
-        x.insertNode(32);
-        x.insertNode(7);
-        assertSame(x.findNode(21).leftChild, x.getInfo(21, "leftChild"));
-        assertSame(x.findNode(21).rightChild, x.getInfo(21, "rightChild"));
-        assertSame(x.findNode(7).parent, x.getInfo(7, "parent"));
-        assertThrows(IllegalArgumentException.class, () -> x.getInfo(0, "parent"));
-    }
 
     @Test
     void removeNode() {
@@ -70,33 +57,33 @@ class TreeTest {
 
         x.removeNode(24);//У удаляемого узла нет потомков
         assertThrows(IllegalArgumentException.class, () -> x.findNode(24));
-        assertSame(x.getInfo(25, "leftChild"), null);
+        assertSame(x.getLeftChild(25), null);
 
         x.removeNode(12);//У удаляемого узла есть только левый потомок
         assertThrows(IllegalArgumentException.class, () -> x.findNode(12));
-        assertSame(x.getInfo(14, "leftChild").key, 9);
-        assertSame(x.getInfo(9, "parent").key, 14);
+        assertSame(x.getLeftChild(14).key, 9);
+        assertSame(x.getParent(9).key, 14);
 
-        x.removeNode(2);//У удаляемого узла есть только правый потомок(На картинке нет, но я добавил 3)
+        x.removeNode(2);//У удаляемого узла есть только правый потомок
         assertThrows(IllegalArgumentException.class, () -> x.findNode(2));
-        assertSame(x.getInfo(3, "parent").key, 4);
-        assertSame(x.getInfo(4, "leftChild").key, 3);
+        assertSame(x.getParent(3).key, 4);
+        assertSame(x.getLeftChild(4).key, 3);
 
         x.removeNode(27);//Есть оба потомка, 1 случай
         assertThrows(IllegalArgumentException.class, () -> x.findNode(27));
-        assertSame(x.getInfo(32, "leftChild").key, 30);
-        assertSame(x.getInfo(30, "parent").key, 32);
-        assertSame(x.getInfo(25, "parent").key, 30);
-        assertSame(x.getInfo(30, "leftChild").key, 25);
+        assertSame(x.getLeftChild(32).key, 30);
+        assertSame(x.getParent(30).key, 32);
+        assertSame(x.getParent(25).key, 30);
+        assertSame(x.getLeftChild(30).key, 25);
 
         x.removeNode(32);//Есть оба потомка, 2 случай(Вместо 27 теперь стоит 30)
         assertThrows(IllegalArgumentException.class, () -> x.findNode(32));
-        assertSame(x.getInfo(21, "rightChild").key, 33);
-        assertSame(x.getInfo(33, "parent").key, 21);
-        assertSame(x.getInfo(30, "parent").key, 33);
-        assertSame(x.getInfo(33, "leftChild").key, 30);
-        assertSame(x.getInfo(37, "parent").key, 33);
-        assertSame(x.getInfo(33, "rightChild").key, 37);
-        assertSame(x.getInfo(34, "leftChild"), null);
+        assertSame(x.getRightChild(21).key, 33);
+        assertSame(x.getParent(33).key, 21);
+        assertSame(x.getParent(30).key, 33);
+        assertSame(x.getLeftChild(33).key, 30);
+        assertSame(x.getParent(37).key, 33);
+        assertSame(x.getRightChild(33).key, 37);
+        assertSame(x.getLeftChild(34), null);
     }
 }

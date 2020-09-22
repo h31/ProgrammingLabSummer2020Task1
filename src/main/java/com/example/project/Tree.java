@@ -1,37 +1,42 @@
 package com.example.project;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Tree {
 
-    private ArrayList<Node> tree = new ArrayList<>();
     private Node root;
 
     public boolean contains(int key) {
-        Node unit = new Node();
-        unit.key = key;
-        return tree.contains(unit);
+        return containsR(root, key);
+    }
+
+    private boolean containsR(Node node, int key) {
+        if (node == null) return false;
+        if (node.key == key) return true;
+        return key < node.key
+                ?containsR(node.leftChild, key)
+                :containsR(node.rightChild, key);
     }
 
     public Node findNode(int key) {
-        if (tree.isEmpty() || !contains(key)) throw new IllegalArgumentException();
-        Node unit = root;
-        while (unit != null) {
-            if (unit.key == key) return unit;
-            unit = unit.key < key ? (unit.rightChild): unit.leftChild;
-        }
-        return null;
+        if(!contains(key)) throw new IllegalArgumentException();
+        return findNodeR(root, key);
     }
+
+    private Node findNodeR(Node node, int key) {
+        if (node.key == key) return node;
+        return key < node.key
+                ?findNodeR(node.leftChild, key)
+                :findNodeR(node.rightChild, key);
+    }
+
 
     public void insertNode(int key) {
         if (contains(key)) throw new IllegalArgumentException();
 
-        Node unit = new Node();
-        unit.key = key;
+        Node unit = new Node(key);
 
-        if (tree.isEmpty()){
-            tree.add(unit);
+        if (root == null){
             root = unit;
         }
         else {
@@ -41,7 +46,6 @@ public class Tree {
                     if (parent.leftChild == null) {
                         unit.parent = parent;
                         parent.leftChild = unit;
-                        tree.add(unit);
                         break;
                     }
                     parent = parent.leftChild;
@@ -50,12 +54,12 @@ public class Tree {
                     if (parent.rightChild == null) {
                         unit.parent = parent;
                         parent.rightChild = unit;
-                        tree.add(unit);
                         break;
                     }
                     parent = parent.rightChild;
                 }
             }
+
         }
     }
 
@@ -83,7 +87,12 @@ public class Tree {
             } else {//оба потомка 2 случай
                 Node leftEdge = unit.rightChild;
                 while (leftEdge.leftChild != null) leftEdge = leftEdge.leftChild;
-                leftEdge.parent.leftChild = null;
+                if (leftEdge.rightChild != null) {
+                    leftEdge.rightChild.parent = leftEdge.parent;
+                    changeChild(leftEdge, leftEdge.rightChild);
+                } else {
+                    leftEdge.parent.leftChild = null;
+                }
                 leftEdge.parent = unit.parent;
                 leftEdge.leftChild = unit.leftChild;
                 leftEdge.rightChild = unit.rightChild;
@@ -92,7 +101,6 @@ public class Tree {
                 changeChild(unit, leftEdge);
             }
         }
-        tree.remove(unit);
     }
 
     private void changeChild(Node unit, Node newValue) {
@@ -104,69 +112,48 @@ public class Tree {
         }
     }
 
-    public Node getInfo(int key, String who) {
-        Node unit = findNode(key);
-        switch (who.toLowerCase()) {
-            case "parent":
-                return unit.parent;
-            case "rightchild":
-                return unit.rightChild;
-            case "leftchild":
-                return unit.leftChild;
-            case "root":
-                return root;
-            default: throw new IllegalArgumentException();
-        }
-    }
-
-/*    private Node getRightChild(int key){
-
-        return findNode(key).rightChild;
-    }
-
-    private Node getLeftChild(int key){
+    public Node getLeftChild(int key){
         return findNode(key).leftChild;
     }
 
-    private Node getParent(int key){
+    public Node getRightChild(int key){
+        return findNode(key).rightChild;
+    }
+
+    public Node getParent(int key){
         return findNode(key).parent;
     }
 
-    public void info(int key) {
-        Node a = findNode(key);
-        System.out.print(a.parent + " ");
-        System.out.print(a.leftChild + " ");
-        System.out.println(a.rightChild + " ");
-    } */
+    public Node getRoot(){
+        return this.root;
+    }
 
-    public Node getNodeByIndex(int index) {
-        return tree.get(index);
+    StringBuilder sb = new StringBuilder();
+
+    public String getTree(Node node) {
+        if (node != null) {
+            sb.append(node.key).append(" ");
+            getTree(node.leftChild);
+            getTree(node.rightChild);
+        }
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if(!(obj instanceof Tree)) return false;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
         Tree oTree = (Tree) obj;
-        if(oTree.tree.size() != tree.size()) return false;
-
-        try {
-        for (Node unit: this.tree) {
-            if (!oTree.findNode(unit.key).equals(unit)) return false;
-        }
-        return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        return oTree.getTree(oTree.root).equals(this.getTree(this.root));
     }
 
     @Override
     public String toString() {
-        return tree.size() + tree.toString();
+        return this.getTree(this.root);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tree.size());
+        return Objects.hash(this.root.key * this.getTree(this.root).length());
     }
 }
