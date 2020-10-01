@@ -103,6 +103,11 @@ public class Tree {
         }
     }
 
+    /**
+     * Меняет потомка у unit.parent
+     * @param unit Предыдущий потомок
+     * @param newValue Новый потомок
+     */
     private void changeChild(Node unit, Node newValue) {
         if (!unit.equals(root)) {
             if (unit.parent.leftChild == unit) unit.parent.leftChild = newValue;
@@ -128,13 +133,16 @@ public class Tree {
         return this.root;
     }
 
-    StringBuilder sb = new StringBuilder();
+    public String getTree() {
+        StringBuilder sb = new StringBuilder();
+        return getTree(root, sb);
+    }
 
-    public String getTree(Node node) {
+    private String getTree(Node node, StringBuilder sb) {
         if (node != null) {
             sb.append(node.key).append(" ");
-            getTree(node.leftChild);
-            getTree(node.rightChild);
+            getTree(node.leftChild, sb);
+            getTree(node.rightChild, sb);
         }
         return sb.toString();
     }
@@ -144,16 +152,16 @@ public class Tree {
         if (this == obj) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         Tree oTree = (Tree) obj;
-        return oTree.getTree(oTree.root).equals(this.getTree(this.root));
+        return oTree.getTree().equals(this.getTree());
     }
 
     @Override
     public String toString() {
-        return this.getTree(this.root);
+        return this.getTree();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.root.key * this.getTree(this.root).length());
+        return Objects.hash(this.root.key * this.getTree().length());
     }
 }
